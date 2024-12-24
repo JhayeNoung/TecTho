@@ -7,6 +7,7 @@ import movieService from "./services/movie-service"
 import { PostMovie } from "./services/movie-service"
 import useGenre from "./hooks/useGenre"
 import { Genre } from "./hooks/useGenre"
+import { SiDeutschewelle } from "react-icons/si"
 
 export default function Movie() {
     const [refresh, setRefresh] = useState(false); // Trigger for re-fetch
@@ -35,15 +36,15 @@ export default function Movie() {
           <div className="mb-3">
             <GenreFilter
                 onChange={(e) => {
-                  const selectedGenreId = e.target.value;
-                  if (e.target.value === ""){
-                    setSelectedGenre(genres)
-                  }
-                  else{
-                    genres.find((genre) => `${genre._id}` === selectedGenreId ? setSelectedGenre(genres): console.log('no match'));
-                  }
-                }}
-            />
+                  genres.map(genre=>{
+                    if (e.target.value === ""){
+                      setSelectedGenre(null)
+                    } else if (`${genre._id}` === e.target.value){
+                      setSelectedGenre(genre)
+                    }
+                  })
+                }
+            }/>
           </div>
   
           {/* MovieList */}

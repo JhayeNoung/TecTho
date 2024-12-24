@@ -1,3 +1,4 @@
+const http2 = require('http2');
 const express = require('express');
 const app = express();
 const {msgLogger} = require('./middlewares/logger');
@@ -16,5 +17,7 @@ require('./startup/config')();
 // you can use an express method get(), to know what enviroment
 msgLogger.info(`Environment - ${app.get('env')}`);
 const PORT = process.env.PORT || 3001;
+// const server = http2.createServer(app)
+// server.listen(PORT, ()=>msgLogger.info(`Listening at port ${PORT}.`))
 const server = app.listen(PORT, ()=>msgLogger.info(`Listening at port ${PORT}.`));
 module.exports = server;
