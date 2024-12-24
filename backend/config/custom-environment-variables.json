@@ -1,0 +1,4 @@
+{
+    "db": "MONGO_URL",
+    "privateKey": "PRIVATE_KEY"
+}

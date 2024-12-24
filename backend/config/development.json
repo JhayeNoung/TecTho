@@ -1,0 +1,4 @@
+{
+    "db": "mongodb://localhost:27017/dev_playground_node",
+    "privateKey": "1234"
+}

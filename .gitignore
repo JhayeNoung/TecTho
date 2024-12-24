@@ -1,0 +1,5 @@
+backend/node_modules
+backend/coverage
+backend/log
+
+frontend/node_modules
