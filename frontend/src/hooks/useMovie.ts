@@ -19,6 +19,15 @@ export interface PostMovie {
     "poster": string,
 }
 
-const useMovie = (dep?: any[]) => useData<Movie>(apiMovie, '/movies', undefined, dep)
+export interface MovieQuery{
+    page: number,
+  }
+
+
+export interface MovieQuery{
+    page: number,
+}
+
+const useMovie = (movieQuery?: MovieQuery) => useData<Movie>(apiMovie, '/movies', {params:{page: movieQuery?.page}}, [movieQuery])
 
 export default useMovie

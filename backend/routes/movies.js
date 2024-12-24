@@ -9,7 +9,7 @@ const { default: mongoose } = require('mongoose');
 router.get('/', async (req, res) => {
     // Use req.query.page to get the page number, defaulting to 1 if not provided
     const pageNumber = parseInt(req.query.page) || 1; // default to 1 for the first page
-    const pageSize = parseInt(req.query.pageSize) || 6; // default to 6 if not provided
+    const pageSize = parseInt(req.query.pageSize) || 2; // default to 6 if not provided
 
     // Calculate the number of documents to skip
     const skip = (pageNumber - 1) * pageSize;

@@ -6,19 +6,22 @@ import useMovie from "./hooks/useMovie"
 import GenreList from "./components/GenreList"
 import { Genre } from "./hooks/useGenre"
 import MovieHeading from "./components/MovieHeading"
+import PageBar from "./components/PageBar"
+import { MovieQuery } from "./hooks/useMovie"
 
 function App() {
   const breakpoint = useBreakpointValue({base: 0, lg: 1})
-  const {data, error, loading} = useMovie()
   const [selectedGenre, setSelectedGenre] = useState<Genre | null>(null)
+  const [ movieQuery, setMovieQuery ] = useState<MovieQuery>({} as MovieQuery)
+  const {data, error, loading} = useMovie(movieQuery)
 
   return (
     <>
 
       <Grid
         templateAreas={{
-          base: `"nav" "main"`,
-          lg: `"nav nav" "aside main"`
+          base: `"nav" "main" "page"`,
+          lg: `"nav nav" "aside main" "page page"`
         }}
 
         templateColumns={{
@@ -45,6 +48,11 @@ function App() {
           <MovieHeading genre={selectedGenre}/>
           <MovieList movies={data} selectedGenre={selectedGenre}/>
         </GridItem>
+
+        <GridItem area="page" bg="red">
+          <PageBar onPageSelect={(page)=>setMovieQuery({page})}/>
+        </GridItem>
+
       </Grid>
     </>
   )

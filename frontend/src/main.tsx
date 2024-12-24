@@ -10,7 +10,6 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <Provider>
       <App />
-      <MovieAPI/>
     </Provider>
   </StrictMode>,
 )
