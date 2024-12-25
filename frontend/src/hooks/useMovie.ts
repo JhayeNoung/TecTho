@@ -21,11 +21,6 @@ export interface PostMovie {
 
 export interface MovieQuery{
     page: number,
-  }
-
-
-export interface MovieQuery{
-    page: number,
 }
 
 const useMovie = (movieQuery?: MovieQuery) => useData<Movie>(apiMovie, '/movies', {params:{page: movieQuery?.page}}, [movieQuery])

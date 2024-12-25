@@ -7,9 +7,8 @@ import movieService from "./services/movie-service"
 import { PostMovie } from "./services/movie-service"
 import useGenre from "./hooks/useGenre"
 import { Genre } from "./hooks/useGenre"
-import { SiDeutschewelle } from "react-icons/si"
 
-export default function Movie() {
+export default function MovieAPI() {
     const [refresh, setRefresh] = useState(false); // Trigger for re-fetch
     const {data: movies, error, loading} = useMovie([refresh, setRefresh])
     const {data: genres} = useGenre()

@@ -5,8 +5,23 @@ const validObjectId = require('../middlewares/validObjectId');
 const auth = require('../middlewares/auth');
 
 router.get('/', async (req,res)=>{
-    const genres = await Genre.find();
-    res.status(200).send(genres);
+    // Use req.query.page to get the page number, defaulting to 1 if not provided
+    const page_number = parseInt(req.query.page) || 1; // default to 1 for the first page
+    const page_size = parseInt(req.query.page_size) || 5; // default to 6 if not provided
+
+    // Calculate the number of documents to skip
+    const skip = (page_number - 1) * page_size;
+
+    // Retrive the total number of genres
+    const count = await Genre.countDocuments();
+
+    // Retrieve the movies for the current page
+    const results = await Genre.find()
+        .skip(skip) // skip the number of docs based on the page
+        .limit(page_size) // limit the number of docs to the specified page size
+        .sort({ name: 1 });
+
+    res.status(200).send({count, page_size, results});
 });
 
 router.get('/:id', validObjectId, async (req,res)=>{

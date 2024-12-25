@@ -6,6 +6,12 @@ type Error = {
     message: string
 }
 
+interface FetchMovieResponse<T>{
+    count: number;
+    page_size: number;
+    results: T[];
+}
+
 function useData<T>(axiosInstance: AxiosInstance, endpoint: string, requestConfig?: AxiosRequestConfig, dep?: any[]){
     const [data, setData] = useState<T[]>([]);
     const [error, setError] = useState<Error>({message: ""});
@@ -15,10 +21,10 @@ function useData<T>(axiosInstance: AxiosInstance, endpoint: string, requestConfi
         setLoading(true)
         const controller = new AbortController();
         axiosInstance
-        .get<T[]>(endpoint, {signal: controller.signal, ...requestConfig})
+        .get<FetchMovieResponse<T>>(endpoint, {signal: controller.signal, ...requestConfig})
         .then(response=>{
-            setData(response.data)
-            console.log(response.data)
+            setData(response.data.results)
+            console.log(response.data.results)
             setLoading(false)
         })
         .catch(error=>{

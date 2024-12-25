@@ -8,19 +8,22 @@ const { default: mongoose } = require('mongoose');
 
 router.get('/', async (req, res) => {
     // Use req.query.page to get the page number, defaulting to 1 if not provided
-    const pageNumber = parseInt(req.query.page) || 1; // default to 1 for the first page
-    const pageSize = parseInt(req.query.pageSize) || 2; // default to 6 if not provided
+    const page_number = parseInt(req.query.page) || 1; // default to 1 for the first page
+    const page_size = parseInt(req.query.page_size) || 5; // default to 6 if not provided
 
     // Calculate the number of documents to skip
-    const skip = (pageNumber - 1) * pageSize;
+    const skip = (page_number - 1) * page_size;
+
+    // Retrieve the total number of movies
+    const count = await Movie.countDocuments();
 
     // Retrieve the movies for the current page
-    const movies = await Movie.find()
+    const results = await Movie.find()
         .skip(skip) // skip the number of docs based on the page
-        .limit(pageSize) // limit the number of docs to the specified page size
+        .limit(page_size) // limit the number of docs to the specified page size
         .sort({ title: 1 });
 
-    res.status(200).send(movies);
+    res.status(200).send({count, page_size, results});
 });
 
 router.get('/:id', validObjectId, async (req,res)=>{
