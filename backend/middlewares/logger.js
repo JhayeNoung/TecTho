@@ -20,11 +20,7 @@ const logger = winston.createLogger({
     defaultMeta: { service: 'user-service' },
 
     transports: [
-        new winston.transports.Console({
-            // format: winston.format.combine(
-            //     customFormat,
-            // )
-        })
+        new winston.transports.Console()
     ],
 
     exceptionHandlers: [

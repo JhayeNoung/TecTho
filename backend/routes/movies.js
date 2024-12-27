@@ -5,11 +5,54 @@ const {Genre, validateGenre} = require('../models/genre');
 const validObjectId = require('../middlewares/validObjectId');
 const auth = require('../middlewares/auth');
 const { default: mongoose } = require('mongoose');
+const { listObjects, generatePresignedUrl, generatePresignedDeleteUrl} = require('../middlewares/media')
+
+router.get('/aws-api', async (req, res) => {
+    try{
+        // Fetching AWS
+        const response = await listObjects('images')
+
+        // concatenate your key to your bucket link
+        const imageURIs = response.Contents
+        .map((item) => 
+            `https://${process.env.BUCKET_NAME}.s3.ap-southeast-2.amazonaws.com/${item.Key}`)
+
+        res.send(response)
+    }   
+    catch(error){
+        res.send(`${error}`)
+    }
+});
+
+router.post('/generate-presigned-url', async (req, res) => {
+    const { fileName } = req.body;
+    
+    try {
+      const url = await generatePresignedUrl(fileName);
+      res.json({ url });
+      
+    } catch (error) {
+      res.status(500).send(`${error}`);
+    }
+    
+});
+
+router.post('/generate-presigned-delete-url', async (req, res) => {
+    const { fileName } = req.body;
+    
+    try {
+      const url = await generatePresignedDeleteUrl(fileName);
+      res.json({ url });
+      
+    } catch (error) {
+      res.status(500).send(`${error}`);
+    }
+});
 
 router.get('/', async (req, res) => {
     // Use req.query.page to get the page number, defaulting to 1 if not provided
     const page_number = parseInt(req.query.page) || 1; // default to 1 for the first page
-    const page_size = parseInt(req.query.page_size) || 5; // default to 6 if not provided
+    const page_size = parseInt(req.query.page_size) || 20; // default to 10 if not provided
 
     // Calculate the number of documents to skip
     const skip = (page_number - 1) * page_size;
@@ -25,6 +68,7 @@ router.get('/', async (req, res) => {
 
     res.status(200).send({count, page_size, results});
 });
+
 
 router.get('/:id', validObjectId, async (req,res)=>{
     // find by id and check 404
@@ -46,11 +90,12 @@ router.post('/', auth, async (req,res)=>{
 
     // find duplicate
     let movie_title = await Movie.findOne({title: req.body.title});
-    if(movie_title) return res.status(400).send('Alreay have movie with this title.')
+    if(movie_title) return res.status(400).send('Already have movie with this title.')
 
     // save movie
     const movie = new Movie(req.body);
     movie.genre = genre;
+
     await movie.save();
 
     res.status(200).send(movie);

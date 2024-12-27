@@ -11,14 +11,6 @@ export interface Movie {
     "poster": string,
 }
 
-export interface PostMovie {
-    "title": string,
-    "numberInStock": number,
-    "dailyRentalRate": number,
-    "genre": string,
-    "poster": string,
-}
-
 export interface MovieQuery{
     page: number,
 }

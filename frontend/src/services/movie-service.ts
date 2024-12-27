@@ -23,5 +23,5 @@ export interface PostMovie {
     "poster": string,
 }
 
-export default create(apiMovie, '/movies')
+export default create('/movies')
 

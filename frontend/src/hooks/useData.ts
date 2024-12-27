@@ -6,7 +6,7 @@ type Error = {
     message: string
 }
 
-interface FetchMovieResponse<T>{
+export interface FetchResponse<T>{
     count: number;
     page_size: number;
     results: T[];
@@ -21,7 +21,7 @@ function useData<T>(axiosInstance: AxiosInstance, endpoint: string, requestConfi
         setLoading(true)
         const controller = new AbortController();
         axiosInstance
-        .get<FetchMovieResponse<T>>(endpoint, {signal: controller.signal, ...requestConfig})
+        .get<FetchResponse<T>>(endpoint, {signal: controller.signal, ...requestConfig})
         .then(response=>{
             setData(response.data.results)
             console.log(response.data.results)
