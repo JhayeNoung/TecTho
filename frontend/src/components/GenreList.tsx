@@ -3,21 +3,23 @@ import { Button } from "@chakra-ui/react"
 import { List } from "@chakra-ui/react"
 import { Genre } from "@/hooks/useGenre"
 
-interface Props{
-    onClick: (selectValue: Genre) => void
+interface Props {
+    onClick: (genre: Genre) => void;
+    selectedGenre: Genre | null;
 }
 
-export default function GenreList({onClick}: Props) {
-    const { data, error, loading } = useGenre()
+export default function GenreList({ onClick, selectedGenre }: Props) {
+    const { data } = useGenre()
 
     return (
         <List.Root variant={"plain"}>
-            {data.map(d=>
+            {data.map(d =>
                 <List.Item key={d._id}>
-                    <Button 
-                        variant={"plain"} 
-                        _hover={{textDecoration: "underline"}} 
-                        onClick={()=>onClick(d)}
+                    <Button
+                        fontWeight={d._id === selectedGenre?._id ? "bold" : "normal"}
+                        variant={"plain"}
+                        _hover={{ textDecoration: "underline" }}
+                        onClick={() => onClick(d)}
                     >
                         {d.name}
                     </Button>

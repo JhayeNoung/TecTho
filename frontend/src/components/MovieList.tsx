@@ -1,36 +1,40 @@
+import { Table, TableBody, TableCell, TableColumnHeader, TableHeader, TableRoot, TableRow } from "@chakra-ui/react"
+
 import { Movie } from "@/hooks/useMovie";
 import { Genre } from "@/hooks/useGenre";
+import MovieAction from "./MovieAction";
 
-interface Props{
+interface Props {
     movies: Movie[];
     selectedGenre: Genre | null;
 }
 
-export default function MovieList({movies, selectedGenre}: Props) {
+export default function MovieList({ movies, selectedGenre }: Props) {
 
     return (
-        <table className="table mb-3">
-            <thead>
-                <tr>
-                <th scope="col">Title</th>
-                <th scope="col">Number In Stock</th>
-                <th scope="col">Daily Rental Rate</th>
-                <th scope="col">Genre</th>
-                </tr>
-            </thead>
+        <TableRoot interactive>
+            <TableHeader>
+                <TableRow>
+                    <TableColumnHeader>Title</TableColumnHeader>
+                    <TableColumnHeader>Stock</TableColumnHeader>
+                    <TableColumnHeader>Rental Rate</TableColumnHeader>
+                    <TableColumnHeader>Genre</TableColumnHeader>
+                </TableRow>
+            </TableHeader>
 
-            <tbody>
+            <TableBody>
                 {movies
                     .filter(movie => selectedGenre === null || movie.genre._id === selectedGenre._id)
-                    .map(movie=>
-                        <tr key={movie._id}>
-                            <td>{movie.title}</td>
-                            <td>{movie.numberInStock}</td>
-                            <td>{movie.dailyRentalRate}</td>
-                            <td>{movie.genre.name}</td>
-                        </tr>
-                )}
-            </tbody>
-        </table>    
+                    .map(movie =>
+                        <TableRow key={movie._id}>
+                            <TableCell>{movie.title}</TableCell>
+                            <TableCell>{movie.numberInStock}</TableCell>
+                            <TableCell>{movie.dailyRentalRate}</TableCell>
+                            <TableCell>{movie.genre.name}</TableCell>
+                            <TableCell><MovieAction movie={movie} /></TableCell>
+                        </TableRow>
+                    )}
+            </TableBody>
+        </TableRoot>
     )
 }
