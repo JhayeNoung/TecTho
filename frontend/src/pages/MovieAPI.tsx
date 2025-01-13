@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { CanceledError } from '@/services/api-movie';
 
+
 import logo from '../assets/logo.webp'
 import MovieList from '@/components/MovieList';
 import GenreFilter from '@/components/GenreFilter';

@@ -43,7 +43,7 @@ function UserAction({ user }: Props) {
   return (
     <>
       <HStack>
-        <NavLink to="/registration/update" state={{ user }}><Button variant="plain" color="blue">Edit</Button></NavLink>
+        <NavLink to="/registration/logout" state={{ user }}><Button variant="plain" color="blue">Edit</Button></NavLink>
         <Button variant="plain" _hover={{ color: "blue" }} color="red" onClick={handleDelete}>
           Delete
         </Button>

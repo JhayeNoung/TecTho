@@ -6,10 +6,9 @@ import DarkMode from "../components/DarkMode";
 import UserRegister from "@/components/UserRegister";
 import UserList from "@/components/UserList";
 import UserLogIn from "@/components/UserLogIn";
-import UserUpdate from "@/components/UserUpdate";
 import { useUser } from "@/hooks/useUser";
-import UserLogOut from "@/components/UserLogOut";
 import AlertMessage from "@/components/AlertMessage";
+import UserLogOut from "@/components/UserLogOut";
 
 function Registration() {
   const { users, error } = useUser();
@@ -40,11 +39,9 @@ function Registration() {
           {/* Spacer pushes the rest of the components to the right */}
           <Spacer />
 
-          <NavLink to="/registration">
-            <Button variant="plain" _hover={{ textDecoration: "underline" }}>
-              {email ? email : "Sign In"}
-            </Button>
-          </NavLink>
+          <Button variant="plain">
+            {email ? email : ""}
+          </Button>
 
           <NavLink to="/api" end>
             <Button variant="plain" _hover={{ textDecoration: "underline" }}>
@@ -60,9 +57,8 @@ function Registration() {
       <GridItem area="form" bg="dodgerblue">
         <Routes>
           <Route index element={<UserLogIn />} />
-          <Route path="logout" element={<UserLogOut email={email} />} />
+          <Route path="logout" element={<UserLogOut />} />
           <Route path="register" element={<UserRegister />} />
-          <Route path='update' element={<UserUpdate />} />
         </Routes>
       </GridItem>
 

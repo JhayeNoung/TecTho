@@ -1,11 +1,10 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useLocation } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { Input, Button } from "@chakra-ui/react";
 import { FormControl, FormLabel } from "@chakra-ui/form-control";
 import { z } from "zod";
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useNavigate } from "react-router-dom";
 
 import apiMovie from "@/services/api-movie";
 import AlertMessage from "./AlertMessage";
@@ -28,14 +27,11 @@ const schemaUser = z.object({
 
 type User = z.infer<typeof schemaUser>;
 
-export default function UserUpdate() {
+export default function UserUpdate({ user }: { user: User }) {
   const { register, handleSubmit, formState: { errors } } = useForm<User>({ resolver: zodResolver(schemaUser) });
   const [alert, setAlert] = useState("");
   const storedToken = localStorage.getItem('token');
   const navigate = useNavigate();
-
-  const location = useLocation(); // get "state" from NavLink Edit component of UserAction
-  const user = location.state?.user; // get user data from "state"
 
   const onSubmit = async (payload: User) => {
     setAlert(""); // reset alert
@@ -51,7 +47,6 @@ export default function UserUpdate() {
         navigate('/registration/logout'); // Navigate to the logout page after submission
       })
       .catch(error => {
-        console.log(error);
         switch (error.status) {
           case 404:
             window.alert(error.message);
@@ -96,6 +91,12 @@ export default function UserUpdate() {
         <Button type='submit'>
           Update
         </Button>
+
+        <NavLink to="/registration/logout" end>
+          <Button type='submit'>
+            Cancle
+          </Button>
+        </NavLink>
       </form>
     </>
   );

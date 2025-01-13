@@ -28,6 +28,7 @@ export default function UserLogin() {
       .post("users/login", payload)
       .then((response) => {
         localStorage.setItem("token", response.data)      // set the token to local storage (session storage)
+        localStorage.setItem("email", payload.email)      // set the email to local storage (session storage)
         window.dispatchEvent(new Event("token-change"));  // Dispatch a custom event to notify all listeners that the token has changed
         navigate('/registration/logout', { state: { email: payload.email } }); // Navigate to the logout page with email state
       })
