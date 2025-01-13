@@ -39,13 +39,13 @@ function Registration() {
           {/* Spacer pushes the rest of the components to the right */}
           <Spacer />
 
-          <Button variant="plain">
-            {email ? email : ""}
+          <Button variant="plain" fontWeight="bold">
+            {email ? email : "User API"}
           </Button>
 
           <NavLink to="/api" end>
             <Button variant="plain" _hover={{ textDecoration: "underline" }}>
-              API
+              Movie API
             </Button>
           </NavLink>
 

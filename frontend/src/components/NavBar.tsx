@@ -25,13 +25,13 @@ export default function NavBar({ onSearch }: Props) {
 
       <NavLink to="/registration">
         <Button variant="plain" _hover={{ textDecoration: "underline" }}>
-          Sign In
+          User API
         </Button>
       </NavLink>
 
       <NavLink to="/api" end>
         <Button variant="plain" _hover={{ textDecoration: "underline" }}>
-          API
+          Movie API
         </Button>
       </NavLink>
 
