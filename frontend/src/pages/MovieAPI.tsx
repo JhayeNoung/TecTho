@@ -72,7 +72,7 @@ function API() {
           {/* Spacer pushes the rest of the components to the right */}
           <Spacer />
 
-          <NavLink to="/registeration">
+          <NavLink to="/registration">
             <Button variant="plain" _hover={{ textDecoration: "underline" }}>
               Sign In
             </Button>

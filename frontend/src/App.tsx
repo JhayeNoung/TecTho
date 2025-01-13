@@ -3,7 +3,7 @@ import { AuthProvider } from "./context/TokenContext";
 
 import Home from "./pages/Home";
 import MoiveAPI from "./pages/MovieAPI";
-import Registeration from "./pages/Registeriation";
+import Registration from "./pages/Registration";
 
 function App() {
   return (
@@ -11,7 +11,7 @@ function App() {
     <Routes>
       <Route index element={<Home />} />
       <Route path="api" element={<MoiveAPI />} />
-      <Route path="registeration/*" element={<Registeration />} />
+      <Route path="registration/*" element={<Registration />} />
     </Routes>
 
   )

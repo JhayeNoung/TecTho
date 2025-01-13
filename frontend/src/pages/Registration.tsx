@@ -11,7 +11,7 @@ import { useUser } from "@/hooks/useUser";
 import UserLogOut from "@/components/UserLogOut";
 import AlertMessage from "@/components/AlertMessage";
 
-function Registeration() {
+function Registration() {
   const { users, error } = useUser();
 
   return (
@@ -38,7 +38,7 @@ function Registeration() {
           {/* Spacer pushes the rest of the components to the right */}
           <Spacer />
 
-          <NavLink to="/registeration">
+          <NavLink to="/registration">
             <Button variant="plain" _hover={{ textDecoration: "underline" }}>
               Sign In
             </Button>
@@ -54,7 +54,7 @@ function Registeration() {
         </HStack>
       </GridItem>
 
-      {/* Registeration Forms */}
+      {/* registration Forms */}
       <GridItem area="form" bg="dodgerblue">
         <Routes>
           <Route index element={<UserLogIn />} />
@@ -74,4 +74,4 @@ function Registeration() {
   );
 }
 
-export default Registeration;
+export default Registration;

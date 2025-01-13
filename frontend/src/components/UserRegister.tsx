@@ -103,4 +103,4 @@ export default function UserRegister() {
 }
 
 // Note on NavLink "to" value:
-// Using root "/" prefix, to="/registeration", infront of path name is also Ok to go back to "~/registeration"
+// Using root "/" prefix, to="/registration", infront of path name is also Ok to go back to "~/registration"

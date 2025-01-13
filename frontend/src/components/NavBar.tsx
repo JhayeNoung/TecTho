@@ -23,7 +23,7 @@ export default function NavBar({ onSearch }: Props) {
         <SearchInput submitHandler={(event) => onSearch(event.searchName)} />
       </Box>
 
-      <NavLink to="/registeration">
+      <NavLink to="/registration">
         <Button variant="plain" _hover={{ textDecoration: "underline" }}>
           Sign In
         </Button>

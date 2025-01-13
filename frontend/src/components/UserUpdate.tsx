@@ -48,7 +48,7 @@ export default function UserUpdate() {
       })
       .then(() => {
         window.dispatchEvent(new Event("user-update")); // Dispatch event on successful update
-        navigate('/registeration/logout'); // Navigate to the logout page after submission
+        navigate('/registration/logout'); // Navigate to the logout page after submission
       })
       .catch(error => {
         console.log(error);
