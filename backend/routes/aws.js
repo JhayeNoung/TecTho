@@ -53,7 +53,7 @@ router.post('/post-url', async (req, res) => {
         // configure the input parameters
         const input = {
             Bucket: process.env.BUCKET_NAME,
-            Key: `images/${fileName}`,
+            Key: `media/images/${fileName}`,
             ContentType: 'image/jpeg',  // Adjust based on the file type
         };
 
@@ -83,7 +83,7 @@ router.post('/delete-url', async (req, res) => {
         // configure the input parameters
         const input = {
             Bucket: process.env.BUCKET_NAME,
-            Key: `images/${fileName}`,
+            Key: `media/images/${fileName}`,
         };
 
         // Create the DeleteObjectCommand for deleting the file

@@ -10,7 +10,7 @@ interface Props {
 function MovieCard({ movie }: Props) {
     return (
         <Card.Root>
-            <Image src={movie.poster} />
+            <Image src={movie.poster_url} />
             <CardBody>
                 <HStack justify={'flex-end'}>
                     <MetacriticBadge name={"In Stock"} score={movie.numberInStock} />

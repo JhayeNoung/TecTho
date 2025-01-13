@@ -5,7 +5,7 @@ import { z } from "zod";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Input, Button } from "@chakra-ui/react";
 
-import { uploadFile, deleteFile } from "@/media/FileHandling";
+import { uploadFile, deleteFile } from "@/services/aws-service";
 import movieService from "@/services/movie-service";
 import useGenre from "../hooks/useGenre";
 import AlertMessage from "./AlertMessage";
@@ -23,8 +23,7 @@ const schemaMovie = z.object({
           "image/jpeg",
         ].includes(file.type),
       { message: "Invalid image file type" }
-    )
-    .nullable(),
+    ),
 });
 
 type Movie = z.infer<typeof schemaMovie>;
@@ -53,44 +52,46 @@ export default function MovieForm() {
   const [alert, setAlert] = useState("");
 
   const handleFormSubmit = async (payload: Movie) => {
-    console.log(payload);
+    console.log("Payload", payload);
 
     setAlert(""); // reset the alert message when submitting the form, which make sure duplicate value is not set, if duplicate value is set, alert state will be the same
 
-    // // upload machenism to S3, return poster URI
-    // const posterUrl = await uploadFile(movie.poster);
+    // upload the file to S3 and get the URL of the uploaded file 
+    const poster_url = await uploadFile(payload.poster);
+    console.log("AWS", poster_url);
 
-    // // save the input data to backend
-    // await movieService
-    //   .post(payload) // add poster string
-    //   .then(response => {
-    //     console.log(response)
-    //     if (response.status === 200) {
-    //       setAlert("Successfully Submit")
-    //     }
-    //   })
-    //   .catch(error => {
-    //     // set the alert message based on the error status
-    //     switch (error.status) {
-    //       case 404:
-    //         if (error.response.data.includes("No user found with this email.")) {
-    //           setAlert("No user found with this email.");
-    //         } else {
-    //           setAlert("The requested resource was not found. status code: 404");
-    //         }
-    //         break;
-    //       case 401:
-    //       case 400:
-    //       case 403:
-    //         setAlert(error.response.data);
-    //         break;
-    //       case 500:
-    //         setAlert(error.message);
-    //         break;
-    //       default:
-    //         window.alert("An unexpected error occurred");
-    //     }
-    //   })
+    // remove poster from payload, because we don't need to send it to the backend
+    const { poster, ...rest } = payload;
+
+    // send the payload to the backend
+    await movieService
+      .post({ ...rest, poster_url })
+      .then(response => {
+        console.log("Backend Response", response)
+        setAlert("Movie added successfully.");
+      })
+      .catch(error => {
+        console.log(error);
+        switch (error.status) {
+          case 404:
+            if (error.response.data.includes("No genre found.")) {
+              setAlert("No genre found.");
+            } else {
+              setAlert("The requested resource was not found. status code: 404");
+            }
+            break;
+          case 401:
+          case 400:
+          case 403:
+            setAlert(error.response.data);
+            break;
+          case 500:
+            setAlert(error.message);
+            break;
+          default:
+            window.alert("An unexpected error occurred");
+        }
+      })
   };
 
   return (
@@ -121,11 +122,11 @@ export default function MovieForm() {
 
         {/* "useForm" doesn't separately handle 'File' format, so we will need to grab the file from "e.target" and set the value with "setValue" */}
         <FormControl>
-          <label htmlFor="poster" className="from-label">Enter poster file: </label>
+          <label htmlFor="poster" className="from-label">Choose File</label>
           <input
             id="poster"
             onChange={(e) => {
-              const file = e.target.files?.[0];
+              const file = e.target.files?.[0]; // get file objcet from the event
               if (file) setValue("poster", file); // set the value of poster with the file
             }}
             type="file"

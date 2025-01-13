@@ -77,27 +77,27 @@ router.get('/:id', validObjectId, async (req, res) => {
 });
 
 
-// Create a new movie
-router.post('/', auth, async (req, res) => {
-    // validate movie request and check 400
-    const { error } = validateMovie(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
+// Create a new movie 
+router.post('/', async (req, res) => {
+    // // validate movie request and check 400
+    // const { error } = validateMovie(req.body);
+    // if (error) return res.status(400).send(error.details[0].message);
 
-    // find genre , and check 404
-    let genre = await Genre.findById(req.body.genre);
-    if (!genre) return res.status(404).send('No genre found');
+    // // find genre , and check 404
+    // let genre = await Genre.findById(req.body.genre);
+    // if (!genre) return res.status(404).send('No genre found.');
 
-    // find duplicate
-    let movie_title = await Movie.findOne({ title: req.body.title });
-    if (movie_title) return res.status(400).send('Already have movie with this title.')
+    // // find duplicate
+    // let movie_title = await Movie.findOne({ title: req.body.title });
+    // if (movie_title) return res.status(400).send('Already have movie with this title.')
 
-    // save movie
-    const movie = new Movie(req.body);
-    movie.genre = genre;
+    // // save movie
+    // const movie = new Movie(req.body);
+    // movie.genre = genre;
 
-    await movie.save();
+    // await movie.save();
 
-    res.status(200).send(movie);
+    res.status(200).send(req.body);
 });
 
 

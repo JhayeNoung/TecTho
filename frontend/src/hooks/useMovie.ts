@@ -8,7 +8,7 @@ export interface Movie {
     "numberInStock": number,
     "dailyRentalRate": number,
     "genre": Genre,
-    "poster": string,
+    "poster_url": string,
 }
 
 export interface MovieQuery {
