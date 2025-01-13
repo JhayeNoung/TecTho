@@ -5,50 +5,8 @@ const { Genre, validateGenre } = require('../models/genre');
 const validObjectId = require('../middlewares/validObjectId');
 const auth = require('../middlewares/auth');
 const { default: mongoose } = require('mongoose');
-const { listObjects, generatePresignedUrl, generatePresignedDeleteUrl } = require('../middlewares/media')
 
-router.get('/aws-api', async (req, res) => {
-    try {
-        // Fetching AWS
-        const response = await listObjects('images')
-
-        // concatenate your key to your bucket link
-        const imageURIs = response.Contents
-            .map((item) =>
-                `https://${process.env.BUCKET_NAME}.s3.ap-southeast-2.amazonaws.com/${item.Key}`)
-
-        res.send(response)
-    }
-    catch (error) {
-        res.send(`${error}`)
-    }
-});
-
-router.post('/generate-presigned-url', async (req, res) => {
-    const { fileName } = req.body;
-
-    try {
-        const url = await generatePresignedUrl(fileName);
-        res.json({ url });
-
-    } catch (error) {
-        res.status(500).send(`${error}`);
-    }
-
-});
-
-router.post('/generate-presigned-delete-url', async (req, res) => {
-    const { fileName } = req.body;
-
-    try {
-        const url = await generatePresignedDeleteUrl(fileName);
-        res.json({ url });
-
-    } catch (error) {
-        res.status(500).send(`${error}`);
-    }
-});
-
+// Get all movies
 router.get('/', async (req, res) => {
     // Use req.query.page to get the page number, defaulting to 1 if not provided
     const page_number = parseInt(req.query.page) || 1; // default to 1 for the first page
@@ -108,6 +66,7 @@ router.get('/', async (req, res) => {
 });
 
 
+// Get a single movie
 router.get('/:id', validObjectId, async (req, res) => {
     // find by id and check 404
     const movie = await Movie.findById(req.params.id);
@@ -117,6 +76,8 @@ router.get('/:id', validObjectId, async (req, res) => {
     res.status(200).send(movie);
 });
 
+
+// Create a new movie
 router.post('/', auth, async (req, res) => {
     // validate movie request and check 400
     const { error } = validateMovie(req.body);
@@ -139,6 +100,8 @@ router.post('/', auth, async (req, res) => {
     res.status(200).send(movie);
 });
 
+
+// Update a movie
 router.put('/:id', [validObjectId, auth], async (req, res) => {
     // find movie and check 404
     let movie = await Movie.findById(req.params.id);
@@ -171,6 +134,8 @@ router.put('/:id', [validObjectId, auth], async (req, res) => {
     res.status(200).send(movie);
 })
 
+
+// Delete a movie
 router.delete('/:id', [validObjectId, auth], async (req, res) => {
     // find movie and check 404
     let movie = await Movie.findById(req.params.id);
@@ -179,5 +144,6 @@ router.delete('/:id', [validObjectId, auth], async (req, res) => {
     await movie.deleteOne();
     res.status(200).send('Movie has been deleted');
 })
+
 
 module.exports = router;

@@ -8,19 +8,7 @@ import { Input, Button } from "@chakra-ui/react";
 import { uploadFile, deleteFile } from "@/media/FileHandling";
 import movieService from "@/services/movie-service";
 import useGenre from "../hooks/useGenre";
-import { Alert } from "./ui/alert";
-
-export interface PostMovie {
-  "title": string,
-  "numberInStock": number,
-  "dailyRentalRate": number,
-  "genre": string,
-  "poster": string | null,
-}
-
-export interface Error {
-  message: string,
-}
+import AlertMessage from "./AlertMessage";
 
 const schemaMovie = z.object({
   title: z.string().min(1),
@@ -41,38 +29,73 @@ const schemaMovie = z.object({
 
 type Movie = z.infer<typeof schemaMovie>;
 
+
+/*
+Hybrid Upload is used to upload file in this MovieForm component:
+
+1.  Frontend Request for Pre-signed URL:
+    The frontend sends file metadata (e.g., file type, size) to the backend.
+
+2.  Backend Generates Pre-signed URL:
+    The backend validates the request and returns a pre-signed URL.
+
+3.  Frontend Uploads to S3:
+    The frontend uses the pre-signed URL to upload the file directly to S3.
+
+4.  Backend Logs Metadata:
+
+The backend receives metadata from the frontend after the successful upload for storage or processing.
+*/
+
 export default function MovieForm() {
   const { register, setValue, handleSubmit, formState: { errors } } = useForm<Movie>({ resolver: zodResolver(schemaMovie) });
-  const { data: genres } = useGenre()
-  const [message, setMessage] = useState<string | null>(null);
+  const { data: genres } = useGenre();
+  const [alert, setAlert] = useState("");
 
-  const handleFormSubmit = async (movie: Movie) => {
-    console.log(movie);
+  const handleFormSubmit = async (payload: Movie) => {
+    console.log(payload);
 
-    // // upload directly the file from input to S3, get the poster string
+    setAlert(""); // reset the alert message when submitting the form, which make sure duplicate value is not set, if duplicate value is set, alert state will be the same
+
+    // // upload machenism to S3, return poster URI
     // const posterUrl = await uploadFile(movie.poster);
 
     // // save the input data to backend
     // await movieService
-    //   .post<PostMovie>({ ...movie, poster: posterUrl }) // add poster string
+    //   .post(payload) // add poster string
     //   .then(response => {
     //     console.log(response)
     //     if (response.status === 200) {
-    //       setMessage("Successfully Submit")
-    //       setTimeout(() => setMessage(null), 3000); // Clears after 3 seconds
+    //       setAlert("Successfully Submit")
     //     }
     //   })
     //   .catch(error => {
-    //     console.log(error.response.data)
-    //     deleteFile(movie.poster) // if saving data to backend failed, delete upload file to s3
-    //     setMessage(`${error.response.data}`)
-    //     setTimeout(() => setMessage(null), 5000); // Clears after 3 seconds
+    //     // set the alert message based on the error status
+    //     switch (error.status) {
+    //       case 404:
+    //         if (error.response.data.includes("No user found with this email.")) {
+    //           setAlert("No user found with this email.");
+    //         } else {
+    //           setAlert("The requested resource was not found. status code: 404");
+    //         }
+    //         break;
+    //       case 401:
+    //       case 400:
+    //       case 403:
+    //         setAlert(error.response.data);
+    //         break;
+    //       case 500:
+    //         setAlert(error.message);
+    //         break;
+    //       default:
+    //         window.alert("An unexpected error occurred");
+    //     }
     //   })
   };
 
   return (
     <>
-      {message && (<Alert status="success" mb={4}>{message}</Alert>)}
+      {alert && <AlertMessage message={alert} />}
 
       <form onSubmit={handleSubmit(handleFormSubmit)}>
 
