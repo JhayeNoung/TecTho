@@ -23,13 +23,13 @@ export default function UserLogin() {
   const navigate = useNavigate();
 
   const onSubmit = (payload: User) => {
-    setAlert(""); // reset the alert message when submitting the form, which make sure duplicate value is not set, if duplicate value is set, alert state will be the same
+    setAlert("");                                         // reset the alert message when submitting the form, which make sure duplicate value is not set, if duplicate value is set, alert state will be the same
     apiMovie
       .post("users/login", payload)
       .then((response) => {
-        localStorage.setItem("token", response.data) // set the token to local storage (session storage)
-        window.dispatchEvent(new Event("token-change")); // Dispatch a custom event to notify all listeners that the token has changed
-        navigate('logout'); // Navigate to the logout page after submission
+        localStorage.setItem("token", response.data)      // set the token to local storage (session storage)
+        window.dispatchEvent(new Event("token-change"));  // Dispatch a custom event to notify all listeners that the token has changed
+        navigate('/registration/logout', { state: { email: payload.email } }); // Navigate to the logout page with email state
       })
       .catch(error => {
         // set the alert message based on the error status
@@ -59,6 +59,7 @@ export default function UserLogin() {
     <>
       {alert && <AlertMessage message={alert} />}
 
+      {/* Logging In Form */}
       <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
         <FormControl>
           <FormLabel htmlFor="email">Email</FormLabel>
@@ -77,6 +78,7 @@ export default function UserLogin() {
         </Button>
       </form>
 
+      {/* Sign Up Link */}
       <Box>
         <NavLink to="register" end>
           Sign Up

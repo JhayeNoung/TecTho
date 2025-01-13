@@ -1,4 +1,4 @@
-import { NavLink, Route, Routes } from "react-router-dom";
+import { NavLink, Route, Routes, useLocation } from "react-router-dom";
 import { Button, Grid, GridItem, HStack, Image, Spacer } from "@chakra-ui/react";
 
 import logo from '../assets/logo.webp'
@@ -13,6 +13,8 @@ import AlertMessage from "@/components/AlertMessage";
 
 function Registration() {
   const { users, error } = useUser();
+  const location = useLocation();
+  const email = location.state?.email;
 
   return (
     <Grid
@@ -40,7 +42,7 @@ function Registration() {
 
           <NavLink to="/registration">
             <Button variant="plain" _hover={{ textDecoration: "underline" }}>
-              Sign In
+              {email ? email : "Sign In"}
             </Button>
           </NavLink>
 
@@ -58,7 +60,7 @@ function Registration() {
       <GridItem area="form" bg="dodgerblue">
         <Routes>
           <Route index element={<UserLogIn />} />
-          <Route path="logout" element={<UserLogOut />} />
+          <Route path="logout" element={<UserLogOut email={email} />} />
           <Route path="register" element={<UserRegister />} />
           <Route path='update' element={<UserUpdate />} />
         </Routes>
