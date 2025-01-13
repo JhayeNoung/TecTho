@@ -22,7 +22,7 @@ type Error = {
   message: string
 }
 
-function API() {
+function MovieAPI() {
   const [movies, setMovies] = useState<Movie[]>([]);
   const { data: genres } = useGenre()
   const [selectedGenre, setSelectedGenre] = useState<Genre | null>(null)
@@ -119,4 +119,4 @@ function API() {
   )
 }
 
-export default API
+export default MovieAPI
