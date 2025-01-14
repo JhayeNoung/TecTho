@@ -5,10 +5,9 @@ import { z } from "zod";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Input, Button } from "@chakra-ui/react";
 
-import { uploadFile, deleteFile } from "@/services/aws-service";
-import movieService from "@/services/movie-service";
 import useGenre from "../hooks/useGenre";
 import AlertMessage from "./AlertMessage";
+import apiMovie from "@/services/api-movie";
 
 const schemaMovie = z.object({
   title: z.string().min(1),
@@ -52,23 +51,25 @@ export default function MovieForm() {
   const [alert, setAlert] = useState("");
 
   const handleFormSubmit = async (payload: Movie) => {
-    console.log("Payload", payload);
-
     setAlert(""); // reset the alert message when submitting the form, which make sure duplicate value is not set, if duplicate value is set, alert state will be the same
 
-    // upload the file to S3 and get the URL of the uploaded file 
-    const poster_url = await uploadFile(payload.poster);
-    console.log("AWS", poster_url);
-
-    // remove poster from payload, because we don't need to send it to the backend
+    // Remove the poster from the payload
     const { poster, ...rest } = payload;
 
+    // Get the pre-signed URL from the backend
+    const presigned_response = await apiMovie.post('/presigned-url/post-url', { fileName: payload.poster.name });
+    const poster_url = presigned_response.data.url.split('?')[0];
+
     // send the payload to the backend
-    await movieService
-      .post({ ...rest, poster_url })
-      .then(response => {
-        console.log("Backend Response", response)
-        setAlert("Movie added successfully.");
+    await apiMovie.post("/movies", { ...rest, poster_url })
+      .then(async () => {
+        // Upload the file to S3 using the pre-signed URL after the movie is successfully posted
+        await fetch(presigned_response.data.url, {
+          method: 'PUT',
+          headers: { 'Content-Type': payload.poster.type },
+          body: payload.poster,
+        });
+        setAlert("Movie posted successfully");
       })
       .catch(error => {
         console.log(error);
