@@ -6,12 +6,10 @@ import DarkMode from "../components/DarkMode";
 import UserRegister from "@/components/UserRegister";
 import UserList from "@/components/UserList";
 import UserLogIn from "@/components/UserLogIn";
-import { useUser } from "@/hooks/useUser";
-import AlertMessage from "@/components/AlertMessage";
 import UserLogOut from "@/components/UserLogOut";
+import UserUpdateTest from "@/components/UserUpdateTest";
 
 function Registration() {
-  const { users, error } = useUser();
   const location = useLocation();
   const email = location.state?.email;
 
@@ -58,14 +56,14 @@ function Registration() {
         <Routes>
           <Route index element={<UserLogIn />} />
           <Route path="logout" element={<UserLogOut />} />
+          <Route path="login/update" element={<UserUpdateTest />} />
           <Route path="register" element={<UserRegister />} />
         </Routes>
       </GridItem>
 
       {/* User List */}
       <GridItem area="list" bg="yellow">
-        {error && <AlertMessage message={error} />}
-        <UserList users={users} />
+        <UserList />
       </GridItem>
 
     </Grid>

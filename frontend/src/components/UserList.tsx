@@ -1,15 +1,16 @@
 import { TableBody, TableCell, TableColumnHeader, TableHeader, TableRoot, TableRow } from "@chakra-ui/react"
 
 import UserAction from "./UserAction"
-import { User } from "@/hooks/useUser"
+import { useUser } from "@/hooks/useUser";
+import AlertMessage from "./AlertMessage";
 
-interface Props {
-  users: User[]
-}
+function UserList() {
+  const { users, error } = useUser();
 
-function UserList({ users }: Props) {
   return (
     <>
+      {error && <AlertMessage message={error} />}
+
       <TableRoot size="lg" interactive>
         <TableHeader>
           <TableRow>
