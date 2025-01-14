@@ -5,6 +5,7 @@ import { Input, Button } from "@chakra-ui/react";
 import { FormControl, FormLabel } from "@chakra-ui/form-control";
 import { z } from "zod";
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useLocation } from "react-router-dom";
 
 import apiMovie from "@/services/api-movie";
 import AlertMessage from "./AlertMessage";
@@ -27,11 +28,13 @@ const schemaUser = z.object({
 
 type User = z.infer<typeof schemaUser>;
 
-export default function UserUpdate({ user }: { user: User }) {
+export default function UserUpdate() {
   const { register, handleSubmit, formState: { errors } } = useForm<User>({ resolver: zodResolver(schemaUser) });
   const [alert, setAlert] = useState("");
   const storedToken = localStorage.getItem('token');
   const navigate = useNavigate();
+  const location = useLocation();
+  const user = location.state?.user;
 
   const onSubmit = async (payload: User) => {
     setAlert(""); // reset alert

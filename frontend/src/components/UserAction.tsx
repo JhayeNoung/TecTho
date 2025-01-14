@@ -49,7 +49,7 @@ function UserAction({ user }: Props) {
       {/* if token present, use TableCell UserAction, else use TableCell of Edit and Delete buttons which are dimm */}
       {storedToken ?
         <HStack>
-          <NavLink to="/registration/logout" state={{ user }}><Button variant="plain" _hover={{ color: "cyan" }} color="blue">Edit</Button></NavLink>
+          <NavLink to="/registration/logout/update" state={{ user }}><Button variant="plain" _hover={{ color: "cyan" }} color="blue">Edit</Button></NavLink>
           <Button variant="plain" _hover={{ color: "cyan" }} color="red" onClick={handleDelete}>
             Delete
           </Button>
