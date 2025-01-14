@@ -56,10 +56,10 @@ function UserAction({ user }: Props) {
         </HStack>
         :
         <HStack>
-          <Button variant="plain" color="gray" onClick={() => handleLoginFirst()}>
+          <Button variant="plain" color="gray" _hover={{ textDecoration: "underline" }} onClick={() => handleLoginFirst()}>
             Edit
           </Button>
-          <Button variant="plain" color="gray" onClick={() => handleLoginFirst()}>
+          <Button variant="plain" color="gray" _hover={{ textDecoration: "underline" }} onClick={() => handleLoginFirst()}>
             Delete
           </Button>
         </HStack>
