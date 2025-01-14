@@ -1,7 +1,6 @@
 import { Grid, GridItem, Show, useBreakpointValue } from "@chakra-ui/react"
 import { useState } from "react"
 
-import { Genre } from "../hooks/useGenre"
 import { MovieQuery } from "../hooks/useMovie"
 import GenreList from "../components/GenreList"
 import PageBar from "../components/PageBar"
@@ -13,7 +12,6 @@ import NavBar from "../components/NavBar"
 
 function Home() {
     const breakpoint = useBreakpointValue({ base: 0, lg: 1 })
-    const [selectedGenre, setSelectedGenre] = useState<Genre | null>(null)
     const [movieQuery, setMovieQuery] = useState<MovieQuery>({} as MovieQuery)
 
     return (

@@ -1,19 +1,17 @@
 import { HStack, Image, Grid, GridItem, Spacer, Button } from '@chakra-ui/react'
 import { NavLink } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import { CanceledError } from '@/services/api-movie';
-
+import { useState } from 'react';
 
 import logo from '../assets/logo.webp'
 import MovieList from '@/components/MovieList';
-import GenreFilter from '@/components/GenreFilter';
 import MovieForm from '@/components/MovieForm';
-import apiMovie from '@/services/api-movie';
-import useGenre, { Genre } from '@/hooks/useGenre';
-import { Movie } from '@/hooks/useMovie';
 import DarkMode from '../components/DarkMode';
+import GenreSelector from '../components/GenreSelector';
+import { MovieQuery } from '@/hooks/useMovie';
 
-function MovieAPITest() {
+function MovieAPI() {
+  const [movieQuery, setMovieQuery] = useState<MovieQuery>({} as MovieQuery)
+
   return (
     <Grid
       templateAreas={{
@@ -62,7 +60,8 @@ function MovieAPITest() {
 
       {/* Movie List */}
       <GridItem area="list" bg="yellow">
-        <p>list</p>
+        <GenreSelector selectedGenre={movieQuery.genre} onSelectedGenre={(genre) => setMovieQuery({ ...movieQuery, genre })} />
+        <MovieList movieQuery={movieQuery} />
       </GridItem>
 
     </Grid>
@@ -70,4 +69,4 @@ function MovieAPITest() {
   )
 }
 
-export default MovieAPITest
+export default MovieAPI

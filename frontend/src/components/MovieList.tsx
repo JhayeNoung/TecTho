@@ -1,15 +1,25 @@
-import { Table, TableBody, TableCell, TableColumnHeader, TableHeader, TableRoot, TableRow } from "@chakra-ui/react"
+import { Text, TableBody, TableCell, TableColumnHeader, TableHeader, TableRoot, TableRow, Spinner } from "@chakra-ui/react"
 
-import { Movie } from "@/hooks/useMovie";
-import { Genre } from "@/hooks/useGenre";
 import MovieAction from "./MovieAction";
+import useMovie from "@/hooks/useMovie";
+import { MovieQuery } from "@/hooks/useMovie";
+
+// interface Props {
+//     movies: Movie[];
+//     selectedGenre: Genre | null;
+// }
 
 interface Props {
-    movies: Movie[];
-    selectedGenre: Genre | null;
+    movieQuery: MovieQuery
 }
 
-export default function MovieList({ movies, selectedGenre }: Props) {
+
+export default function MovieList({ movieQuery }: Props) {
+    const { error, data: movies, loading } = useMovie(movieQuery)
+
+    if (error) return <Text>{error}</Text>
+
+    if (loading) return <Spinner />
 
     return (
         <TableRoot interactive>
@@ -22,9 +32,9 @@ export default function MovieList({ movies, selectedGenre }: Props) {
                 </TableRow>
             </TableHeader>
 
+
             <TableBody>
                 {movies
-                    .filter(movie => selectedGenre === null || movie.genre._id === selectedGenre._id)
                     .map(movie =>
                         <TableRow key={movie._id}>
                             <TableCell>{movie.title}</TableCell>
