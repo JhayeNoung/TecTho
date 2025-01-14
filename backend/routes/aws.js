@@ -2,6 +2,7 @@ const { S3Client, PutObjectCommand, DeleteObjectCommand, ListObjectsV2Command } 
 const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
 const express = require('express');
 const router = express.Router();
+const { v4: uuidv4 } = require('uuid');
 
 // Configure S3 Client
 const client = new S3Client({
@@ -12,6 +13,10 @@ const client = new S3Client({
     },
 });
 
+// Function to generate a random path
+const generateRandomPath = () => {
+    return Math.random().toString(36).substring(2, 5);
+};
 
 // AWS S3 API Example
 router.get('/aws-api', async (req, res) => {
@@ -49,10 +54,13 @@ router.get('/aws-api', async (req, res) => {
 router.post('/post-url', async (req, res) => {
     try {
         const { fileName } = req.body;
+        // const randomPath = generateRandomPath();
+        // const randomPath = uuidv4();
 
-        // configure the input parameters
+        // configure the input parameters 
         const input = {
             Bucket: process.env.BUCKET_NAME,
+            // Key: `media/images/${randomPath}/${fileName}`,
             Key: `media/images/${fileName}`,
             ContentType: 'image/jpeg',  // Adjust based on the file type
         };
@@ -79,11 +87,12 @@ router.post('/post-url', async (req, res) => {
 router.post('/delete-url', async (req, res) => {
     try {
         const { fileName } = req.body;
+        const randomPath = generateRandomPath();
 
         // configure the input parameters
         const input = {
             Bucket: process.env.BUCKET_NAME,
-            Key: `media/images/${fileName}`,
+            Key: `media/images/${randomPath}/${fileName}`,
         };
 
         // Create the DeleteObjectCommand for deleting the file
