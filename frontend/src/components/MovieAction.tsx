@@ -19,7 +19,7 @@ function MovieAction({ movie }: Props) {
         }
       })
       .then(() => {
-        window.dispatchEvent(new Event("user-delete")); // Dispatch event on successful delete
+        window.dispatchEvent(new Event("movie-delete")); // Dispatch event on successful delete
       })
       .catch(error => {
         console.log(error)
@@ -57,13 +57,13 @@ function MovieAction({ movie }: Props) {
         </HStack>
         :
         <HStack>
-          <Button variant="plain" color="grey">
+          <Button variant="plain" _hover={{ textDecoration: "underline" }} color="grey" onClick={() => window.alert("Please login to perform this action")}>
             Edit
           </Button>
-          <Button variant="plain" color="grey">
+          <Button variant="plain" _hover={{ textDecoration: "underline" }} color="grey" onClick={() => window.alert("Please login to perform this action")}>
             Details
           </Button>
-          <Button variant="plain" color="grey">
+          <Button variant="plain" _hover={{ textDecoration: "underline" }} color="grey" onClick={() => window.alert("Please login to perform this action")}>
             Delete
           </Button>
         </HStack>

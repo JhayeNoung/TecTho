@@ -16,7 +16,9 @@ function useData<T>(axiosInstance: AxiosInstance, endpoint: string, requestConfi
 
     useEffect(() => {
         setLoading(true)
+
         const controller = new AbortController();
+
         axiosInstance
             .get<FetchResponse<T>>(endpoint, { signal: controller.signal, ...requestConfig })
             .then(response => {
@@ -29,7 +31,10 @@ function useData<T>(axiosInstance: AxiosInstance, endpoint: string, requestConfi
                 console.log(error)
                 setLoading(false)
             })
-        return () => controller.abort()
+
+        return () => {
+            controller.abort()
+        }
     }, dep ? [...dep] : [])
 
     return { data, error, loading }
