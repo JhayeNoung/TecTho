@@ -9,6 +9,7 @@ import DarkMode from '../components/DarkMode';
 import { MovieQuery } from '@/hooks/useMovie';
 import GenreSelector from '@/components/GenreSelector';
 import SortSelector from '@/components/SortSelector';
+import SearchInput from '@/components/SearchInput';
 
 function MovieAPI() {
   const [movieQuery, setMovieQuery] = useState<MovieQuery>({} as MovieQuery)
@@ -61,10 +62,13 @@ function MovieAPI() {
 
       {/* Movie List */}
       <GridItem area="list" bg="yellow">
+        <SearchInput submitHandler={(event) => setMovieQuery({ ...movieQuery, search: event.searchName })} />
+
         <HStack>
           <GenreSelector onSelectedGenre={(genre) => setMovieQuery({ ...movieQuery, genre })} />
           <SortSelector selectedSortOrder={movieQuery.ordering} onSelectedSortOrder={(ordering) => setMovieQuery({ ...movieQuery, ordering })} />
         </HStack>
+
         <MovieList movieQuery={movieQuery} />
       </GridItem>
 

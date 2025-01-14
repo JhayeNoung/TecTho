@@ -10,9 +10,9 @@ import AlertMessage from "./AlertMessage";
 import apiMovie from "@/services/api-movie";
 
 const schemaMovie = z.object({
-  title: z.string().min(1),
-  numberInStock: z.number({ invalid_type_error: "Number in stock must be a number" }).nonnegative(),
-  dailyRentalRate: z.number({ invalid_type_error: "Rate must be a number" }).nonnegative(),
+  title: z.string().min(1).max(255),
+  numberInStock: z.number({ invalid_type_error: "Number in stock must be a number" }).max(300).nonnegative(),
+  dailyRentalRate: z.number({ invalid_type_error: "Rate must be a number" }).max(300).nonnegative(),
   genre: z.string().min(1, { message: "You have to choose a genre" }),
   poster: z
     .instanceof(File)
@@ -50,6 +50,7 @@ export default function MovieForm() {
   const { data: genres } = useGenre();
   const [alert, setAlert] = useState("");
   const [loading, setLoading] = useState(false)
+  const storedToken = localStorage.getItem('token');
 
   const handleFormSubmit = async (payload: Movie) => {
     setAlert(""); // Reset the alert
@@ -63,7 +64,13 @@ export default function MovieForm() {
       const poster_url = presigned_response.data.url.split('?')[0];
 
       // send the payload to the backend
-      await apiMovie.post("/movies", { ...rest, poster_url })
+      await apiMovie
+        .post(`/movies`, { ...rest, poster_url }, {
+          headers: {
+            Authorization: `${storedToken}`,
+            "Content-Type": "application/json"
+          }
+        })
 
       // Upload the file to S3 using the pre-signed URL after the movie is successfully posted
       await fetch(presigned_response.data.url, {
@@ -73,10 +80,12 @@ export default function MovieForm() {
       });
 
       setAlert("Movie posted successfully");
+      window.dispatchEvent(new Event("movie-post")); // Dispatch an event to notify the MovieList component
       setLoading(false);
     }
     // Handle the error
     catch (error: any) {
+      console.log(error)
       switch (error.response?.status) {
         case 404:
           if (error.response.data.includes("No genre found.")) {
@@ -89,7 +98,7 @@ export default function MovieForm() {
           if (error.response.data.includes("Already have movie with this title.")) {
             setAlert("Already have movie with this title.");
           } else {
-            setAlert("Invalid request. status code: 400");
+            setAlert(error.response.data);
           }
           break;
         case 401:
