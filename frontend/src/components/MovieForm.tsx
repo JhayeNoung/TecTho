@@ -51,47 +51,57 @@ export default function MovieForm() {
   const [alert, setAlert] = useState("");
 
   const handleFormSubmit = async (payload: Movie) => {
-    setAlert(""); // reset the alert message when submitting the form, which make sure duplicate value is not set, if duplicate value is set, alert state will be the same
+    setAlert(""); // Reset the alert
 
     // Remove the poster from the payload
     const { poster, ...rest } = payload;
 
-    // Get the pre-signed URL from the backend
-    const presigned_response = await apiMovie.post('/presigned-url/post-url', { fileName: payload.poster.name });
-    const poster_url = presigned_response.data.url.split('?')[0];
+    // Try to post the movie and upload the poster
+    try {
+      // Get the pre-signed URL from the backend
+      const presigned_response = await apiMovie.post('/presigned-url/post-url', { fileName: payload.poster.name });
+      const poster_url = presigned_response.data.url.split('?')[0];
 
-    // send the payload to the backend
-    await apiMovie.post("/movies", { ...rest, poster_url })
-      .then(async () => {
-        // Upload the file to S3 using the pre-signed URL after the movie is successfully posted
-        await fetch(presigned_response.data.url, {
-          method: 'PUT',
-          headers: { 'Content-Type': payload.poster.type },
-          body: payload.poster,
-        });
-        setAlert("Movie posted successfully");
-      })
-      .catch(error => {
-        switch (error.status) {
-          case 404:
-            if (error.response.data.includes("No genre found.")) {
-              setAlert("No genre found.");
-            } else {
-              setAlert("The requested resource was not found. status code: 404");
-            }
-            break;
-          case 401:
-          case 400:
-          case 403:
-            setAlert(error.response.data);
-            break;
-          case 500:
-            setAlert(error.message);
-            break;
-          default:
-            window.alert("An unexpected error occurred");
-        }
-      })
+      // send the payload to the backend
+      await apiMovie.post("/movies", { ...rest, poster_url })
+
+      // Upload the file to S3 using the pre-signed URL after the movie is successfully posted
+      await fetch(presigned_response.data.url, {
+        method: 'PUT',
+        headers: { 'Content-Type': payload.poster.type },
+        body: payload.poster,
+      });
+
+      setAlert("Movie posted successfully");
+    }
+    // Handle the error
+    catch (error: any) {
+      switch (error.response?.status) {
+        case 404:
+          if (error.response.data.includes("No genre found.")) {
+            setAlert("No genre found.");
+          } else {
+            setAlert("The requested resource was not found. status code: 404");
+          }
+          break;
+        case 400:
+          if (error.response.data.includes("Already have movie with this title.")) {
+            setAlert("Already have movie with this title.");
+          } else {
+            setAlert("Invalid request. status code: 400");
+          }
+          break;
+        case 401:
+        case 403:
+          setAlert(error.response.data);
+          break;
+        case 500:
+          setAlert(error.message);
+          break;
+        default:
+          window.alert("An unexpected error occurred");
+      }
+    }
   };
 
   return (

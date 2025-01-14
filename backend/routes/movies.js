@@ -78,7 +78,7 @@ router.get('/:id', validObjectId, async (req, res) => {
 
 
 // Create a new movie 
-router.post('/', [auth], async (req, res) => {
+router.post('/', async (req, res) => {
     // validate movie request and check 400
     const { error } = validateMovie(req.body);
     if (error) return res.status(400).send(error.details[0].message);
