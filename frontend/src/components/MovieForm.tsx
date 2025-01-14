@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import { FormControl, FormLabel } from "@chakra-ui/form-control";
 import { z } from "zod";
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -49,12 +49,12 @@ export default function MovieForm() {
   const { register, setValue, handleSubmit, formState: { errors } } = useForm<Movie>({ resolver: zodResolver(schemaMovie) });
   const { data: genres } = useGenre();
   const [alert, setAlert] = useState("");
+  const [loading, setLoading] = useState(false)
 
   const handleFormSubmit = async (payload: Movie) => {
     setAlert(""); // Reset the alert
-
-    // Remove the poster from the payload
-    const { poster, ...rest } = payload;
+    setLoading(true);
+    const { poster, ...rest } = payload; // Separate the poster from the payload
 
     // Try to post the movie and upload the poster
     try {
@@ -73,6 +73,7 @@ export default function MovieForm() {
       });
 
       setAlert("Movie posted successfully");
+      setLoading(false);
     }
     // Handle the error
     catch (error: any) {
@@ -101,6 +102,7 @@ export default function MovieForm() {
         default:
           window.alert("An unexpected error occurred");
       }
+      setLoading(false);
     }
   };
 
@@ -156,7 +158,7 @@ export default function MovieForm() {
           {errors.genre?.message && <p className="text-danger">{errors.genre?.message}</p>}
         </FormControl>
 
-        <Button type="submit">Post</Button>
+        {!loading ? <Button type="submit">Post</Button> : <Button disabled>Posting...</Button>}
       </form>
     </>
   )
