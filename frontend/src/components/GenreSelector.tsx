@@ -1,28 +1,26 @@
-import { MenuContent, MenuItem, MenuRoot, MenuTrigger } from "@/components/ui/menu"
 
-import useGenre from "@/hooks/useGenre"
-import { Button } from "@chakra-ui/react"
-import { Genre } from "@/hooks/useGenre"
+import useGenre from "../hooks/useGenre"
+import { Genre } from "../hooks/useGenre"
 
 interface Props {
-  onSelectedGenre: (genre: Genre) => void,
-  selectedGenre: Genre | null;
+    onSelectedGenre: (genre: Genre) => void,
 }
 
-export default function GenreSelector({ onSelectedGenre, selectedGenre }: Props) {
-  const { data: genres, error } = useGenre()
 
-  if (error) return null;
+export default function GenreSelector({ onSelectedGenre }: Props) {
+    const { data: genres } = useGenre()
 
-  return (
-    <MenuRoot>
-      <MenuTrigger asChild>
-        <Button>{selectedGenre?.name || 'Genre'}</Button>
-      </MenuTrigger>
-      <MenuContent>
-        {genres.map(genre => <MenuItem key={genre._id} value={genre.name} onClick={() => onSelectedGenre(genre)}>{genre.name}</MenuItem>)}
-      </MenuContent>
-    </MenuRoot>
-  )
+    return (
+        <select
+            id="genre"
+            className="form-select"
+            onChange={(event) => {
+                const genreId = event.target.value
+                const genre = genres.filter(genre => String(genre._id) === genreId)[0]
+                onSelectedGenre(genre)
+            }}>
+            <option value="">--- All Genres ---</option>
+            {genres.map((genre) => <option value={genre._id} key={genre._id}>{genre.name}</option>)}
+        </select>
+    )
 }
-

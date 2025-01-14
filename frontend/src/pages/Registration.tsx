@@ -24,7 +24,7 @@ function Registration() {
 
       templateColumns={{
         base: '1fr', // base is 1 fraction, means in small device
-        lg: '400px 1fr', // in large scree, first column take 200px and second takes all
+        lg: '350px 1fr', // in large scree, first column take 200px and second takes all
       }}
     >
 

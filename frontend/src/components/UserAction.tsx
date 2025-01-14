@@ -10,6 +10,10 @@ interface Props {
 function UserAction({ user }: Props) {
   const storedToken = localStorage.getItem('token');
 
+  const handleLoginFirst = () => {
+    window.alert("You need to login first");
+  }
+
   const handleDelete = async () => {
     apiMovie
       .delete(`/users/${user._id}`, {
@@ -42,12 +46,24 @@ function UserAction({ user }: Props) {
 
   return (
     <>
-      <HStack>
-        <NavLink to="/registration/logout" state={{ user }}><Button variant="plain" color="blue">Edit</Button></NavLink>
-        <Button variant="plain" _hover={{ color: "blue" }} color="red" onClick={handleDelete}>
-          Delete
-        </Button>
-      </HStack>
+      {/* if token present, use TableCell UserAction, else use TableCell of Edit and Delete buttons which are dimm */}
+      {storedToken ?
+        <HStack>
+          <NavLink to="/registration/logout" state={{ user }}><Button variant="plain" _hover={{ color: "cyan" }} color="blue">Edit</Button></NavLink>
+          <Button variant="plain" _hover={{ color: "cyan" }} color="red" onClick={handleDelete}>
+            Delete
+          </Button>
+        </HStack>
+        :
+        <HStack>
+          <Button variant="plain" color="gray" onClick={() => handleLoginFirst()}>
+            Edit
+          </Button>
+          <Button variant="plain" color="gray" onClick={() => handleLoginFirst()}>
+            Delete
+          </Button>
+        </HStack>
+      }
     </>
   )
 }

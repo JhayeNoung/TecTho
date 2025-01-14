@@ -19,8 +19,6 @@ export default function MovieList({ movieQuery }: Props) {
 
     if (error) return <Text>{error}</Text>
 
-    if (loading) return <Spinner />
-
     return (
         <TableRoot interactive>
             <TableHeader>
@@ -34,6 +32,11 @@ export default function MovieList({ movieQuery }: Props) {
 
 
             <TableBody>
+                {loading &&
+                    <TableRow>
+                        <TableCell><Spinner /></TableCell>
+                    </TableRow>}
+
                 {movies
                     .map(movie =>
                         <TableRow key={movie._id}>

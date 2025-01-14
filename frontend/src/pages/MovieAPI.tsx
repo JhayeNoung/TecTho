@@ -6,8 +6,9 @@ import logo from '../assets/logo.webp'
 import MovieList from '@/components/MovieList';
 import MovieForm from '@/components/MovieForm';
 import DarkMode from '../components/DarkMode';
-import GenreSelector from '../components/GenreSelector';
 import { MovieQuery } from '@/hooks/useMovie';
+import GenreSelector from '@/components/GenreSelector';
+import SortSelector from '@/components/SortSelector';
 
 function MovieAPI() {
   const [movieQuery, setMovieQuery] = useState<MovieQuery>({} as MovieQuery)
@@ -21,7 +22,7 @@ function MovieAPI() {
 
       templateColumns={{
         base: '1fr', // base is 1 fraction, means in small device
-        lg: '400px 1fr', // in large scree, first column take 200px and second takes all
+        lg: '350px 1fr', // in large scree, first column take 200px and second takes all
       }}
     >
 
@@ -60,7 +61,10 @@ function MovieAPI() {
 
       {/* Movie List */}
       <GridItem area="list" bg="yellow">
-        <GenreSelector selectedGenre={movieQuery.genre} onSelectedGenre={(genre) => setMovieQuery({ ...movieQuery, genre })} />
+        <HStack>
+          <GenreSelector onSelectedGenre={(genre) => setMovieQuery({ ...movieQuery, genre })} />
+          <SortSelector selectedSortOrder={movieQuery.ordering} onSelectedSortOrder={(ordering) => setMovieQuery({ ...movieQuery, ordering })} />
+        </HStack>
         <MovieList movieQuery={movieQuery} />
       </GridItem>
 

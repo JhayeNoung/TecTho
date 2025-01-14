@@ -111,9 +111,6 @@ export default function MovieForm() {
       {alert && <AlertMessage message={alert} />}
 
       <form onSubmit={handleSubmit(handleFormSubmit)}>
-
-        <h1>Movie Form</h1>
-
         <FormControl>
           <FormLabel htmlFor="title">Title</FormLabel>
           <Input id="title" {...register('title', { required: true })} type="text" placeholder="La La Land" />
