@@ -1,7 +1,6 @@
 import { Card, CardBody, Image, HStack } from '@chakra-ui/react'
 import { Movie } from '@/hooks/useMovie'
 import MetacriticBadge from './MetacriticBadge'
-import { optimizedImage } from '@/helper/image-optimization'
 
 interface Props {
     movie: Movie
@@ -10,7 +9,15 @@ interface Props {
 function MovieCard({ movie }: Props) {
     return (
         <Card.Root>
-            <Image src={movie.poster_url} />
+            {movie.poster_url.endsWith(".mp4") ? (
+                <video controls width="100%">
+                    <source src={movie.poster_url} type="video/mp4" />
+                    Your browser does not support the video tag.
+                </video>
+            ) : (
+                <Image src={movie.poster_url} alt="Movie Poster" />
+            )}
+
             <CardBody>
                 <HStack justify={'flex-end'}>
                     <MetacriticBadge name={"In Stock"} score={movie.numberInStock} />

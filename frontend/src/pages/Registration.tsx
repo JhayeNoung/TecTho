@@ -12,6 +12,7 @@ import UserUpdate from "@/components/UserUpdate";
 function Registration() {
   const location = useLocation();
   const email = location.state?.email;
+  const storedToken = localStorage.getItem('token');
 
   return (
     <Grid
@@ -37,9 +38,15 @@ function Registration() {
           {/* Spacer pushes the rest of the components to the right */}
           <Spacer />
 
-          <Button variant="plain" fontWeight="bold">
-            {email ? email : "User API"}
-          </Button>
+          {storedToken ?
+            <Button variant="plain" fontWeight="bold">
+              {localStorage.getItem("email")}
+            </Button>
+            :
+            <Button variant="plain" fontWeight="bold">
+              User API
+            </Button>
+          }
 
           <NavLink to="/api" end>
             <Button variant="plain" _hover={{ textDecoration: "underline" }}>
