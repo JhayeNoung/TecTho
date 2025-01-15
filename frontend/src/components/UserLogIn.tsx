@@ -81,7 +81,7 @@ export default function UserLogin() {
 
       {/* Sign Up Link */}
       <Box>
-        <NavLink to="register" end>
+        <NavLink to="register" className="link" end>
           Sign Up
         </NavLink>
         <p> if you haven't register yet.</p>

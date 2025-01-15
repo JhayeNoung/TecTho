@@ -95,7 +95,7 @@ export default function UserRegister() {
                 </Button>
             </form>
 
-            <NavLink to=".." end>
+            <NavLink to=".." className="link" end>
                 Back to login.
             </NavLink>
         </>
