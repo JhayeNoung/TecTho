@@ -80,7 +80,7 @@ function validateUpdateUser(payload) {
 }
 
 
-function validateAuth(user) {
+function validateLogIn(user) {
     const schema = Joi.object({
         email: Joi.string().min(5).max(255).required().email(),
         password: Joi.string().min(5).max(255).required(),
@@ -91,5 +91,5 @@ function validateAuth(user) {
 
 exports.User = User;
 exports.validateUser = validateUser;
-exports.validateAuth = validateAuth;
+exports.validateLogIn = validateLogIn;
 exports.validateUpdateUser = validateUpdateUser;
