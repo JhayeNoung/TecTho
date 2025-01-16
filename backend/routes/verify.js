@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
-const config = require('config')
 const { User, validateUser } = require('../models/user');
 const sendVerificationEmail = require('../middlewares/mailer')
 

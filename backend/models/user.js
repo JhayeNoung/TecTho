@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const Joi = require('joi');
 Joi.objectId = require('joi-objectid')(Joi);
-const config = require('config');
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -32,7 +31,7 @@ const userSchema = new mongoose.Schema({
 
 userSchema.methods.generateAuthToken = function () {
     // The 'this' context refers to the document, so no need to pass the user as a parameter
-    return jwt.sign({ _id: this._id, isAdmin: this.isAdmin }, config.get('privateKey'));
+    return jwt.sign({ _id: this._id, isAdmin: this.isAdmin }, process.env.PRIVATE_KEY);
 }
 
 const User = mongoose.model('User', userSchema);

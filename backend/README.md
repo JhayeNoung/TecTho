@@ -1,2 +1,0 @@
-# Vidly
-movie renting service

@@ -1,12 +1,10 @@
-const http2 = require('http2');
 const express = require('express');
 const app = express();
 const { msgLogger } = require('./middlewares/logger');
-require('dotenv').config({ path: ['.env', '.env.prob'] });
-require('express-async-errors');
 
-// we need to pass 'app' to startup/routes module(that is connected to port 3000)
-require('./startup/routes')(app);
+
+require('express-async-errors');
+require('./startup/routes')(app); // we need to pass 'app' to startup/routes module(that is connected to port 3000)
 require('./startup/db')();
 require('./startup/config')();
 
