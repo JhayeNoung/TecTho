@@ -1,13 +1,12 @@
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { NavLink } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { Input, Button } from "@chakra-ui/react";
 import { FormControl, FormLabel } from "@chakra-ui/form-control";
 import { z } from "zod";
 import { zodResolver } from '@hookform/resolvers/zod';
-
+import { useState } from "react";
 import apiMovie from "@/services/api-movie";
-import AlertMessage from "./AlertMessage";
 
 const schemaUser = z.object({
     name: z.string().min(2).max(100),
@@ -38,39 +37,42 @@ type User = z.infer<typeof schemaUser>;
 
 export default function UserRegister() {
     const { register, handleSubmit, formState: { errors } } = useForm<User>({ resolver: zodResolver(schemaUser) });
-    const [alert, setAlert] = useState("");
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
 
     const onSubmit = async (payload: User) => {
-        setAlert("");
-        apiMovie
-            .post("/users", payload)
-            .then(() => {
-                setAlert("User registered successfully");
-                window.dispatchEvent(new Event("user-register")); // Dispatch event on successful register
-            })
-            .catch(error => {
-                switch (error.status) {
-                    case 404:
-                        setAlert(error.message);
-                        break;
-                    case 401:
-                    case 400:
-                    case 403:
-                        setAlert(error.response.data);
-                        break;
-                    case 500:
-                        setAlert(error.message);
-                        break;
-                    default:
-                        window.alert("An unexpected error occurred");
-                }
-            })
+        try {
+            // check validation and send mail
+            setLoading(true);
+            await apiMovie.post("/users/validation", payload);
+
+            // route to verify page
+            navigate("verification", { state: { payload } });
+            setLoading(false);
+        }
+        catch (error: any) {
+            console.log(error);
+            switch (error.status) {
+                case 404:
+                    alert(error.message);
+                    break;
+                case 401:
+                case 400:
+                case 403:
+                    alert(error.response.data);
+                    break;
+                case 500:
+                    alert(error.message);
+                    break;
+                default:
+                    window.alert("An unexpected error occurred");
+            }
+            setLoading(false);
+        }
     };
 
     return (
         <>
-            {alert && <AlertMessage message={alert} />}
-
             <form onSubmit={handleSubmit(onSubmit)}>
                 <FormControl>
                     <FormLabel htmlFor="name">Username</FormLabel>
@@ -90,9 +92,16 @@ export default function UserRegister() {
                     {errors.password?.message && <p className="text-danger">{errors.password?.message}</p>}
                 </FormControl>
 
-                <Button type='submit'>
-                    Register
-                </Button>
+                {loading ?
+                    <Button disabled>
+                        Register...
+                    </Button>
+                    :
+                    <Button type='submit'>
+                        Register
+                    </Button>
+                }
+
             </form>
 
             <NavLink to=".." className="link" end>

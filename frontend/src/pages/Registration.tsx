@@ -8,6 +8,7 @@ import UserList from "@/components/UserList";
 import UserLogIn from "@/components/UserLogIn";
 import UserLogOut from "@/components/UserLogOut";
 import UserUpdate from "@/components/UserUpdate";
+import UserVerification from "@/components/UserVerification";
 
 function Registration() {
   const location = useLocation();
@@ -65,6 +66,7 @@ function Registration() {
           <Route path="logout" element={<UserLogOut />} />
           <Route path="logout/update" element={<UserUpdate />} />
           <Route path="register" element={<UserRegister />} />
+          <Route path="register/verification" element={<UserVerification />} />
         </Routes>
       </GridItem>
 

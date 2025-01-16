@@ -15,7 +15,6 @@ function MovieAPI() {
   const [movieQuery, setMovieQuery] = useState<MovieQuery>({} as MovieQuery)
   const storedToken = localStorage.getItem('token');
 
-
   return (
     <Grid
       templateAreas={{
