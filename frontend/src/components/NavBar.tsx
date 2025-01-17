@@ -45,6 +45,12 @@ export default function NavBar({ onSearch }: Props) {
         </Button>
       </NavLink>
 
+      <NavLink to="/payment" end>
+        <Button variant="plain" _hover={{ textDecoration: "underline" }}>
+          Payment
+        </Button>
+      </NavLink>
+
       <DarkMode />
     </HStack >
   )

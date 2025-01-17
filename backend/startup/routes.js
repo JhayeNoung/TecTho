@@ -8,6 +8,7 @@ const returns = require('../routes/returns');
 const error = require('../middlewares/error');
 const aws = require('../routes/aws');
 const verify = require('../routes/verify');
+const stripe = require('../routes/stripe');
 const morgan = require('morgan');
 const cors = require("cors"); // If your frontend and backend are running on different origins (e.g., different ports in development), make sure the backend is configured to handle CORS (Cross-Origin Resource Sharing). 
 
@@ -26,5 +27,6 @@ module.exports = function (app) {
     app.use('/api/returns', returns);
     app.use('/api/presigned-url', aws);
     app.use('/api/verify', verify);
+    app.use('/api/stripe', stripe);
     app.use(error);
 } 
