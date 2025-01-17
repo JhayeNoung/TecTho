@@ -18,6 +18,10 @@ const generateRandomPath = () => {
     return Math.random().toString(36).substring(2, 5);
 };
 
+function replaceSpacesWithUnderscore(input) {
+    return input.replace(/ /g, "_");
+}
+
 // AWS S3 API Example
 router.get('/aws-api', async (req, res) => {
     try {
@@ -61,7 +65,7 @@ router.post('/post-url', async (req, res) => {
         const input = {
             Bucket: process.env.BUCKET_NAME,
             // Key: `media/images/${randomPath}/${fileName}`,
-            Key: `media/images/${fileName}`,
+            Key: `media/images/${replaceSpacesWithUnderscore(fileName)}`,
             ContentType: 'image/jpeg',  // Adjust based on the file type
         };
 

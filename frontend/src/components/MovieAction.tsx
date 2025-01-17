@@ -17,6 +17,7 @@ function MovieAction({ movie }: Props) {
       // Get the pre-signed URL from the backend
       const presigned_response = await apiMovie.post('/presigned-url/delete-url', { KEY: key });
 
+      // Delete the movie from the database
       await apiMovie
         .delete(`/movies/${movie._id}`, {
           headers: {
