@@ -11,34 +11,45 @@ function MovieAction({ movie }: Props) {
   const storedToken = localStorage.getItem('token');
 
   const handleDelete = async () => {
-    apiMovie
-      .delete(`/movies/${movie._id}`, {
-        headers: {
-          Authorization: `${storedToken}`,
-          "Content-Type": "multipart/form-data"
-        }
-      })
-      .then(() => {
-        window.dispatchEvent(new Event("movie-delete")); // Dispatch event on successful delete
-      })
-      .catch(error => {
-        console.log(error)
-        switch (error.status) {
-          case 404:
-            window.alert(error.message);
-            break;
-          case 401:
-          case 400:
-          case 403:
-            window.alert(error.response.data);
-            break;
-          case 500:
-            window.alert(error.message);
-            break;
-          default:
-            window.alert("An unexpected error occurred");
-        }
-      })
+    try {
+      const key = movie.poster_url.split('com/')[1]
+
+      // Get the pre-signed URL from the backend
+      const presigned_response = await apiMovie.post('/presigned-url/delete-url', { KEY: key });
+
+      await apiMovie
+        .delete(`/movies/${movie._id}`, {
+          headers: {
+            Authorization: `${storedToken}`,
+            "Content-Type": "multipart/form-data"
+          }
+        })
+
+      // Delete the file from S3 using the pre-signed URL after the movie is successfully deleted
+      await fetch(presigned_response.data.url, {
+        method: 'DELETE',
+      });
+
+      window.dispatchEvent(new Event("movie-delete")); // Dispatch event on successful delete
+    }
+    catch (error: any) {
+      console.log(error)
+      switch (error.status) {
+        case 404:
+          window.alert(error.message);
+          break;
+        case 401:
+        case 400:
+        case 403:
+          window.alert(error.response.data);
+          break;
+        case 500:
+          window.alert(error.message);
+          break;
+        default:
+          window.alert("An unexpected error occurred");
+      }
+    }
   };
 
   return (

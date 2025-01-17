@@ -20,6 +20,7 @@ const schemaMovie = z.object({
       (file) =>
         [
           "image/jpeg",
+          "video/mp4"
         ].includes(file.type),
       { message: "Invalid image file type" }
     ),
@@ -150,7 +151,7 @@ export default function MovieForm() {
             type="file"
             name="poster"
             className="form-control"
-            accept="image/png, image/jpeg"
+            accept="image/png, image/jpeg, video/mp4"
           />
           {errors.poster?.message && <p className="text-danger">{errors.poster?.message}</p>}
         </FormControl>

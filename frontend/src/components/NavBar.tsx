@@ -12,6 +12,8 @@ interface Props {
 }
 
 export default function NavBar({ onSearch }: Props) {
+  const storedToken = localStorage.getItem("token")
+
   return (
     <HStack padding='10px'>
 
@@ -23,11 +25,19 @@ export default function NavBar({ onSearch }: Props) {
         <SearchInput submitHandler={(event) => onSearch(event.searchName)} />
       </Box>
 
-      <NavLink to="/registration">
-        <Button variant="plain" _hover={{ textDecoration: "underline" }}>
-          User API
-        </Button>
-      </NavLink>
+      {storedToken ?
+        <NavLink to="/registration/logout">
+          <Button variant="plain" _hover={{ textDecoration: "underline" }}>
+            {localStorage.getItem("email")}
+          </Button>
+        </NavLink>
+        :
+        <NavLink to="/registration">
+          <Button variant="plain" _hover={{ textDecoration: "underline" }}>
+            User API
+          </Button>
+        </NavLink>
+      }
 
       <NavLink to="/api" end>
         <Button variant="plain" _hover={{ textDecoration: "underline" }}>

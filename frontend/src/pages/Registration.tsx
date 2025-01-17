@@ -8,10 +8,12 @@ import UserList from "@/components/UserList";
 import UserLogIn from "@/components/UserLogIn";
 import UserLogOut from "@/components/UserLogOut";
 import UserUpdate from "@/components/UserUpdate";
+import UserVerification from "@/components/UserVerification";
 
 function Registration() {
   const location = useLocation();
   const email = location.state?.email;
+  const storedToken = localStorage.getItem('token');
 
   return (
     <Grid
@@ -37,9 +39,15 @@ function Registration() {
           {/* Spacer pushes the rest of the components to the right */}
           <Spacer />
 
-          <Button variant="plain" fontWeight="bold">
-            {email ? email : "User API"}
-          </Button>
+          {storedToken ?
+            <Button variant="plain" fontWeight="bold">
+              {localStorage.getItem("email")}
+            </Button>
+            :
+            <Button variant="plain" fontWeight="bold">
+              User API
+            </Button>
+          }
 
           <NavLink to="/api" end>
             <Button variant="plain" _hover={{ textDecoration: "underline" }}>
@@ -58,6 +66,7 @@ function Registration() {
           <Route path="logout" element={<UserLogOut />} />
           <Route path="logout/update" element={<UserUpdate />} />
           <Route path="register" element={<UserRegister />} />
+          <Route path="register/verification" element={<UserVerification />} />
         </Routes>
       </GridItem>
 

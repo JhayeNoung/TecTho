@@ -86,13 +86,12 @@ router.post('/post-url', async (req, res) => {
 // Generate presigned URL for deleting files
 router.post('/delete-url', async (req, res) => {
     try {
-        const { fileName } = req.body;
-        const randomPath = generateRandomPath();
+        const { KEY } = req.body;
 
         // configure the input parameters
         const input = {
             Bucket: process.env.BUCKET_NAME,
-            Key: `media/images/${randomPath}/${fileName}`,
+            Key: `${KEY}`,
         };
 
         // Create the DeleteObjectCommand for deleting the file

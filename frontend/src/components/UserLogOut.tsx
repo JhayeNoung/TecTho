@@ -13,6 +13,7 @@ function UserLogOut() {
 
   return (
     <>
+
       <Text>{localStorage.getItem("email")}</Text>
 
       <NavLink to=".." end>

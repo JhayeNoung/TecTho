@@ -4,7 +4,7 @@ import App from './App'
 import 'bootstrap/dist/css/bootstrap.css'
 import { Provider } from "@/components/ui/provider"
 import { BrowserRouter } from "react-router";
-import UserUpdate from './components/UserUpdate'
+import "./index.css"; // my custom css
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

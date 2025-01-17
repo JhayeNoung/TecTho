@@ -1,10 +1,13 @@
 const mongoose = require('mongoose');
-const config = require('config');
-const {msgLogger} = require('../middlewares/logger');
+const { msgLogger } = require('../middlewares/logger');
 
-const db = config.get('db');
-module.exports = function(){
+module.exports = function () {
+    let db = "mongodb://localhost:27017/dev_playground_node"
+    if (process.env.NODE_ENV === 'production') {
+        db = process.env.MONGO_URI;
+    }
+
     mongoose.connect(db)
-        .then(()=>msgLogger.info(`Connects to ${db}`))
-        .catch(err => msgLogger.error(err.message));   
+        .then(() => msgLogger.info(`Connects to ${db}`))
+        .catch(err => msgLogger.error(err.message));
 }

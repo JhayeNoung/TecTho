@@ -1,10 +1,11 @@
 const express = require('express');
-const { User, validateUser, validateAuth, validateUpdateUser } = require('../models/user');
+const { User, validateUser, validateLogIn, validateUpdateUser } = require('../models/user');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const validObjectId = require('../middlewares/validObjectId');
 const saltRounds = 10;
 const auth = require('../middlewares/auth')
+const sendVerificationEmail = require('../middlewares/mailer')
 
 router.get('/', async (req, res) => {
     const user = await User.find();
@@ -12,8 +13,8 @@ router.get('/', async (req, res) => {
 });
 
 
-// register user
-router.post('/', async (req, res) => {
+// validate email and send verification email
+router.post('/validation', async (req, res) => {
     // validate the request body and check 400
     const { error } = validateUser(req.body);
     if (error) return res.status(400).send(error.details[0].message);
@@ -22,20 +23,45 @@ router.post('/', async (req, res) => {
     const email = await User.findOne({ email: req.body.email });
     if (email) return res.status(400).send('There is an account with this email.');
 
+    // check mail system
+    const result = await sendVerificationEmail(req.body.email)
+    if (!result.success) {
+        console.error('Detailed error:', result.error);
+
+        if (result.error.message.includes('Invalid recipient') || result.error.message.includes('ENOTFOUND')) {
+            return res.status(400).send('The provided email address is not valid or registered.');
+        }
+        return res.status(500).send('An error occurred while sending the verification email.');
+    }
+    res.status(200).send('Ok');
+});
+
+// verify email
+router.get('/validation/mail', async (req, res) => {
+    // const { token } = req.query;
+    const { verificationKey } = req.query;
+
+    if (verificationKey != 12345) return res.status(400).send('Invalid verification key.');
+
+    res.status(200).send('Email verified!');
+});
+
+
+// register user
+router.post('/create', async (req, res) => {
     // create user and hash user password
     const user = new User(req.body);
     const hashPassword = await bcrypt.hash(req.body.password, saltRounds);
     user.password = hashPassword;
     await user.save();
 
-    const token = user.generateAuthToken();
-    res.header('x-auth-token', token).status(200).send(user);
+    res.status(200).send('Ok');
 });
 
 // login
 router.post('/login', async (req, res) => {
     // validate email and password
-    const { error } = validateAuth(req.body);
+    const { error } = validateLogIn(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
     // find user by email and check 404
@@ -86,7 +112,7 @@ router.delete('/:id', [validObjectId, auth], async (req, res) => {
 // delete account
 router.delete('/login/delete', async (req, res) => {
     // validate email and password
-    const { error } = validateAuth(req.body);
+    const { error } = validateLogIn(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
     // find user by email and check 404

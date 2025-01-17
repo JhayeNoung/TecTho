@@ -1,6 +1,6 @@
 import { HStack, Image, Grid, GridItem, Spacer, Button } from '@chakra-ui/react'
 import { NavLink } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import logo from '../assets/logo.webp'
 import MovieList from '@/components/MovieList';
@@ -13,6 +13,7 @@ import SearchInput from '@/components/SearchInput';
 
 function MovieAPI() {
   const [movieQuery, setMovieQuery] = useState<MovieQuery>({} as MovieQuery)
+  const storedToken = localStorage.getItem('token');
 
   return (
     <Grid
@@ -39,11 +40,19 @@ function MovieAPI() {
           {/* Spacer pushes the rest of the components to the right */}
           <Spacer />
 
-          <NavLink to="/registration">
-            <Button variant="plain" _hover={{ textDecoration: "underline" }}>
-              User API
-            </Button>
-          </NavLink>
+          {storedToken ?
+            <NavLink to="/registration/logout">
+              <Button variant="plain" _hover={{ textDecoration: "underline" }}>
+                {localStorage.getItem("email")}
+              </Button>
+            </NavLink>
+            :
+            <NavLink to="/registration">
+              <Button variant="plain" _hover={{ textDecoration: "underline" }}>
+                User API
+              </Button>
+            </NavLink>
+          }
 
           <Button variant="plain" fontWeight="bold">
             Movie API
