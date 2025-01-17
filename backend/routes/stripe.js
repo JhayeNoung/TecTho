@@ -1,5 +1,5 @@
 // This is your test secret API key.
-const stripe = require('stripe')('sk_test_51Qhz1cBn7sAkNs75GcSGBJ1l1Ppm7QTafxDUfwtp5wEWQro5qJwqugrXbtSgUsHI5TEAi7kTAkgj6qZMO5KfsV2e00t7GCkYoI');
+const stripe = require('stripe')(process.env.STRIPE_TEST_PRIVATE_KEY);
 const express = require('express');
 const router = express.Router();
 

@@ -1,8 +1,8 @@
 import { Switch } from "@/components/ui/switch"
-import { useColorMode } from './ui/color-mode'
 import { AiFillSun, AiOutlineSun, AiFillMoon, AiOutlineMoon } from "react-icons/ai";
 import { useState } from "react";
 import { Box, HStack } from "@chakra-ui/react";
+import { ColorModeButton, useColorMode, useColorModeValue } from "@/components/ui/color-mode"
 
 function DarkMode() {
     // userColorMode for toggling dark mode
