@@ -13,18 +13,14 @@ function MovieAction({ movie }: Props) {
   const handleDelete = async () => {
     try {
       const key = movie.poster_url.split('com/')[1]
-
-      // Get the pre-signed URL from the backend
       const presigned_response = await apiMovie.post('/presigned-url/delete-url', { KEY: key });
 
-      // Delete the movie from the database
-      await apiMovie
-        .delete(`/movies/${movie._id}`, {
-          headers: {
-            Authorization: `${storedToken}`,
-            "Content-Type": "multipart/form-data"
-          }
-        })
+      await apiMovie.delete(`/movies/${movie._id}`, {
+        headers: {
+          Authorization: `${storedToken}`,
+          "Content-Type": "multipart/form-data"
+        }
+      })
 
       // Delete the file from S3 using the pre-signed URL after the movie is successfully deleted
       await fetch(presigned_response.data.url, {
@@ -53,11 +49,15 @@ function MovieAction({ movie }: Props) {
     }
   };
 
+  const handleEdit = () => {
+    return window.location.href = `http://localhost:3001/api/movies/${movie._id}`;
+  }
+
   return (
     <>
       {storedToken ?
         <HStack>
-          <Button variant="plain" _hover={{ color: "cyan" }} color="blue" onClick={() => console.log("edit")}>
+          <Button variant="plain" _hover={{ color: "cyan" }} color="blue" onClick={() => handleEdit()}>
             Edit
           </Button>
           <Button variant="plain" _hover={{ color: "cyan" }} color="blue" onClick={() => console.log("details")}>
