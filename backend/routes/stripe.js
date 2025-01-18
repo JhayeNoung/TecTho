@@ -6,11 +6,23 @@ const router = express.Router();
 const YOUR_DOMAIN = 'http://localhost:5173/payment';
 
 router.post('/create-checkout-session', async (req, res) => {
+    const movie = JSON.parse(req.body.movie); // Parse the incoming JSON string to object
+
+    const product = await stripe.products.create({
+        name: movie.title,
+    });
+
+    const price = await stripe.prices.create({
+        product: product.id,
+        unit_amount: movie.dailyRentalRate * 100,
+        currency: 'usd',
+    });
+
     const session = await stripe.checkout.sessions.create({
         line_items: [
             {
                 // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
-                price: 'price_1QiC8fBn7sAkNs75MkTUZZin',
+                price: price.id,
                 quantity: 1,
             },
         ],

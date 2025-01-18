@@ -38,6 +38,8 @@ function MovieCard({ movie }: Props) {
       <CardBody>
         <HStack justify={'space-between'}>
           <form action="http://localhost:3001/api/stripe/create-checkout-session" method="POST">
+            {/* movie object to json */}
+            <input type="hidden" name="movie" value={JSON.stringify(movie)} />
             <Button type="submit">
               Rent Now
             </Button>
