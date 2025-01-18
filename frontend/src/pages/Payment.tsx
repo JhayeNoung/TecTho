@@ -70,6 +70,9 @@ const ProductDisplay = () => (
 const Message = ({ message }: { message: string }) => (
   <section>
     <p>{message}</p>
+    <NavLink to="/">
+      <Button>Back to Home</Button>
+    </NavLink>
   </section>
 );
 

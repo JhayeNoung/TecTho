@@ -56,7 +56,6 @@ export default function MovieForm() {
   const handleFormSubmit = async (payload: Movie) => {
     setAlert(""); // Reset the alert
     setLoading(true);
-    const { poster, ...rest } = payload; // Separate the poster from the payload
 
     // Try to post the movie and upload the poster
     try {
@@ -65,13 +64,13 @@ export default function MovieForm() {
       const poster_url = presigned_response.data.url.split('?')[0];
 
       // send the payload to the backend
-      await apiMovie
-        .post(`/movies`, { ...rest, poster_url }, {
-          headers: {
-            Authorization: `${storedToken}`,
-            "Content-Type": "application/json"
-          }
-        })
+      const { poster, ...rest } = payload; // Separate the poster file from the payload
+      await apiMovie.post(`/movies`, { ...rest, poster_url }, {
+        headers: {
+          Authorization: `${storedToken}`,
+          "Content-Type": "application/json"
+        }
+      })
 
       // Upload the file to S3 using the pre-signed URL after the movie is successfully posted
       await fetch(presigned_response.data.url, {
@@ -80,8 +79,9 @@ export default function MovieForm() {
         body: payload.poster,
       });
 
-      setAlert("Movie posted successfully");
       window.dispatchEvent(new Event("movie-post")); // Dispatch an event to notify the MovieList component
+
+      setAlert("Movie posted successfully");
       setLoading(false);
     }
     // Handle the error

@@ -19,7 +19,10 @@ const generateRandomPath = () => {
 };
 
 function replaceSpacesWithUnderscore(input) {
-    return input.replace(/ /g, "_");
+    if (input.includes(" ")) {
+        return input.replace(/ /g, "_");
+    }
+    return input;
 }
 
 // AWS S3 API Example
@@ -58,19 +61,17 @@ router.get('/aws-api', async (req, res) => {
 router.post('/post-url', async (req, res) => {
     try {
         const { fileName } = req.body;
-        // const randomPath = generateRandomPath();
-        // const randomPath = uuidv4();
+        console.log(fileName);
+        var key = fileName.includes(".mp4") ? `media/videos/${replaceSpacesWithUnderscore(fileName)}` : `media/images/${replaceSpacesWithUnderscore(fileName)}`;
 
         // configure the input parameters 
         const input = {
             Bucket: process.env.BUCKET_NAME,
-            // Key: `media/images/${randomPath}/${fileName}`,
-            Key: `media/images/${replaceSpacesWithUnderscore(fileName)}`,
+            Key: key,
             ContentType: 'image/jpeg',  // Adjust based on the file type
         };
 
         // Create the PutObjectCommand for uploading the file
-        // https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/s3/command/PutObjectCommand/
         const command = new PutObjectCommand(input);
 
         // Generate the presigned URL with a 5-minute expiry time
