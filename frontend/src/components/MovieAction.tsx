@@ -2,6 +2,8 @@
 import { Button, HStack } from '@chakra-ui/react'
 import apiMovie from '@/services/api-movie'
 import { Movie } from '@/hooks/useMovie';
+import Dialog from './Dialog';
+import MovieUpdate from './MovieUpdate';
 
 interface Props {
   movie: Movie
@@ -57,20 +59,14 @@ function MovieAction({ movie }: Props) {
     }
   };
 
-  const handleEdit = () => {
-    return window.location.href = `http://localhost:3001/api/movies/${movie._id}`;
-  }
+
 
   return (
     <>
       {storedToken ?
         <HStack>
-          <Button variant="plain" _hover={{ color: "cyan" }} color="blue" onClick={() => handleEdit()}>
-            Edit
-          </Button>
-          <Button variant="plain" _hover={{ color: "cyan" }} color="blue" onClick={() => console.log("details")}>
-            Details
-          </Button>
+          <MovieUpdate movie={movie}>Edit</MovieUpdate>
+          <Dialog data={movie}>Detail</Dialog>
           <Button variant="plain" _hover={{ color: "cyan" }} color="red" onClick={handleDelete}>
             Delete
           </Button>
@@ -80,9 +76,7 @@ function MovieAction({ movie }: Props) {
           <Button variant="plain" _hover={{ textDecoration: "underline" }} color="grey" onClick={() => window.alert("Please login to perform this action")}>
             Edit
           </Button>
-          <Button variant="plain" _hover={{ textDecoration: "underline" }} color="grey" onClick={() => window.alert("Please login to perform this action")}>
-            Details
-          </Button>
+          <Dialog data={movie}>Detail</Dialog>
           <Button variant="plain" _hover={{ textDecoration: "underline" }} color="grey" onClick={() => window.alert("Please login to perform this action")}>
             Delete
           </Button>

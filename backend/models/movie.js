@@ -53,6 +53,20 @@ function validateMovie(movie) {
     return schema.validate(movie);
 }
 
+function validateUpdateMovie(movie) {
+    const schema = Joi.object({
+        title: Joi.string().min(1).max(255).allow('').optional(),
+        genre: Joi.objectId().allow('').optional(),
+        numberInStock: Joi.number().min(0).max(300).allow('').optional(),
+        dailyRentalRate: Joi.number().min(0).max(300).allow('').optional(),
+        poster_url: Joi.string().min(1).allow('').optional(),
+        video_url: Joi.string().min(1).allow('').optional(),
+    });
+
+    return schema.validate(movie);
+}
+
 exports.validateMovie = validateMovie;
 exports.Movie = Movie;
 exports.movieSchema = movieSchema;
+exports.validateUpdateMovie = validateUpdateMovie;

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { validateMovie, Movie } = require('../models/movie');
+const { validateMovie, Movie, validateUpdateMovie } = require('../models/movie');
 const { Genre, validateGenre } = require('../models/genre');
 const validObjectId = require('../middlewares/validObjectId');
 const auth = require('../middlewares/auth');
@@ -107,12 +107,17 @@ router.put('/:id', [validObjectId, auth], async (req, res) => {
     let movie = await Movie.findById(req.params.id);
     if (!movie) return res.status(404).send('Not found the movie');
 
-    // found and update movie
+    // if provided validate the payload 
+    const { error } = validateUpdateMovie(req.body)
+    if (error) return res.status(400).send(error.details[0].message);
+
+    // update movie
     movie.title = req.body.title || movie.title;
     movie.genre = movie.genre;
     movie.numberInStock = req.body.numberInStock || movie.numberInStock;
     movie.dailyRentalRate = req.body.dailyRentalRate || movie.dailyRentalRate;
-    movie.poster = req.body.poster || movie.poster;
+    movie.poster_url = req.body.poster_url || movie.poster_url;
+    movie.video_url = req.body.video_url || movie.video_url;
 
     // if genere is provided
     if (req.body.hasOwnProperty("genre")) {
