@@ -20,6 +20,7 @@ import { useState } from "react"
 
 import { Movie } from "@/hooks/useMovie"
 import apiMovie from "@/services/api-movie"
+import useGenre from "../hooks/useGenre";
 
 interface Props {
   children: React.ReactNode
@@ -30,9 +31,17 @@ const MovieUpdateForm = ({ movie }: { movie: Movie }) => {
   const { register, handleSubmit } = useForm<Movie>();
   const storedToken = localStorage.getItem('token');
   const [alert, setAlert] = useState("");
+  const { data: genres } = useGenre();
 
-  const onSubmit = async (payload: Movie) => {
+  const onSubmit = async (formData: Movie) => {
     setAlert("");
+
+    const payload = {
+      title: formData.title,
+      numberInStock: formData.numberInStock || "",
+      dailyRentalRate: formData.dailyRentalRate || "",
+      genre: formData.genre
+    }
 
     await apiMovie.put(`/movies/${movie._id}`, payload, {
       headers: {
@@ -45,7 +54,6 @@ const MovieUpdateForm = ({ movie }: { movie: Movie }) => {
         setAlert("Movie updated successfully");
       })
       .catch((error: any) => {
-        console.log(error)
         setAlert(error.response.data);
       })
   }
@@ -65,6 +73,12 @@ const MovieUpdateForm = ({ movie }: { movie: Movie }) => {
             </Field>
             <Field label="Daily Rental Rate">
               <Input {...register("dailyRentalRate", { valueAsNumber: true })} placeholder="Daily Rental Rate" />
+            </Field>
+            <Field label="Choose Genres">
+              <select {...register("genre")} className="custom-form-select" id="genre">
+                <option value="">Choose Genres</option>
+                {genres.map(genre => <option value={genre._id} key={genre._id}>{genre.name}</option>)}
+              </select>
             </Field>
           </Stack>
         </DialogBody >

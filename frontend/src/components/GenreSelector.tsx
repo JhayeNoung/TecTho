@@ -13,7 +13,7 @@ export default function GenreSelector({ onSelectedGenre }: Props) {
     return (
         <select
             id="genre"
-            className="form-select"
+            className="custom-form-select"
             onChange={(event) => {
                 const genreId = event.target.value
                 const genre = genres.filter(genre => String(genre._id) === genreId)[0]
