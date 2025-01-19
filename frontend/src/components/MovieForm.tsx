@@ -4,10 +4,13 @@ import { FormControl, FormLabel } from "@chakra-ui/form-control";
 import { z } from "zod";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Input, Button } from "@chakra-ui/react";
+import { Field } from "@/components/ui/field"
+import { NativeSelectField, NativeSelectRoot } from "@chakra-ui/react";
 
 import useGenre from "../hooks/useGenre";
 import AlertMessage from "./AlertMessage";
 import apiMovie from "@/services/api-movie";
+
 
 const schemaMovie = z.object({
   title: z.string().min(1).max(255),
@@ -37,24 +40,6 @@ const schemaMovie = z.object({
 
 type Movie = z.infer<typeof schemaMovie>;
 
-
-/*
-Hybrid Upload is used to upload file in this MovieForm component:
-
-1.  Frontend Request for Pre-signed URL:
-    The frontend sends file metadata (e.g., file type, size) to the backend.
-
-2.  Backend Generates Pre-signed URL:
-    The backend validates the request and returns a pre-signed URL.
-
-3.  Frontend Uploads to S3:
-    The frontend uses the pre-signed URL to upload the file directly to S3.
-
-4.  Backend Logs Metadata:
-
-The backend receives metadata from the frontend after the successful upload for storage or processing.
-*/
-
 export default function MovieForm() {
   const { register, setValue, handleSubmit, formState: { errors } } = useForm<Movie>({ resolver: zodResolver(schemaMovie) });
   const { data: genres } = useGenre();
@@ -66,7 +51,6 @@ export default function MovieForm() {
     setAlert(""); // Reset the alert
     setLoading(true);
 
-    // Try to post the movie and upload the poster
     try {
       // Get the pre-signed URL from the backend
       const presigned_poster = await apiMovie.post('/presigned-url/post-url', { name: payload.poster.name, type: payload.poster.type });
@@ -160,7 +144,7 @@ export default function MovieForm() {
 
         {/* "useForm" doesn't separately handle 'File' format, so we will need to grab the file from "e.target" and set the value with "setValue" */}
         <FormControl>
-          <label htmlFor="poster" className="from-label">Choose Poster File</label>
+          <FormLabel htmlFor="poster">Poster File</FormLabel>
           <input
             id="poster"
             onChange={(e) => {
@@ -169,14 +153,14 @@ export default function MovieForm() {
             }}
             type="file"
             name="poster"
-            className="form-control"
+            className="custom-form-control"
             accept="image/png, image/jpeg"
           />
           {errors.poster?.message && <p className="text-danger">{errors.poster?.message}</p>}
         </FormControl>
 
         <FormControl>
-          <label htmlFor="video" className="from-label">Choose Video File</label>
+          <FormLabel htmlFor="video">Video File</FormLabel>
           <input
             id="video"
             onChange={(e) => {
@@ -185,7 +169,7 @@ export default function MovieForm() {
             }}
             type="file"
             name="video"
-            className="form-control"
+            className="custom-form-control"
             accept="video/mp4"
           />
           {errors.video?.message && <p className="text-danger">{errors.video?.message}</p>}
@@ -193,7 +177,7 @@ export default function MovieForm() {
 
         <FormControl>
           <label htmlFor="genre" className="from-label">Genres</label>
-          <select {...register("genre")} className="form-select" id="genre">
+          <select {...register("genre")} className="custom-form-select" id="genre">
             <option value="">Choose Genres</option>
             {genres.map(genre => <option value={genre._id} key={genre._id}>{genre.name}</option>)}
           </select>

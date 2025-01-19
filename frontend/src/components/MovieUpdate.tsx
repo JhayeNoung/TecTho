@@ -40,7 +40,7 @@ const MovieUpdateForm = ({ movie }: { movie: Movie }) => {
       title: formData.title,
       numberInStock: formData.numberInStock || "",
       dailyRentalRate: formData.dailyRentalRate || "",
-      genre: formData.genre
+      genre: formData.genre || movie.genre._id,
     }
 
     await apiMovie.put(`/movies/${movie._id}`, payload, {
@@ -76,7 +76,7 @@ const MovieUpdateForm = ({ movie }: { movie: Movie }) => {
             </Field>
             <Field label="Choose Genres">
               <select {...register("genre")} className="custom-form-select" id="genre">
-                <option value="">Choose Genres</option>
+                <option value="">Genres</option>
                 {genres.map(genre => <option value={genre._id} key={genre._id}>{genre.name}</option>)}
               </select>
             </Field>

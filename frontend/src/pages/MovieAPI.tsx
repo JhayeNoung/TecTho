@@ -64,13 +64,13 @@ function MovieAPI() {
 
 
       {/* Movie Form */}
-      <GridItem area="form" bg="dodgerblue">
+      <GridItem area="form" paddingLeft={3} paddingTop={3}>
         <MovieForm />
       </GridItem>
 
 
       {/* Movie List */}
-      <GridItem area="list" bg="yellow">
+      <GridItem area="list" padding={{ base: '3', lg: '3 3 3 3' }}>
         <SearchInput submitHandler={(event) => setMovieQuery({ ...movieQuery, search: event.searchName })} />
 
         <HStack>
