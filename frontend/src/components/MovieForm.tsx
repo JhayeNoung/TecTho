@@ -20,9 +20,18 @@ const schemaMovie = z.object({
       (file) =>
         [
           "image/jpeg",
-          "video/mp4"
+          "image/png"
         ].includes(file.type),
       { message: "Invalid image file type" }
+    ),
+  video: z
+    .instanceof(File)
+    .refine(
+      (file) =>
+        [
+          "video/mp4"
+        ].includes(file.type),
+      { message: "Invalid video file type" }
     ),
 });
 
@@ -60,12 +69,15 @@ export default function MovieForm() {
     // Try to post the movie and upload the poster
     try {
       // Get the pre-signed URL from the backend
-      const presigned_response = await apiMovie.post('/presigned-url/post-url', { fileName: payload.poster.name });
-      const poster_url = presigned_response.data.url.split('?')[0];
+      const presigned_poster = await apiMovie.post('/presigned-url/post-url', { name: payload.poster.name, type: payload.poster.type });
+      const poster_url = presigned_poster.data.url.split('?')[0];
+
+      const presigned_video = await apiMovie.post('/presigned-url/post-url', { name: payload.video.name, type: payload.video.type });
+      const video_url = presigned_video.data.url.split('?')[0];
 
       // send the payload to the backend
-      const { poster, ...rest } = payload; // Separate the poster file from the payload
-      await apiMovie.post(`/movies`, { ...rest, poster_url }, {
+      const { poster, video, ...rest } = payload; // Separate the poster file from the payload
+      await apiMovie.post(`/movies`, { ...rest, poster_url, video_url }, {
         headers: {
           Authorization: `${storedToken}`,
           "Content-Type": "application/json"
@@ -73,10 +85,17 @@ export default function MovieForm() {
       })
 
       // Upload the file to S3 using the pre-signed URL after the movie is successfully posted
-      await fetch(presigned_response.data.url, {
+      await fetch(presigned_poster.data.url, {
         method: 'PUT',
         headers: { 'Content-Type': payload.poster.type },
         body: payload.poster,
+      });
+
+      // Upload the file to S3 using the pre-signed URL after the movie is successfully posted
+      await fetch(presigned_video.data.url, {
+        method: 'PUT',
+        headers: { 'Content-Type': payload.poster.type },
+        body: payload.video,
       });
 
       window.dispatchEvent(new Event("movie-post")); // Dispatch an event to notify the MovieList component
@@ -141,7 +160,7 @@ export default function MovieForm() {
 
         {/* "useForm" doesn't separately handle 'File' format, so we will need to grab the file from "e.target" and set the value with "setValue" */}
         <FormControl>
-          <label htmlFor="poster" className="from-label">Choose File</label>
+          <label htmlFor="poster" className="from-label">Choose Poster File</label>
           <input
             id="poster"
             onChange={(e) => {
@@ -151,9 +170,25 @@ export default function MovieForm() {
             type="file"
             name="poster"
             className="form-control"
-            accept="image/png, image/jpeg, video/mp4"
+            accept="image/png, image/jpeg"
           />
           {errors.poster?.message && <p className="text-danger">{errors.poster?.message}</p>}
+        </FormControl>
+
+        <FormControl>
+          <label htmlFor="video" className="from-label">Choose Video File</label>
+          <input
+            id="video"
+            onChange={(e) => {
+              const file = e.target.files?.[0]; // get file objcet from the event
+              if (file) setValue("video", file); // set the value of video with the file
+            }}
+            type="file"
+            name="video"
+            className="form-control"
+            accept="video/mp4"
+          />
+          {errors.video?.message && <p className="text-danger">{errors.video?.message}</p>}
         </FormControl>
 
         <FormControl>

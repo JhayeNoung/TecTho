@@ -9,6 +9,7 @@ export interface Movie {
     "dailyRentalRate": number,
     "genre": Genre,
     "poster_url": string,
+    "video_url": string,
 }
 
 export interface MovieQuery {
