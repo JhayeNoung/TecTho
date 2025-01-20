@@ -4,7 +4,7 @@ const { msgLogger } = require('../middlewares/logger');
 module.exports = function () {
     let db = "mongodb://localhost:27017/dev_playground_node"
     if (process.env.NODE_ENV === 'production') {
-        db = process.env.MONGO_URI;
+        db = process.env.MONGO_URL;
     }
 
     mongoose.connect(db)

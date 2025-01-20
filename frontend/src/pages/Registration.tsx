@@ -45,7 +45,7 @@ function Registration() {
 
           {storedToken ?
             <Button variant="plain" fontWeight="bold">
-              {localStorage.getItem("email")}
+              {email}
             </Button>
             :
             <Button variant="plain" fontWeight="bold">

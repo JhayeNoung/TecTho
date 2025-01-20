@@ -1,11 +1,10 @@
 import create from "./http-service"
-import apiMovie from "./api-movie"
 
 type Genre = {
     "_id": string,
     "name": string,
-  }
-  
+}
+
 export interface Movie {
     "_id": string,
     "title": string,
