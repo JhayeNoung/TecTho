@@ -3,7 +3,6 @@ import { useState } from "react"
 
 import { MovieQuery } from "../hooks/useMovie"
 import GenreList from "../components/GenreList"
-import PageBar from "../components/PageBar"
 import MovieHeading from "../components/MovieHeading"
 import MovieGrib from "../components/MovieGrib"
 import SortSelector from "../components/SortSelector"
@@ -17,8 +16,8 @@ function Home() {
     return (
         <Grid
             templateAreas={{
-                base: `"nav" "main" "page"`,
-                lg: `"nav nav" "aside main" "page page"`
+                base: `"nav" "main"`,
+                lg: `"nav nav" "aside main"`
             }}
 
             templateColumns={{
@@ -56,11 +55,6 @@ function Home() {
                 <Box>
                     <MovieGrib movieQuery={movieQuery} />
                 </Box>
-            </GridItem>
-
-            <GridItem area="page" bg="red">
-                <p>Footer</p>
-                {/* <PageBar onPageSelect={(page) => setMovieQuery({ page })} /> */}
             </GridItem>
 
         </Grid >
