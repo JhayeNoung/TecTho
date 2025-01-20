@@ -60,15 +60,15 @@ router.get('/aws-api', async (req, res) => {
 // Generate presigned URL for uploading files
 router.post('/post-url', async (req, res) => {
     try {
-        const { fileName } = req.body;
-        console.log(fileName);
-        var key = fileName.includes(".mp4") ? `media/videos/${replaceSpacesWithUnderscore(fileName)}` : `media/images/${replaceSpacesWithUnderscore(fileName)}`;
+
+        const { name, type } = req.body;
+        var key = name.toLowerCase().includes(".mp4") ? `media/videos/${replaceSpacesWithUnderscore(name)}` : `media/images/${replaceSpacesWithUnderscore(name)}`;
 
         // configure the input parameters 
         const input = {
             Bucket: process.env.BUCKET_NAME,
             Key: key,
-            ContentType: 'image/jpeg',  // Adjust based on the file type
+            ContentType: type,  // Adjust based on the file type
         };
 
         // Create the PutObjectCommand for uploading the file

@@ -1,4 +1,4 @@
-import { HStack, Image, Grid, GridItem, Spacer, Button } from '@chakra-ui/react'
+import { HStack, Image, Grid, GridItem, Spacer, Button, Box } from '@chakra-ui/react'
 import { NavLink } from 'react-router-dom';
 import { useState } from 'react';
 
@@ -9,7 +9,6 @@ import DarkMode from '../components/DarkMode';
 import { MovieQuery } from '@/hooks/useMovie';
 import GenreSelector from '@/components/GenreSelector';
 import SortSelector from '@/components/SortSelector';
-import SearchInput from '@/components/SearchInput';
 
 function MovieAPI() {
   const [movieQuery, setMovieQuery] = useState<MovieQuery>({} as MovieQuery)
@@ -18,23 +17,27 @@ function MovieAPI() {
   return (
     <Grid
       templateAreas={{
-        base: `"nav" "main"`,
-        lg: `"nav nav" "form list"`
+        base: `"nav" "form" "list"`,  // Stack nav, form, and list in one column for small screens
+        lg: `"nav nav" "form list"`,  // In large screens, side by side
+        md: `"nav" "form" "list"`,
+        sm: `"nav" "form" "list"`,
       }}
 
       templateColumns={{
-        base: '1fr', // base is 1 fraction, means in small device
-        lg: '350px 1fr', // in large scree, first column take 200px and second takes all
+        base: '1fr', // 1 fraction for all elements in small screens (stacked)
+        lg: '350px 1fr', // On large screens, side by side
+        md: '1fr',
+        sm: '1fr',
       }}
     >
 
 
       {/* Navigation Bar */}
-      <GridItem area="nav" bg="coral">
+      <GridItem area="nav">
         <HStack padding='10px'>
 
           <NavLink to="/" end>
-            <Image src={logo} boxSize="60px" />
+            <Image src={logo} boxSize="50px" />
           </NavLink>
 
           {/* Spacer pushes the rest of the components to the right */}
@@ -64,21 +67,26 @@ function MovieAPI() {
 
 
       {/* Movie Form */}
-      <GridItem area="form" bg="dodgerblue">
-        <MovieForm />
+      <GridItem area="form" padding={{ base: '3', lg: '3 3 3 3' }}>
+        <Box padding="3" borderRadius="md" boxShadow="md">
+          <MovieForm />
+        </Box>
       </GridItem>
 
 
       {/* Movie List */}
-      <GridItem area="list" bg="yellow">
-        <SearchInput submitHandler={(event) => setMovieQuery({ ...movieQuery, search: event.searchName })} />
+      <GridItem area="list" padding={{ base: '3', lg: '3 3 3 3' }}>
 
-        <HStack>
-          <GenreSelector onSelectedGenre={(genre) => setMovieQuery({ ...movieQuery, genre })} />
-          <SortSelector selectedSortOrder={movieQuery.ordering} onSelectedSortOrder={(ordering) => setMovieQuery({ ...movieQuery, ordering })} />
-        </HStack>
+        <Box paddingBottom={3}>
+          <HStack>
+            <GenreSelector onSelectedGenre={(genre) => setMovieQuery({ ...movieQuery, genre })} />
+            <SortSelector selectedSortOrder={movieQuery.ordering} onSelectedSortOrder={(ordering) => setMovieQuery({ ...movieQuery, ordering })} />
+          </HStack>
+        </Box>
 
-        <MovieList movieQuery={movieQuery} />
+        <Box>
+          <MovieList movieQuery={movieQuery} />
+        </Box>
       </GridItem>
 
     </Grid>

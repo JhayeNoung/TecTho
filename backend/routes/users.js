@@ -86,7 +86,7 @@ router.put('/:id', [validObjectId, auth], async (req, res) => {
 
     // if provided validate the payload 
     const { error } = validateUpdateUser(req.body)
-    if (error) return res.status(400).send(error)
+    if (error) return res.status(400).send(error.details[0].message);
 
     // if not provided in the payload, add original
     user.name = req.body.name || user.name;

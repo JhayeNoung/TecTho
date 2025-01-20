@@ -1,6 +1,5 @@
-import { Genre } from '@/hooks/useGenre'
 import { MovieQuery } from '@/hooks/useMovie'
-
+import { Heading } from '@chakra-ui/react';
 /*
 First Letter upper:
 
@@ -12,7 +11,8 @@ interface Props {
 }
 
 export default function MovieHeading({ query }: Props) {
+  const heading = !query.genre?.name ? "All Movie" : query.genre?.name.charAt(0).toUpperCase() + query.genre?.name.slice(1) + " Movie";
   return (
-    <div>{!query.genre?.name ? "All Movie" : query.genre?.name.charAt(0).toUpperCase() + query.genre?.name.slice(1) + " Movie"}</div>
+    <Heading size="3xl">{heading}</Heading>
   )
 }

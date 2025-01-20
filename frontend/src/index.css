@@ -6,3 +6,50 @@
 .link:hover {
     text-decoration: underline;
 }
+
+.custom-form-select {
+    padding: 8px 12px;
+    /* Corrected value without quotes */
+    font-size: 1rem;
+    /* Corrected property name */
+    border-radius: 4px;
+    /* Corrected property name */
+    border: 1px solid #E2E8F0;
+    /* Corrected property name */
+    outline: none;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.custom-form-control {
+    padding: 8px 12px;
+    /* Corrected value without quotes */
+    font-size: 1rem;
+    /* Corrected property name */
+    border-radius: 4px;
+    /* Corrected property name */
+    border: 1px solid #E2E8F0;
+    background-color: #F7FAFC;
+    /* Corrected property name */
+    outline: none;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.text-danger {
+    color: red;
+}
+
+.file-upload {
+    padding: 2px 12px 2px 0px;
+    /* Corrected value without quotes */
+    font-size: 1rem;
+    /* Corrected property name */
+    border-radius: 4px;
+    /* Corrected property name */
+    border: 1px solid #E2E8F0;
+    /* Corrected property name */
+    outline: none;
+    width: 100%;
+    box-sizing: border-box;
+}

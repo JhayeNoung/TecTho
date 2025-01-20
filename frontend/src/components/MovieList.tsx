@@ -49,7 +49,7 @@ export default function MovieList({ movieQuery }: Props) {
 
     return (
         <>
-            <Table.ScrollArea borderWidth="1px" rounded="md" height="500px">
+            <Table.ScrollArea borderWidth="1px" rounded="md" height="560px">
                 <TableRoot stickyHeader>
                     <TableHeader>
                         <TableRow>

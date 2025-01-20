@@ -2,6 +2,8 @@
 import { Button, HStack } from '@chakra-ui/react'
 import apiMovie from '@/services/api-movie'
 import { Movie } from '@/hooks/useMovie';
+import Dialog from './Dialog';
+import MovieUpdate from './MovieUpdate';
 
 interface Props {
   movie: Movie
@@ -12,8 +14,11 @@ function MovieAction({ movie }: Props) {
 
   const handleDelete = async () => {
     try {
-      const key = movie.poster_url.split('com/')[1]
-      const presigned_response = await apiMovie.post('/presigned-url/delete-url', { KEY: key });
+      const poster_key = movie.poster_url.split('com/')[1]
+      const presigned_poster = await apiMovie.post('/presigned-url/delete-url', { KEY: poster_key });
+
+      const video_key = movie.video_url.split('com/')[1]
+      const presigned_video = await apiMovie.post('/presigned-url/delete-url', { KEY: video_key });
 
       await apiMovie.delete(`/movies/${movie._id}`, {
         headers: {
@@ -23,7 +28,12 @@ function MovieAction({ movie }: Props) {
       })
 
       // Delete the file from S3 using the pre-signed URL after the movie is successfully deleted
-      await fetch(presigned_response.data.url, {
+      await fetch(presigned_poster.data.url, {
+        method: 'DELETE',
+      });
+
+      // Delete the file from S3 using the pre-signed URL after the movie is successfully deleted
+      await fetch(presigned_video.data.url, {
         method: 'DELETE',
       });
 
@@ -49,20 +59,14 @@ function MovieAction({ movie }: Props) {
     }
   };
 
-  const handleEdit = () => {
-    return window.location.href = `http://localhost:3001/api/movies/${movie._id}`;
-  }
+
 
   return (
     <>
       {storedToken ?
         <HStack>
-          <Button variant="plain" _hover={{ color: "cyan" }} color="blue" onClick={() => handleEdit()}>
-            Edit
-          </Button>
-          <Button variant="plain" _hover={{ color: "cyan" }} color="blue" onClick={() => console.log("details")}>
-            Details
-          </Button>
+          <MovieUpdate movie={movie}>Edit</MovieUpdate>
+          <Dialog data={movie}>Detail</Dialog>
           <Button variant="plain" _hover={{ color: "cyan" }} color="red" onClick={handleDelete}>
             Delete
           </Button>
@@ -72,9 +76,7 @@ function MovieAction({ movie }: Props) {
           <Button variant="plain" _hover={{ textDecoration: "underline" }} color="grey" onClick={() => window.alert("Please login to perform this action")}>
             Edit
           </Button>
-          <Button variant="plain" _hover={{ textDecoration: "underline" }} color="grey" onClick={() => window.alert("Please login to perform this action")}>
-            Details
-          </Button>
+          <Dialog data={movie}>Detail</Dialog>
           <Button variant="plain" _hover={{ textDecoration: "underline" }} color="grey" onClick={() => window.alert("Please login to perform this action")}>
             Delete
           </Button>

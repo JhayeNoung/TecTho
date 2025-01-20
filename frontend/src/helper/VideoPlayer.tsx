@@ -7,10 +7,11 @@ import Player from "video.js/dist/types/player";
 
 interface Props {
   posterUrl: string,
+  videoUrl: string,
   onReady?: (player: Player) => void;
 }
 
-const VideoPlayer = ({ posterUrl, onReady }: Props) => {
+const VideoPlayer = ({ posterUrl, videoUrl, onReady }: Props) => {
   const videoRef = React.useRef<HTMLDivElement | null>(null);
   const playerRef = React.useRef<Player | null>(null);
 
@@ -29,8 +30,9 @@ const VideoPlayer = ({ posterUrl, onReady }: Props) => {
         responsive: true,
         fluid: true,
         preload: "auto",
+        poster: posterUrl,
         sources: [{
-          src: posterUrl,
+          src: videoUrl,
           type: 'video/mp4'
         }]
       };

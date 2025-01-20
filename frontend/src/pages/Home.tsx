@@ -1,9 +1,8 @@
-import { Grid, GridItem, Show, useBreakpointValue } from "@chakra-ui/react"
+import { Grid, GridItem, Show, useBreakpointValue, Box } from "@chakra-ui/react"
 import { useState } from "react"
 
 import { MovieQuery } from "../hooks/useMovie"
 import GenreList from "../components/GenreList"
-import PageBar from "../components/PageBar"
 import MovieHeading from "../components/MovieHeading"
 import MovieGrib from "../components/MovieGrib"
 import SortSelector from "../components/SortSelector"
@@ -17,8 +16,8 @@ function Home() {
     return (
         <Grid
             templateAreas={{
-                base: `"nav" "main" "page"`,
-                lg: `"nav nav" "aside main" "page page"`
+                base: `"nav" "main"`,
+                lg: `"nav nav" "aside main"`
             }}
 
             templateColumns={{
@@ -27,30 +26,38 @@ function Home() {
             }}
         >
 
-            <GridItem area="nav" bg="coral">
+            <GridItem area="nav">
                 <NavBar onSearch={(search) => setMovieQuery({ ...movieQuery, search })} />
             </GridItem>
 
             {/* Conditionally render based on screen size using `when` */}
             {/* Show Aside on 'lg' */}
             <Show when={breakpoint === 1}>
-                <GridItem area="aside" bg="gold">
-                    <GenreList selectedGenre={movieQuery.genre} onClick={genre => { setMovieQuery({ ...movieQuery, genre }) }} />
+                <GridItem area="aside" padding={{ base: '3', lg: '3 3 3 3' }} paddingTop={5}>
+                    <Box padding="3" borderRadius="md" boxShadow="md">
+                        <GenreList selectedGenre={movieQuery.genre} onClick={genre => { setMovieQuery({ ...movieQuery, genre }) }} />
+                    </Box>
                 </GridItem>
             </Show>
 
-            <GridItem area="main" bg="dodgerblue">
-                <MovieHeading query={movieQuery} />
-                <SortSelector selectedSortOrder={movieQuery.ordering} onSelectedSortOrder={(ordering) => setMovieQuery({ ...movieQuery, ordering })} />
-                <MovieGrib movieQuery={movieQuery} />
+            <GridItem area="main" padding={{ base: '3', lg: '3 3 3 3' }}>
+                {/* Heading */}
+                <Box paddingBottom={'3'} >
+                    <MovieHeading query={movieQuery} />
+                </Box>
+
+                {/* Sort Selector */}
+                <Box paddingBottom={'3'}>
+                    <SortSelector selectedSortOrder={movieQuery.ordering} onSelectedSortOrder={(ordering) => setMovieQuery({ ...movieQuery, ordering })} />
+                </Box>
+
+                {/* Movie Grid */}
+                <Box>
+                    <MovieGrib movieQuery={movieQuery} />
+                </Box>
             </GridItem>
 
-            <GridItem area="page" bg="red">
-                <p>Footer</p>
-                {/* <PageBar onPageSelect={(page) => setMovieQuery({ page })} /> */}
-            </GridItem>
-
-        </Grid>
+        </Grid >
     )
 }
 

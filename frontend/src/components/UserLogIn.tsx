@@ -2,8 +2,8 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router";
-import { Input, Button, Box } from "@chakra-ui/react";
-import { FormControl, FormLabel } from "@chakra-ui/form-control";
+import { Input, Button, Box, Fieldset, Stack } from "@chakra-ui/react";
+import { Field } from "./ui/field";
 import { z } from "zod";
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -63,29 +63,35 @@ export default function UserLogin() {
 
       {/* Logging In Form */}
       <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
-        <FormControl>
-          <FormLabel htmlFor="email">Email</FormLabel>
-          <Input id="email" {...register('email', { required: true })} type="email" placeholder="email" />
-          {errors.email?.message && <p className="text-danger">{errors.email?.message}</p>}
-        </FormControl>
+        <Fieldset.Root>
+          <Stack>
+            <Fieldset.Legend>Welcome, Ma'am/Sir...</Fieldset.Legend>
+            <Fieldset.HelperText>
+              Please provide your email and password below.
+            </Fieldset.HelperText>
+          </Stack>
+          <Fieldset.Content>
 
-        <FormControl>
-          <FormLabel htmlFor="password">Password</FormLabel>
-          <Input id="password" {...register('password', { required: true })} type="password" placeholder="password" />
-          {errors.password?.message && <p className="text-danger">{errors.password?.message}</p>}
-        </FormControl>
+            <Field label="Email">
+              <Input id="email" {...register('email', { required: true })} type="email" placeholder="email" />
+              {errors.email?.message && <p className="text-danger">{errors.email?.message}</p>}
+            </Field>
 
-        <Button type='submit'>
-          Login
-        </Button>
+            <Field label="Password">
+              <Input id="password" {...register('password', { required: true })} type="password" placeholder="password" />
+              {errors.password?.message && <p className="text-danger">{errors.password?.message}</p>}
+            </Field>
+
+          </Fieldset.Content>
+          <Button type='submit'>
+            Login
+          </Button>
+        </Fieldset.Root>
       </form>
 
       {/* Sign Up Link */}
-      <Box>
-        <NavLink to="register" className="link" end>
-          Sign Up
-        </NavLink>
-        <p> if you haven't register yet.</p>
+      <Box paddingTop={3}>
+        <p> If you haven’t registered yet, please <NavLink to="register" className="link" end>create an account.</NavLink></p>
       </Box>
     </>
   )

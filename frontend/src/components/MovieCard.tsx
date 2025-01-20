@@ -1,5 +1,4 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
 import { Card, CardBody, Image, HStack, Button, Stack } from '@chakra-ui/react'
 import Player from 'video.js/dist/types/player';
 
@@ -30,8 +29,8 @@ function MovieCard({ movie }: Props) {
 
   return (
     <Card.Root>
-      {movie.poster_url.endsWith(".mp4") ?
-        <VideoPlayer posterUrl={movie.poster_url} onReady={handlePlayerReady} />
+      {movie.video_url ?
+        <VideoPlayer posterUrl={movie.poster_url} videoUrl={movie.video_url} onReady={handlePlayerReady} />
         :
         <Image src={movie.poster_url} alt="Movie Poster" />
       }

@@ -30,7 +30,12 @@ const movieSchema = new mongoose.Schema({
         type: String,
         min: 1,
         require: true,
-    }
+    },
+    video_url: {
+        type: String,
+        min: 1,
+        require: true,
+    },
 });
 
 const Movie = mongoose.model('Movie', movieSchema);
@@ -42,6 +47,20 @@ function validateMovie(movie) {
         numberInStock: Joi.number().min(0).max(300).required(),
         dailyRentalRate: Joi.number().min(0).max(300).required(),
         poster_url: Joi.string().min(1).required(),
+        video_url: Joi.string().min(1).required(),
+    });
+
+    return schema.validate(movie);
+}
+
+function validateUpdateMovie(movie) {
+    const schema = Joi.object({
+        title: Joi.string().min(1).max(255).allow('').optional(),
+        genre: Joi.objectId().allow('').optional(),
+        numberInStock: Joi.number().min(0).max(300).allow('').optional(),
+        dailyRentalRate: Joi.number().min(0).max(300).allow('').optional(),
+        poster_url: Joi.string().min(1).allow('').optional(),
+        video_url: Joi.string().min(1).allow('').optional(),
     });
 
     return schema.validate(movie);
@@ -50,3 +69,4 @@ function validateMovie(movie) {
 exports.validateMovie = validateMovie;
 exports.Movie = Movie;
 exports.movieSchema = movieSchema;
+exports.validateUpdateMovie = validateUpdateMovie;

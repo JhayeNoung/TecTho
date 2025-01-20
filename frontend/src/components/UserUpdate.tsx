@@ -38,7 +38,7 @@ export default function UserUpdate() {
 
   const onSubmit = async (payload: User) => {
     setAlert(""); // reset alert
-    apiMovie
+    await apiMovie
       .put(`/users/${user._id}`, payload, {
         headers: {
           Authorization: `${storedToken}`,
