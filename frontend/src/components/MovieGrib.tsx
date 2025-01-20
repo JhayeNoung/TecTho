@@ -17,7 +17,7 @@ function MovieGrib({ movieQuery }: Props) {
 
     return (
         <>
-            <SimpleGrid columns={{ sm: 1, md: 2, lg: 3, xl: 4 }} gap={3}>
+            <SimpleGrid columns={{ sm: 1, md: 2, lg: 4, xl: 4 }} gap={5}>
                 {loading && skeletons.map(skeleton =>
                     <MovieCardContainer key={skeleton}>
                         <MovieCardSkeleton />

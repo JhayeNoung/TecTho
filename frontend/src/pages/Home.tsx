@@ -34,14 +34,16 @@ function Home() {
             {/* Conditionally render based on screen size using `when` */}
             {/* Show Aside on 'lg' */}
             <Show when={breakpoint === 1}>
-                <GridItem area="aside">
-                    <GenreList selectedGenre={movieQuery.genre} onClick={genre => { setMovieQuery({ ...movieQuery, genre }) }} />
+                <GridItem area="aside" padding={{ base: '3', lg: '3 3 3 3' }} paddingTop={5}>
+                    <Box padding="3" borderRadius="md" boxShadow="md">
+                        <GenreList selectedGenre={movieQuery.genre} onClick={genre => { setMovieQuery({ ...movieQuery, genre }) }} />
+                    </Box>
                 </GridItem>
             </Show>
 
             <GridItem area="main" padding={{ base: '3', lg: '3 3 3 3' }}>
                 {/* Heading */}
-                <Box paddingBottom={'3'}>
+                <Box paddingBottom={'3'} >
                     <MovieHeading query={movieQuery} />
                 </Box>
 
@@ -61,7 +63,7 @@ function Home() {
                 {/* <PageBar onPageSelect={(page) => setMovieQuery({ page })} /> */}
             </GridItem>
 
-        </Grid>
+        </Grid >
     )
 }
 

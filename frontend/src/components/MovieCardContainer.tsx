@@ -10,7 +10,7 @@ function MovieCardContainer({ children }: Prop) {
     // borderRadius document is under Styling > Style Props > Border
     return (
         // GameCardSkeleton and GameCard will be the 'children' of GameCardContainer
-        <Box>{children}</Box>
+        <Box borderRadius="lg" overflow={"hidden"}>{children}</Box>
     )
 }
 
