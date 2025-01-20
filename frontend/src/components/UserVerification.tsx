@@ -2,8 +2,8 @@ import React from 'react'
 import { useState } from 'react';
 import { useForm } from "react-hook-form";
 import { useLocation, useNavigate, NavLink } from 'react-router-dom';
-import { FormControl, FormLabel } from "@chakra-ui/form-control";
-import { Input, Button, HStack } from "@chakra-ui/react";
+import { Input, Button, HStack, Fieldset, Stack } from "@chakra-ui/react";
+import { Field } from "./ui/field";
 import { z } from "zod";
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -37,10 +37,10 @@ function UserVerification() {
 
       // route to registration
       setAlert("Email verified successfully. Redirecting to login...");
+      setLoading(false);
       setTimeout(() => {
-        setLoading(false);
         navigate("/registration");
-      }, 5000);
+      }, 2000);
     }
     catch (error: any) {
       console.log(error);
@@ -67,37 +67,45 @@ function UserVerification() {
       {alert && <AlertMessage message={alert} />}
 
       <form onSubmit={handleSubmit(onSubmit)}>
-        <FormControl>
-          <FormLabel htmlFor="verificationKey">Type the key below</FormLabel>
-          <Input id="verificationKey" {...register('verificationKey', { required: true, valueAsNumber: true })} type="verificationKey" placeholder="xxxxx" />
-          {errors.verificationKey?.message && <p className="text-danger">{errors.verificationKey?.message}</p>}
-        </FormControl>
+        <Fieldset.Root>
+          <Stack>
+            <Fieldset.Legend>verification</Fieldset.Legend>
+            <Fieldset.HelperText>
+              Please provide the key sented to your email.
+            </Fieldset.HelperText>
+          </Stack>
+          <Fieldset.Content>
+            <Field label="Type the key">
+              <Input id="verificationKey" {...register('verificationKey', { required: true, valueAsNumber: true })} type="verificationKey" placeholder="xxxxx" />
+              {errors.verificationKey?.message && <p className="text-danger">{errors.verificationKey?.message}</p>}
+            </Field>
+          </Fieldset.Content>
 
-        {loading ?
-          <HStack>
-            <Button disabled>
-              Verify...
-            </Button>
+          {loading ?
+            <HStack>
+              <Button disabled>
+                Verify...
+              </Button>
 
-            <Button disabled>
-              Abort
-            </Button>
-          </HStack>
-          :
-          <HStack>
-            <Button type='submit'>
-              Verify
-            </Button>
-
-            <NavLink to="/registration/register" end>
-              <Button>
+              <Button disabled>
                 Abort
               </Button>
-            </NavLink>
-          </HStack>
-        }
+            </HStack>
+            :
+            <HStack>
+              <Button type='submit'>
+                Verify
+              </Button>
 
-      </form>
+              <NavLink to="/registration/register" end>
+                <Button>
+                  Abort
+                </Button>
+              </NavLink>
+            </HStack>
+          }
+        </Fieldset.Root>
+      </form >
     </>
   )
 }

@@ -1,8 +1,5 @@
-
 import { NavLink } from 'react-router-dom'
-import { Button } from "@chakra-ui/react";
-import { Text } from '@chakra-ui/react';
-
+import { Button, Box, Text } from "@chakra-ui/react";
 
 function UserLogOut() {
   const logout = () => {
@@ -16,9 +13,11 @@ function UserLogOut() {
 
       <Text>{localStorage.getItem("email")}</Text>
 
-      <NavLink to=".." end>
-        <Button onClick={logout}>Log Out</Button>
-      </NavLink>
+      <Box paddingTop={3}>
+        <NavLink to=".." end>
+          <Button onClick={logout}>Log Out</Button>
+        </NavLink>
+      </Box>
     </>
   )
 }

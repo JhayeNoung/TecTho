@@ -1,8 +1,8 @@
 import { useForm } from "react-hook-form";
 import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router";
-import { Input, Button } from "@chakra-ui/react";
-import { FormControl, FormLabel } from "@chakra-ui/form-control";
+import { Input, Button, Fieldset, Stack, Box } from "@chakra-ui/react";
+import { Field } from "./ui/field";
 import { z } from "zod";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from "react";
@@ -74,39 +74,50 @@ export default function UserRegister() {
     return (
         <>
             <form onSubmit={handleSubmit(onSubmit)}>
-                <FormControl>
-                    <FormLabel htmlFor="name">Username</FormLabel>
-                    <Input id="name" {...register('name', { required: true })} type="text" placeholder="name" />
-                    {errors.name?.message && <p className="text-danger">{errors.name?.message}</p>}
-                </FormControl>
+                <Fieldset.Root>
+                    <Stack>
+                        <Fieldset.Legend>Registration Form</Fieldset.Legend>
+                        <Fieldset.HelperText>
+                            Please provide your contact details below.
+                        </Fieldset.HelperText>
+                    </Stack>
+                    <Fieldset.Content>
+                        <Field label="Name">
+                            <Input id="name" {...register('name', { required: true })} type="text" placeholder="name" />
+                            {errors.name?.message && <p className="text-danger">{errors.name?.message}</p>}
+                        </Field>
 
-                <FormControl>
-                    <FormLabel htmlFor="email">Email</FormLabel>
-                    <Input id="email" {...register('email', { required: true })} type="email" placeholder="email" />
-                    {errors.email?.message && <p className="text-danger">{errors.email?.message}</p>}
-                </FormControl>
+                        <Field label="Email">
+                            <Input id="email" {...register('email', { required: true })} type="email" placeholder="email" />
+                            {errors.email?.message && <p className="text-danger">{errors.email?.message}</p>}
+                        </Field>
 
-                <FormControl>
-                    <FormLabel htmlFor="password">Password</FormLabel>
-                    <Input id="password" {...register('password', { required: true })} type="password" placeholder="password" />
-                    {errors.password?.message && <p className="text-danger">{errors.password?.message}</p>}
-                </FormControl>
+                        <Field label="Password">
+                            <Input id="password" {...register('password', { required: true })} type="password" placeholder="password" />
+                            {errors.password?.message && <p className="text-danger">{errors.password?.message}</p>}
+                        </Field>
 
-                {loading ?
-                    <Button disabled>
-                        Register...
-                    </Button>
-                    :
-                    <Button type='submit'>
-                        Register
-                    </Button>
-                }
+                    </Fieldset.Content>
 
+                    {loading ?
+                        <Button disabled>
+                            Register...
+                        </Button>
+                        :
+                        <Button type='submit'>
+                            Register
+                        </Button>
+                    }
+
+                </Fieldset.Root >
             </form>
 
-            <NavLink to=".." className="link" end>
-                Back to login.
-            </NavLink>
+            <Box paddingTop={3}>
+                <NavLink to=".." className="link" end>
+                    Retrun to Login.
+                </NavLink>
+            </Box>
+
         </>
     )
 }

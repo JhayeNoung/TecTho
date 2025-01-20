@@ -1,4 +1,4 @@
-import { TableBody, TableCell, TableColumnHeader, TableHeader, TableRoot, TableRow } from "@chakra-ui/react"
+import { Table, TableBody, TableCell, TableColumnHeader, TableHeader, TableRoot, TableRow } from "@chakra-ui/react"
 
 import UserAction from "./UserAction"
 import { useUser } from "@/hooks/useUser";
@@ -11,25 +11,27 @@ function UserList() {
     <>
       {error && <AlertMessage message={error} />}
 
-      <TableRoot size="lg" interactive>
-        <TableHeader>
-          <TableRow>
-            <TableColumnHeader>Name</TableColumnHeader>
-            <TableColumnHeader>Email</TableColumnHeader>
-            <TableColumnHeader>Role</TableColumnHeader>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {users.map(user => (
-            <TableRow key={user._id}>
-              <TableCell>{user.name}</TableCell>
-              <TableCell>{user.email}</TableCell>
-              <TableCell>{user.isAdmin == true ? "Admin" : "Staff"}</TableCell>
-              <TableCell textAlign="end"><UserAction user={user} /></TableCell>
+      <Table.ScrollArea borderWidth="1px" rounded="md" height="560px">
+        <TableRoot stickyHeader>
+          <TableHeader>
+            <TableRow>
+              <TableColumnHeader>Name</TableColumnHeader>
+              <TableColumnHeader>Email</TableColumnHeader>
+              <TableColumnHeader>Role</TableColumnHeader>
             </TableRow>
-          ))}
-        </TableBody>
-      </TableRoot>
+          </TableHeader>
+          <TableBody>
+            {users.map(user => (
+              <TableRow key={user._id}>
+                <TableCell>{user.name}</TableCell>
+                <TableCell>{user.email}</TableCell>
+                <TableCell>{user.isAdmin == true ? "Admin" : "Staff"}</TableCell>
+                <TableCell textAlign="end"><UserAction user={user} /></TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </TableRoot>
+      </Table.ScrollArea>
     </>
   )
 }

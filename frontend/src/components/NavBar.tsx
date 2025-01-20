@@ -1,5 +1,5 @@
 import logo from '../assets/logo.webp'
-import { HStack, Image } from '@chakra-ui/react'
+import { HStack, Image, Spacer } from '@chakra-ui/react'
 import { NavLink } from 'react-router-dom';
 import { Button } from '@chakra-ui/react';
 import { Box } from '@chakra-ui/react';
@@ -18,12 +18,13 @@ export default function NavBar({ onSearch }: Props) {
     <HStack padding='10px'>
 
       <NavLink to="/" end>
-        <Image src={logo} boxSize="60px" />
+        <Image src={logo} boxSize="50px" minWidth="50px" />
       </NavLink>
 
-      <Box width="full" >
+      <Box width="100%">
         <SearchInput submitHandler={(event) => onSearch(event.searchName)} />
       </Box>
+
 
       {storedToken ?
         <NavLink to="/registration/logout">

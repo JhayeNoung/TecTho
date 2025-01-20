@@ -1,15 +1,14 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { FormControl, FormLabel } from "@chakra-ui/form-control";
 import { z } from "zod";
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Input, Button } from "@chakra-ui/react";
-import { Field } from "@/components/ui/field"
+import { Input, Button, Fieldset, Stack } from "@chakra-ui/react";
+import { Field } from "./ui/field";
 import { NativeSelectField, NativeSelectRoot } from "@chakra-ui/react";
+import apiMovie from "../services/api-movie";
 
 import useGenre from "../hooks/useGenre";
 import AlertMessage from "./AlertMessage";
-import apiMovie from "@/services/api-movie";
 
 
 const schemaMovie = z.object({
@@ -124,67 +123,70 @@ export default function MovieForm() {
       {alert && <AlertMessage message={alert} />}
 
       <form onSubmit={handleSubmit(handleFormSubmit)}>
-        <FormControl>
-          <FormLabel htmlFor="title">Title</FormLabel>
-          <Input id="title" {...register('title', { required: true })} type="text" placeholder="La La Land" />
-          {errors.title?.message && <p className="text-danger">{errors.title?.message}</p>}
-        </FormControl>
+        <Fieldset.Root>
+          <Stack>
+            <Fieldset.Legend>Movie Form</Fieldset.Legend>
+            <Fieldset.HelperText>
+              Please provide movie details below.
+            </Fieldset.HelperText>
+          </Stack>
+          <Fieldset.Content>
 
-        <FormControl>
-          <FormLabel htmlFor="numberInStock">Number In Stock</FormLabel>
-          <Input id="numberInStock" {...register('numberInStock', { required: true, valueAsNumber: true })} type="text" placeholder="1..." />
-          {errors.numberInStock?.message && <p className="text-danger">{errors.numberInStock?.message}</p>}
-        </FormControl>
+            <Field label="Title">
+              <Input {...register('title', { required: true })} type="text" placeholder="Title..." />
+              {errors.title?.message && <p className="text-danger">{errors.title?.message}</p>}
+            </Field>
 
-        <FormControl>
-          <FormLabel htmlFor="dailyRentalRate">Daily Rental Rate</FormLabel>
-          <Input id="dailyRentalRate" {...register('dailyRentalRate', { required: true, valueAsNumber: true })} type="text" placeholder="1..." />
-          {errors.dailyRentalRate?.message && <p className="text-danger">{errors.dailyRentalRate?.message}</p>}
-        </FormControl>
+            <Field label="Number In Stock">
+              <Input {...register('numberInStock', { required: true, valueAsNumber: true })} type="text" placeholder="1..." />
+              {errors.numberInStock?.message && <p className="text-danger">{errors.numberInStock?.message}</p>}
+            </Field>
 
-        {/* "useForm" doesn't separately handle 'File' format, so we will need to grab the file from "e.target" and set the value with "setValue" */}
-        <FormControl>
-          <FormLabel htmlFor="poster">Poster File</FormLabel>
-          <input
-            id="poster"
-            onChange={(e) => {
-              const file = e.target.files?.[0]; // get file objcet from the event
-              if (file) setValue("poster", file); // set the value of poster with the file
-            }}
-            type="file"
-            name="poster"
-            className="custom-form-control"
-            accept="image/png, image/jpeg"
-          />
-          {errors.poster?.message && <p className="text-danger">{errors.poster?.message}</p>}
-        </FormControl>
+            <Field label="Daily Rental Rate">
+              <Input {...register('dailyRentalRate', { required: true, valueAsNumber: true })} type="text" placeholder="1..." />
+              {errors.dailyRentalRate?.message && <p className="text-danger">{errors.dailyRentalRate?.message}</p>}
+            </Field>
 
-        <FormControl>
-          <FormLabel htmlFor="video">Video File</FormLabel>
-          <input
-            id="video"
-            onChange={(e) => {
-              const file = e.target.files?.[0]; // get file objcet from the event
-              if (file) setValue("video", file); // set the value of video with the file
-            }}
-            type="file"
-            name="video"
-            className="custom-form-control"
-            accept="video/mp4"
-          />
-          {errors.video?.message && <p className="text-danger">{errors.video?.message}</p>}
-        </FormControl>
+            <Field label="Poster File">
+              <input
+                type="file"
+                accept="image/jpeg, image/png"
+                className="file-upload"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) setValue("poster", file);
+                }}
+              />
+              {errors.poster?.message && <p className="text-danger">{errors.poster?.message}</p>}
+            </Field>
 
-        <FormControl>
-          <label htmlFor="genre" className="from-label">Genres</label>
-          <select {...register("genre")} className="custom-form-select" id="genre">
-            <option value="">Choose Genres</option>
-            {genres.map(genre => <option value={genre._id} key={genre._id}>{genre.name}</option>)}
-          </select>
-          {errors.genre?.message && <p className="text-danger">{errors.genre?.message}</p>}
-        </FormControl>
+            <Field label="Video File">
+              <input
+                type="file"
+                accept="video/mp4"
+                className="file-upload"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) setValue("video", file);
+                }}
+              />
+              {errors.video?.message && <p className="text-danger">{errors.video?.message}</p>}
+            </Field>
 
-        {!loading ? <Button type="submit">Post</Button> : <Button disabled>Posting...</Button>}
+            <Field label="Genre">
+              <NativeSelectRoot>
+                <NativeSelectField {...register('genre', { required: true })} placeholder="Select genre">
+                  {genres?.map((genre) => (<option key={genre._id} value={genre._id}> {genre.name} </option>))}
+                </NativeSelectField>
+              </NativeSelectRoot>
+            </Field>
+
+          </Fieldset.Content>
+
+          {!loading ? <Button type="submit">Submit</Button> : <Button disabled>Submiting...</Button>}
+
+        </Fieldset.Root>
+
       </form>
     </>
   )
