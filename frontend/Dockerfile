@@ -2,7 +2,7 @@
 FROM node:22.8.0-alpine3.20 AS build-stage
 WORKDIR /app
 COPY package*.json .
-RUN npm install
+RUN npm install 
 COPY . .
 RUN npm run build
 
@@ -11,6 +11,9 @@ FROM nginx:1.26.2-alpine3.20-otel
 
 # Copy the build files to the Nginx directory
 COPY --from=build-stage /app/dist /usr/share/nginx/html
+
+# Copy custom Nginx configuration
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Create a non-root user and group called app_user and app_group
 RUN addgroup app_group && adduser -G app_group -S app_user

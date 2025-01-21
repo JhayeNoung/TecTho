@@ -4,10 +4,10 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     ports:
-      - "5173:80"
+      - "4173:80"
     environment:
       NODE_ENV: production
-      REACT_APP_API_URL: http://playground_node-backend-1:3001/api # Updated API URL to backend container
+    restart: unless-stopped
     depends_on:
       - backend
 
@@ -19,7 +19,6 @@ services:
       - "3001:3001"
     environment:
       NODE_ENV: production
-      MONGO_URL: ${MONGO_URL} # create MONGO_URL docker environment variable
       PRIVATE_KEY: ${PRIVATE_KEY} # value is from .env which is should be excluded from github respository
       AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID} # value is from .env which is should be excluded from github respository
       AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY} # value is from .env which is should be excluded from github respository
@@ -29,4 +28,7 @@ services:
       STRIPE_TEST_PUBLIC_KEY: ${STRIPE_TEST_PUBLIC_KEY}
       STRIPE_TEST_PRIVATE_KEY: ${STRIPE_TEST_PRIVATE_KEY}
       YOUTUBE_API_KEY: ${YOUTUBE_API_KEY}
+      MONGO_URL: ${MONGO_URL}
+      DOMAIN_ADDRESS: ${DOMAIN_ADDRESS}
       PORT: ${PORT}
+    restart: unless-stopped
