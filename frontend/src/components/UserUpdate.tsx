@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { NavLink, useNavigate } from "react-router-dom";
-import { Input, Button } from "@chakra-ui/react";
-import { FormControl, FormLabel } from "@chakra-ui/form-control";
+import { Input, Button, Fieldset, Stack } from "@chakra-ui/react";
+import { Field } from "./ui/field";
 import { z } from "zod";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useLocation } from "react-router-dom";
@@ -73,33 +73,43 @@ export default function UserUpdate() {
       {alert && <AlertMessage message={alert} />}
 
       <form onSubmit={handleSubmit(onSubmit)}>
-        <FormControl>
-          <FormLabel htmlFor="name">Username</FormLabel>
-          <Input id="name" {...register('name')} type="text" placeholder={`${user.name}`} />
-          {errors.name?.message && <p className="text-danger">{errors.name?.message}</p>}
-        </FormControl>
+        <Fieldset.Root>
 
-        <FormControl>
-          <FormLabel htmlFor="email">Email</FormLabel>
-          <Input id="email" {...register('email')} type="email" placeholder={`${user.email}`} />
-          {errors.email?.message && <p className="text-danger">{errors.email?.message}</p>}
-        </FormControl>
+          <Stack>
+            <Fieldset.Legend>Update your details...</Fieldset.Legend>
+            <Fieldset.HelperText>
+              Please take your time ... have a greate day!
+            </Fieldset.HelperText>
+          </Stack>
 
-        <FormControl>
-          <FormLabel htmlFor="password">Password</FormLabel>
-          <Input id="password" {...register('password')} type="password" placeholder="(Leave blank if no change)" />
-          {errors.password?.message && <p className="text-danger">{errors.password?.message}</p>}
-        </FormControl>
+          <Fieldset.Content>
+            <Field label="Name">
+              <Input id="name" {...register('name')} type="text" placeholder={`${user.name}`} />
+              {errors.name?.message && <p className="text-danger">{errors.name?.message}</p>}
+            </Field>
 
-        <Button type='submit'>
-          Update
-        </Button>
+            <Field label="Email">
+              <Input id="email" {...register('email')} type="email" placeholder={`${user.email}`} />
+              {errors.email?.message && <p className="text-danger">{errors.email?.message}</p>}
+            </Field>
 
-        <NavLink to="/registration/logout" end>
+            <Field label="Password">
+              <Input id="password" {...register('password')} type="password" placeholder={`${user.password}`} />
+              {errors.password?.message && <p className="text-danger">{errors.password?.message}</p>}
+            </Field>
+          </Fieldset.Content>
+
           <Button type='submit'>
-            Cancle
+            Update
           </Button>
-        </NavLink>
+
+          <NavLink to="/registration/logout" end>
+            <Button type='submit'>
+              Cancle
+            </Button>
+          </NavLink>
+
+        </Fieldset.Root>
       </form>
     </>
   );
