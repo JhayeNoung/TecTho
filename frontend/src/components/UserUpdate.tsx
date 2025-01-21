@@ -94,7 +94,7 @@ export default function UserUpdate() {
             </Field>
 
             <Field label="Password">
-              <Input id="password" {...register('password')} type="password" placeholder={`${user.password}`} />
+              <Input id="password" {...register('password')} type="password" placeholder="(leave blank if not change)" />
               {errors.password?.message && <p className="text-danger">{errors.password?.message}</p>}
             </Field>
           </Fieldset.Content>

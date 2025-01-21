@@ -22,10 +22,10 @@ export default function UserLogin() {
   const [alert, setAlert] = useState("")
   const navigate = useNavigate();
 
-  const onSubmit = (payload: User) => {
+  const onSubmit = async (payload: User) => {
     setAlert("");                                         // reset the alert message when submitting the form, which make sure duplicate value is not set, if duplicate value is set, alert state will be the same
 
-    apiMovie
+    await apiMovie
       .post("users/login", payload)
       .then((response) => {
         localStorage.setItem("token", response.data)      // set the token to local storage (session storage)

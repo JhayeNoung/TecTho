@@ -1,6 +1,5 @@
-import apiMovie from "@/services/api-movie";
+import apiMovie, { CanceledError } from "@/services/api-movie";
 import { useEffect, useState } from "react";
-import { CanceledError } from "@/services/api-movie";
 
 export type User = {
     _id: string,

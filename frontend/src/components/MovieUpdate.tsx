@@ -66,13 +66,13 @@ const MovieUpdateForm = ({ movie }: { movie: Movie }) => {
         <DialogBody pb="4">
           <Stack gap="4">
             <Field label="Title">
-              <Input {...register("title")} placeholder="Title" />
+              <Input {...register("title")} placeholder={`${movie.title}`} />
             </Field>
             <Field label="Number in Stock">
-              <Input {...register("numberInStock", { valueAsNumber: true })} placeholder="Number in Stock" />
+              <Input {...register("numberInStock", { valueAsNumber: true })} placeholder={`${movie.numberInStock}`} />
             </Field>
             <Field label="Daily Rental Rate">
-              <Input {...register("dailyRentalRate", { valueAsNumber: true })} placeholder="Daily Rental Rate" />
+              <Input {...register("dailyRentalRate", { valueAsNumber: true })} placeholder={`${movie.dailyRentalRate}`} />
             </Field>
             <Field label="Choose Genres">
               <select {...register("genre")} className="custom-form-select" id="genre">

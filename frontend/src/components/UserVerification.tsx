@@ -7,7 +7,7 @@ import { Field } from "./ui/field";
 import { z } from "zod";
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import apiMovie from '@/services/api-movie';
+import apiMovie from "@/services/api-movie";
 import AlertMessage from './AlertMessage';
 
 const schemaUser = z.object({
@@ -23,7 +23,6 @@ function UserVerification() {
   const [loading, setLoading] = useState(false);
   const location = useLocation();
   const user_payload = location.state?.payload;
-  console.log(user_payload)
 
   const onSubmit = async (payload: IKey) => {
     setLoading(true);

@@ -1,5 +1,6 @@
-import { NavLink, Route, Routes, useLocation } from "react-router-dom";
+import { NavLink, Route, Routes } from "react-router-dom";
 import { Button, Grid, GridItem, HStack, Image, Spacer, Box } from "@chakra-ui/react";
+import { useState } from "react";
 
 import logo from '../assets/logo.webp'
 import DarkMode from "../components/DarkMode";
@@ -9,11 +10,18 @@ import UserLogIn from "@/components/UserLogIn";
 import UserLogOut from "@/components/UserLogOut";
 import UserUpdate from "@/components/UserUpdate";
 import UserVerification from "@/components/UserVerification";
+import { useEffect } from "react";
 
 function Registration() {
-  const location = useLocation();
-  const email = location.state?.email;
-  const storedToken = localStorage.getItem('token');
+  const [signal, setSignal] = useState(0);
+
+  // Listen for token-change event and update the signal state to re-render the component
+  useEffect(() => {
+    window.addEventListener("token-change", () => setSignal(prev => prev + 1)); // Listen for token-change event
+    return () => {
+      window.removeEventListener("token-change", () => setSignal(prev => prev + 1));
+    }
+  }, [signal]);
 
   return (
     <Grid
@@ -43,9 +51,9 @@ function Registration() {
           {/* Spacer pushes the rest of the components to the right */}
           <Spacer />
 
-          {storedToken ?
+          {localStorage.getItem('email') ?
             <Button variant="plain" fontWeight="bold">
-              {email}
+              {localStorage.getItem('email')}
             </Button>
             :
             <Button variant="plain" fontWeight="bold">
