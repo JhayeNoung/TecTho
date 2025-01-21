@@ -3,10 +3,8 @@ const stripe = require('stripe')(process.env.STRIPE_TEST_PRIVATE_KEY);
 const express = require('express');
 const router = express.Router();
 
-const YOUR_DOMAIN = 'http://localhost:5173/payment';
-
 router.post('/create-checkout-session', async (req, res) => {
-    const movie = JSON.parse(req.body.movie); // Parse the incoming JSON string to object
+    const movie = req.body;
 
     const product = await stripe.products.create({
         name: movie.title,
@@ -33,11 +31,12 @@ router.post('/create-checkout-session', async (req, res) => {
             quantity: 1,
         }],
         mode: 'payment',
-        success_url: `${YOUR_DOMAIN}?success=true`,
-        cancel_url: `${YOUR_DOMAIN}?canceled=true`,
+        success_url: `${process.env.DOMAIN_ADDRESS}/payment?success=true`,
+        cancel_url: `${process.env.DOMAIN_ADDRESS}/payment?canceled=true`,
     });
 
-    res.redirect(303, session.url);
+    // res.redirect(303, session.url);
+    res.status(200).json({ url: session.url });
 });
 
 module.exports = router;

@@ -6,6 +6,7 @@ import { Movie } from '@/hooks/useMovie'
 import MetacriticBadge from './MetacriticBadge'
 import VideoPlayer from '@/helper/VideoPlayer';
 import videojs from "video.js";
+import apiMovie from '@/services/api-movie';
 
 interface Props {
   movie: Movie
@@ -27,6 +28,13 @@ function MovieCard({ movie }: Props) {
     });
   };
 
+  const handleCheckout = async () => {
+    // Call the backend to create a checkout session, return URL
+    const response = await apiMovie.post('/stripe/create-checkout-session', { ...movie });
+    const { url } = response.data;
+    window.location.href = url; // window.location.href contains the URL of the current page
+  }
+
   return (
     <Card.Root>
       {movie.video_url ?
@@ -36,13 +44,9 @@ function MovieCard({ movie }: Props) {
       }
       <CardBody>
         <HStack justify={'space-between'}>
-          <form action="http://localhost:3001/api/stripe/create-checkout-session" method="POST">
-            {/* movie object to json */}
-            <input type="hidden" name="movie" value={JSON.stringify(movie)} />
-            <Button type="submit">
-              Rent Now
-            </Button>
-          </form>
+          <Button onClick={handleCheckout}>
+            Rent Now
+          </Button>
           <Stack>
             <MetacriticBadge name={"In Stock"} score={movie.numberInStock} />
             <MetacriticBadge name={"Rental Rate"} score={movie.dailyRentalRate} />
