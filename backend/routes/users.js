@@ -6,6 +6,7 @@ const validObjectId = require('../middlewares/validObjectId');
 const saltRounds = 10;
 const auth = require('../middlewares/auth')
 const sendVerificationEmail = require('../middlewares/mailer')
+const jwt = require('jsonwebtoken');
 
 router.get('/', async (req, res) => {
     const user = await User.find();
@@ -72,11 +73,55 @@ router.post('/login', async (req, res) => {
     const validPassword = await bcrypt.compare(req.body.password, user.password);
     if (!validPassword) return res.status(400).send('Invalid Password');
 
-    // generate token
-    const token = user.generateAuthToken();
-    res.status(200).send(token);
+    const accessToken = user.generateAccessToken();
+    const refreshToken = user.generateRefreshToken();
+
+    // Send refresh token as an HttpOnly cookie, 
+    /*  
+        A cookie is a small piece of data that a web server sends to a user’s web browser. 
+        The browser stores it and sends it back to the server with future requests. 
+        Cookies are widely used to remember user preferences, manage sessions, and track user activity.
+
+        res.cookie(name, value [, options]), https://expressjs.com/en/api.html#res.cookie
+    */
+    res.cookie('refreshToken', refreshToken, {
+        httpOnly: true, // Flags the cookie to be accessible only by the web server.
+        secure: process.env.NODE_ENV === 'production', // Ensure this is only over HTTPS in production
+        sameSite: 'strict', //'strict': Prevents the cookie from being sent with cross-site requests (mitigates CSRF attacks).
+    });
+
+    // Send the access token in the response
+    res.status(200).send({ accessToken });
 });
 
+// Token Refresh Route
+router.post('/refresh-token', async (req, res) => {
+    const refreshToken = req.cookies.refreshToken;
+
+    if (!refreshToken) {
+        return res.status(403).send({ error: 'No refresh token found' });
+    }
+
+    try {
+        const decoded = jwt.verify(refreshToken, process.env.USER_REFRESH_KEY);
+        const user = await User.findOne({ email: decoded.email })
+        const accessToken = user.generateAccessToken();
+        res.json({ accessToken });
+    } catch (err) {
+        res.status(403).send({ error: 'Invalid refresh token' });
+    }
+});
+
+// Logout Route
+router.post('/logout', (req, res) => {
+    res.clearCookie('refreshToken', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production', // Make sure it’s only cleared over HTTPS in production
+        sameSite: 'strict',
+    });
+
+    res.status(200).send({ success: 'Logged out successfully' });
+});
 
 // update data
 router.put('/:id', [validObjectId, auth], async (req, res) => {

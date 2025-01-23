@@ -1,23 +1,35 @@
 import { NavLink } from 'react-router-dom'
 import { Button, Box, Text } from "@chakra-ui/react";
-import { useAuth } from '@/context/AuthContext';
+import { useState } from 'react';
+
+import { useUserStore } from '@/context/useUserStore';
+import apiMovie from '@/services/api-movie';
+import { handleError } from '@/services/handle-error';
+import AlertMessage from './AlertMessage';
 
 function UserLogOut() {
-  const { updateToken, updateEmail } = useAuth();
+  const { logout } = useUserStore();
+  const [alert, setAlert] = useState("");
 
-  const logout = () => {
-    updateEmail("");
-    updateToken("");
+  const handleLogout = async () => {
+    try {
+      await apiMovie.post('/users/logout', null, { withCredentials: true }); // clear refresh tokken in cookies
+      logout(); // clear the token and email from the state (or in-memory)
+    }
+    catch (error: any) {
+      handleError(error, setAlert);
+    }
   };
 
   return (
     <>
+      {alert && <AlertMessage message={alert} />}
 
       <Text>{localStorage.getItem("email")}</Text>
 
       <Box paddingTop={3}>
         <NavLink to=".." end>
-          <Button onClick={logout}>Log Out</Button>
+          <Button onClick={handleLogout}>Log Out</Button>
         </NavLink>
       </Box>
     </>

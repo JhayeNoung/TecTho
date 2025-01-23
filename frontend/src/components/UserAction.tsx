@@ -3,12 +3,14 @@ import apiMovie from '@/services/api-movie'
 import { User } from '@/hooks/useUser'
 import { NavLink } from 'react-router-dom'
 
+import { useUserStore } from '@/context/useUserStore'
+
 interface Props {
   user: User
 }
 
 function UserAction({ user }: Props) {
-  const storedToken = localStorage.getItem('token');
+  const { accessToken } = useUserStore();
 
   const handleLoginFirst = () => {
     window.alert("You need to login first");
@@ -18,7 +20,7 @@ function UserAction({ user }: Props) {
     apiMovie
       .delete(`/users/${user._id}`, {
         headers: {
-          Authorization: `${storedToken}`,
+          Authorization: `${accessToken}`,
           "Content-Type": "multipart/form-data"
         }
       })
@@ -47,7 +49,7 @@ function UserAction({ user }: Props) {
   return (
     <>
       {/* if token present, use TableCell UserAction, else use TableCell of Edit and Delete buttons which are dimm */}
-      {storedToken ?
+      {accessToken ?
         <HStack>
           <NavLink to="/registration/logout/update" state={{ user }}><Button variant="plain" _hover={{ color: "cyan" }} color="blue">Edit</Button></NavLink>
           <Button variant="plain" _hover={{ color: "cyan" }} color="red" onClick={handleDelete}>

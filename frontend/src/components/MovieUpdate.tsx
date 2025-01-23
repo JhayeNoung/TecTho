@@ -21,6 +21,7 @@ import { useState } from "react"
 import { Movie } from "@/hooks/useMovie"
 import apiMovie from "@/services/api-movie"
 import useGenre from "../hooks/useGenre";
+import { useUserStore } from "@/context/useUserStore"
 
 interface Props {
   children: React.ReactNode
@@ -29,9 +30,9 @@ interface Props {
 
 const MovieUpdateForm = ({ movie }: { movie: Movie }) => {
   const { register, handleSubmit } = useForm<Movie>();
-  const storedToken = localStorage.getItem('token');
   const [alert, setAlert] = useState("");
   const { data: genres } = useGenre();
+  const { accessToken } = useUserStore();
 
   const onSubmit = async (formData: Movie) => {
     setAlert("");
@@ -45,7 +46,7 @@ const MovieUpdateForm = ({ movie }: { movie: Movie }) => {
 
     await apiMovie.put(`/movies/${movie._id}`, payload, {
       headers: {
-        Authorization: `${storedToken}`,
+        Authorization: `${accessToken}`,
         "Content-Type": "application/json" // set content type to json
       }
     })

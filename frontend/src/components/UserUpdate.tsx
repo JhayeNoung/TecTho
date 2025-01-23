@@ -9,6 +9,7 @@ import { useLocation } from "react-router-dom";
 
 import apiMovie from "@/services/api-movie";
 import AlertMessage from "./AlertMessage";
+import { useUserStore } from "@/context/useUserStore";
 
 // all fields are optional, but if they are filled, they must meet the requirements
 const schemaUser = z.object({
@@ -31,17 +32,17 @@ type User = z.infer<typeof schemaUser>;
 export default function UserUpdate() {
   const { register, handleSubmit, formState: { errors } } = useForm<User>({ resolver: zodResolver(schemaUser) });
   const [alert, setAlert] = useState("");
-  const storedToken = localStorage.getItem('token');
   const navigate = useNavigate();
   const location = useLocation();
   const user = location.state?.user;
+  const { accessToken } = useUserStore();
 
   const onSubmit = async (payload: User) => {
     setAlert(""); // reset alert
     await apiMovie
       .put(`/users/${user._id}`, payload, {
         headers: {
-          Authorization: `${storedToken}`,
+          Authorization: `${accessToken}`,
           "Content-Type": "application/json" // set content type to json
         }
       })

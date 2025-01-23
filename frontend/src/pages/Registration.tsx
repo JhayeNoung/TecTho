@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { NavLink, Route, Routes } from "react-router-dom";
 import { Button, Grid, GridItem, HStack, Image, Spacer, Box } from "@chakra-ui/react";
 
@@ -10,14 +9,10 @@ import UserLogIn from "@/components/UserLogIn";
 import UserLogOut from "@/components/UserLogOut";
 import UserUpdate from "@/components/UserUpdate";
 import UserVerification from "@/components/UserVerification";
-import { useAuth } from "@/context/AuthContext";
+import { useUserStore } from "@/context/useUserStore";
 
 function Registration() {
-  const { token, email } = useAuth();
-
-  useEffect(() => {
-    // Listen for token-change event
-  }, [token, email]);
+  const { accessToken } = useUserStore();
 
   return (
     <Grid
@@ -47,7 +42,7 @@ function Registration() {
           {/* Spacer pushes the rest of the components to the right */}
           <Spacer />
 
-          {localStorage.getItem('email') ?
+          {accessToken ?
             <Button variant="plain" fontWeight="bold">
               {localStorage.getItem('email')}
             </Button>

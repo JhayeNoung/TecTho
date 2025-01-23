@@ -29,9 +29,14 @@ const userSchema = new mongoose.Schema({
     }
 })
 
-userSchema.methods.generateAuthToken = function () {
+userSchema.methods.generateAccessToken = function () {
     // The 'this' context refers to the document, so no need to pass the user as a parameter
-    return jwt.sign({ _id: this._id, isAdmin: this.isAdmin }, process.env.PRIVATE_KEY);
+    return jwt.sign({ _id: this._id, email: this.email, isAdmin: this.isAdmin }, process.env.USER_ACCESS_KEY, { expiresIn: '15m' });
+}
+
+userSchema.methods.generateRefreshToken = function () {
+    // The 'this' context refers to the document, so no need to pass the user as a parameter
+    return jwt.sign({ _id: this._id, email: this.email, isAdmin: this.isAdmin }, process.env.USER_REFRESH_KEY, { expiresIn: '7d' });
 }
 
 const User = mongoose.model('User', userSchema);

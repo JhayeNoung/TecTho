@@ -9,10 +9,11 @@ import DarkMode from '../components/DarkMode';
 import { MovieQuery } from '@/hooks/useMovie';
 import GenreSelector from '@/components/GenreSelector';
 import SortSelector from '@/components/SortSelector';
+import { useUserStore } from '@/context/useUserStore';
 
 function MovieAPI() {
   const [movieQuery, setMovieQuery] = useState<MovieQuery>({} as MovieQuery)
-  const storedToken = localStorage.getItem('token');
+  const { accessToken } = useUserStore();
 
   return (
     <Grid
@@ -43,7 +44,7 @@ function MovieAPI() {
           {/* Spacer pushes the rest of the components to the right */}
           <Spacer />
 
-          {storedToken ?
+          {accessToken ?
             <NavLink to="/registration/logout">
               <Button variant="plain" _hover={{ textDecoration: "underline" }}>
                 {localStorage.getItem("email")}

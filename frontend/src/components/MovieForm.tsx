@@ -9,7 +9,7 @@ import apiMovie from "../services/api-movie";
 
 import useGenre from "../hooks/useGenre";
 import AlertMessage from "./AlertMessage";
-
+import { useUserStore } from "@/context/useUserStore";
 
 const schemaMovie = z.object({
   title: z.string().min(1).max(255),
@@ -44,7 +44,7 @@ export default function MovieForm() {
   const { data: genres } = useGenre();
   const [alert, setAlert] = useState("");
   const [loading, setLoading] = useState(false)
-  const storedToken = localStorage.getItem('token');
+  const { accessToken } = useUserStore();
 
   const handleFormSubmit = async (payload: Movie) => {
     setAlert(""); // Reset the alert
@@ -62,7 +62,7 @@ export default function MovieForm() {
       const { poster, video, ...rest } = payload; // Separate the poster file from the payload
       await apiMovie.post(`/movies`, { ...rest, poster_url, video_url }, {
         headers: {
-          Authorization: `${storedToken}`,
+          Authorization: `${accessToken}`,
           "Content-Type": "application/json"
         }
       })
