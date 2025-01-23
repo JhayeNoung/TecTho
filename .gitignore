@@ -1,7 +1,1 @@
-backend/node_modules
-backend/coverage
-backend/log
-backend/.env
-backend/.env.prob
-
-frontend/node_modules
+.env*

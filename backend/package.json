@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --watchAll --verbose --runInBand --detectOpenHandles",
-    "start": "NODE_ENV=production nodemon --env-file=.env index.js",
+    "start": "NODE_ENV=production nodemon index.js",
     "dev": "NODE_ENV=development nodemon --env-file=.env index.js"
   },
   "keywords": [],

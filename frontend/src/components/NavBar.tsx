@@ -1,5 +1,5 @@
 import logo from '../assets/logo.webp'
-import { HStack, Image, Spacer } from '@chakra-ui/react'
+import { HStack, Image } from '@chakra-ui/react'
 import { NavLink } from 'react-router-dom';
 import { Button } from '@chakra-ui/react';
 import { Box } from '@chakra-ui/react';

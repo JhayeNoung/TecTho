@@ -1,0 +1,34 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "4173:80"
+    environment:
+      NODE_ENV: production
+    restart: unless-stopped
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    environment:
+      NODE_ENV: production
+      PRIVATE_KEY: ${PRIVATE_KEY} # value is from .env which is should be excluded from github respository
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID} # value is from .env which is should be excluded from github respository
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY} # value is from .env which is should be excluded from github respository
+      AWS_REGION: ${AWS_REGION}
+      BUCKET_NAME: ${BUCKET_NAME}
+      APP_PASSWORD: ${APP_PASSWORD}
+      STRIPE_TEST_PUBLIC_KEY: ${STRIPE_TEST_PUBLIC_KEY}
+      STRIPE_TEST_PRIVATE_KEY: ${STRIPE_TEST_PRIVATE_KEY}
+      YOUTUBE_API_KEY: ${YOUTUBE_API_KEY}
+      MONGO_URL: ${MONGO_URL}
+      DOMAIN_ADDRESS: ${DOMAIN_ADDRESS}
+      PORT: ${PORT}
+    restart: unless-stopped

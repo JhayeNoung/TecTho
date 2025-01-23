@@ -17,7 +17,33 @@ module.exports = function (app) {
     app.use(express.static('public'));
     app.use(express.urlencoded({ extended: true }));
     app.use(morgan('tiny'));
+
     app.use(cors());
+    // const allowedOrigins = [
+    //     'http://localhost:5173',
+    //     'https://checkout.stripe.com',
+    //     process.env.DOMAIN_ADDRESS,
+    // ];
+
+    // app.use(cors({
+    //     origin: (origin, callback) => {
+    //         // Allow requests with no origin (like mobile apps or CURL requests)
+    //         if (!origin) return callback(null, true);
+
+    //         // Check if the request's origin is in the allowed origins array
+    //         if (allowedOrigins.includes(origin)) {
+    //             return callback(null, true);
+    //         } else {
+    //             // If not, reject the request with an error
+    //             return callback(new Error('Not allowed by CORS'));
+    //         }
+    //     },
+    //     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Include OPTIONS for preflight
+    //     allowedHeaders: ['Content-Type', 'Authorization'],
+    //     credentials: true, // Add this if you're using cookies
+    // }));
+
+    // app.options('*', cors()); // Preflight request handling
 
     app.use('/api/movies', movies);
     app.use('/api/genres', genres);

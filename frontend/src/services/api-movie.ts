@@ -1,8 +1,11 @@
 import axios, { CanceledError } from "axios";
 
-// Make a request for a user with a given ID
+const backend_api = import.meta.env.MODE === 'production'
+  ? 'http://167.172.67.47:3001/api'
+  : 'http://localhost:3001/api';
+
 export default axios.create({
-  baseURL: 'http://localhost:3001/api',
+  baseURL: backend_api,
   timeout: 10000,
 });
 

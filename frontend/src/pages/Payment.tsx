@@ -1,16 +1,14 @@
 import { useState, useEffect } from "react";
-import { HStack, Image, Button, Spacer, GridItem } from "@chakra-ui/react";
+import { HStack, Image, Button, Spacer, GridItem, Text, Grid, Flex } from "@chakra-ui/react";
 import { NavLink } from "react-router-dom";
 import DarkMode from "../components/DarkMode";
 import logo from "../assets/logo.webp";
 
 const NavBar = ({ storedToken }: { storedToken: string | null }) => (
-  <GridItem area="nav" bg="coral">
-
+  <GridItem area="nav" height="10vh">
     <HStack padding='10px'>
-
       <NavLink to="/" end>
-        <Image src={logo} boxSize="60px" />
+        <Image src={logo} boxSize="50px" />
       </NavLink>
 
       <Spacer />
@@ -35,47 +33,47 @@ const NavBar = ({ storedToken }: { storedToken: string | null }) => (
         </Button>
       </NavLink>
 
-      <NavLink to="/payment" end>
-        <Button variant="plain" _hover={{ textDecoration: "underline" }}>
-          Payment
-        </Button>
-      </NavLink>
-
       <DarkMode />
-    </HStack >
+
+    </HStack>
   </GridItem>
 );
 
-const ProductDisplay = () => (
-  <section>
-    <div className="product">
-      <img
-        src="https://i.imgur.com/EHyR2nP.png"
-        alt="The cover of Stubborn Attachments"
-      />
-      <div className="description">
-        <h3>Stubborn Attachments</h3>
-        <h5>$20.00</h5>
-      </div>
-    </div>
-    <form action="http://localhost:3001/api/stripe/create-checkout-session" method="POST">
-      <button type="submit">
-        Checkout
-      </button>
-    </form>
-  </section>
-);
-
-
 const Message = ({ message }: { message: string }) => (
-  <section>
-    <p>{message}</p>
-    <NavLink to="/">
-      <Button>Back to Home</Button>
-    </NavLink>
-  </section>
+  <GridItem
+    area="main"
+    height="80vh" // 100vh unit refers to 100% of the viewport height, so it takes the full height of the screen
+  >
+    <Flex
+      direction="column"
+      justify="center"
+      align="center"
+      height="100%" // Ensures it takes the full height of the GridItem
+    >
+      <Text paddingBottom={3}>{message}</Text>
+      <NavLink to="/" >
+        <Button>Back to Home</Button>
+      </NavLink>
+    </Flex>
+  </GridItem>
 );
 
+const Footer = () => (
+  <GridItem
+    area="footer"
+    height="10vh" // 100vh unit refers to 100% of the viewport height, so it takes the full height of the screen
+    bg={"gray.100"}
+  >
+    <Flex
+      direction="column"
+      justify="center"
+      align="center"
+      height="100%" // Ensures it takes the full height of the GridItem
+    >
+      <Text textAlign="center" padding="10px">© 2021 Movie API</Text>
+    </Flex>
+  </GridItem >
+);
 
 export default function Payment() {
   const [message, setMessage] = useState("");
@@ -96,12 +94,19 @@ export default function Payment() {
     }
   }, []);
 
-  return message ? (
-    <Message message={message} />
-  ) : (
-    <>
+  return (
+    <Grid
+      templateAreas={{
+        base: `"nav" "main" "footer"`,
+      }}
+
+      templateColumns={{
+        base: '1fr', // base is 1 fraction, means in small device
+      }}
+    >
       <NavBar storedToken={storedToken} />
-      <ProductDisplay />
-    </>
-  );
-}
+      <Message message={message} />
+      <Footer />
+    </Grid>
+  )
+};
