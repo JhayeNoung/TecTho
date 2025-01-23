@@ -8,7 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 
 import AlertMessage from "./AlertMessage";
 import apiMovie from "@/services/api-movie";
-import { useAuth } from "@/context/AuthContext";
+import { useUserStore } from "@/context/useUserStore";
 import { handleError } from "@/services/handle-error";
 
 const schemaUser = z.object({
@@ -22,14 +22,15 @@ export default function UserLogin() {
   const { register, handleSubmit, formState: { errors } } = useForm<User>({ resolver: zodResolver(schemaUser) });
   const [alert, setAlert] = useState("")
   const navigate = useNavigate();
-  const { updateToken, updateEmail } = useAuth();
+  const { updateAccessToken, updateEmail } = useUserStore();
 
   const onSubmit = async (payload: User) => {
     setAlert(""); // reset the alert message when submitting the form, which make sure duplicate value is not set, if duplicate value is set, alert state will be the same
 
     try {
-      const response = await apiMovie.post("users/login", payload);
-      updateToken(response.data);
+      const response = await apiMovie.post("/users/login", payload, { withCredentials: true });
+      const { accessToken } = response.data;
+      updateAccessToken(accessToken);
       updateEmail(payload.email);
       navigate('/registration/logout'); // redirect to the logout page
     }

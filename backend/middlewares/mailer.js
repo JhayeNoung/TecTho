@@ -14,7 +14,7 @@ const transporter = nodemailer.createTransport({
 
 const sendVerificationEmail = async (email) => {
     try {
-        // const token = jwt.sign({ key: email }, process.env.PRIVATE_KEY, { expiresIn: '1h' });
+        // const token = jwt.sign({ key: email }, process.env.USER_ACCESS_KEY, { expiresIn: '1h' });
         // const verificationKey = crypto.randomInt(100000, 999999); // Generate a 6-digit key
         const verificationKey = 12345
         const mailOptions = {

@@ -4,7 +4,9 @@ import { NavLink } from "react-router-dom";
 import DarkMode from "../components/DarkMode";
 import logo from "../assets/logo.webp";
 
-const NavBar = ({ storedToken }: { storedToken: string | null }) => (
+import { useUserStore } from "@/context/useUserStore";
+
+const NavBar = ({ accessToken }: { accessToken: string | null }) => (
   <GridItem area="nav" height="10vh">
     <HStack padding='10px'>
       <NavLink to="/" end>
@@ -13,7 +15,7 @@ const NavBar = ({ storedToken }: { storedToken: string | null }) => (
 
       <Spacer />
 
-      {storedToken ?
+      {accessToken ?
         <NavLink to="/registration/logout">
           <Button variant="plain" _hover={{ textDecoration: "underline" }}>
             {localStorage.getItem("email")}
@@ -77,7 +79,7 @@ const Footer = () => (
 
 export default function Payment() {
   const [message, setMessage] = useState("");
-  const storedToken = localStorage.getItem('token');
+  const { accessToken } = useUserStore();
 
   useEffect(() => {
     // Check to see if this is a redirect back from Checkout
@@ -104,7 +106,7 @@ export default function Payment() {
         base: '1fr', // base is 1 fraction, means in small device
       }}
     >
-      <NavBar storedToken={storedToken} />
+      <NavBar accessToken={accessToken} />
       <Message message={message} />
       <Footer />
     </Grid>

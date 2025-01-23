@@ -6,13 +6,14 @@ import { Box } from '@chakra-ui/react';
 
 import SearchInput from './SearchInput';
 import DarkMode from './DarkMode';
+import { useUserStore } from '@/context/useUserStore';
 
 interface Props {
   onSearch: (searchValue: string) => void;
 }
 
 export default function NavBar({ onSearch }: Props) {
-  const storedToken = localStorage.getItem("token")
+  const { accessToken } = useUserStore();
 
   return (
     <HStack padding='10px'>
@@ -26,7 +27,7 @@ export default function NavBar({ onSearch }: Props) {
       </Box>
 
 
-      {storedToken ?
+      {accessToken ?
         <NavLink to="/registration/logout">
           <Button variant="plain" _hover={{ textDecoration: "underline" }}>
             {localStorage.getItem("email")}

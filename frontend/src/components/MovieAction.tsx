@@ -5,12 +5,14 @@ import { Movie } from '@/hooks/useMovie';
 import Dialog from './Dialog';
 import MovieUpdate from './MovieUpdate';
 
+import { useUserStore } from '@/context/useUserStore';
+
 interface Props {
   movie: Movie
 }
 
 function MovieAction({ movie }: Props) {
-  const storedToken = localStorage.getItem('token');
+  const { accessToken } = useUserStore();
 
   const handleDelete = async () => {
     try {
@@ -22,7 +24,7 @@ function MovieAction({ movie }: Props) {
 
       await apiMovie.delete(`/movies/${movie._id}`, {
         headers: {
-          Authorization: `${storedToken}`,
+          Authorization: `${accessToken}`,
           "Content-Type": "multipart/form-data"
         }
       })
@@ -63,7 +65,7 @@ function MovieAction({ movie }: Props) {
 
   return (
     <>
-      {storedToken ?
+      {accessToken ?
         <HStack>
           <MovieUpdate movie={movie}>Edit</MovieUpdate>
           <Dialog data={movie}>Detail</Dialog>

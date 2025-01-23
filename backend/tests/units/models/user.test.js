@@ -7,7 +7,7 @@ describe('GenerateAuthToken', () => {
         const user = new User({ isAdmin: true });
 
         const token = await user.generateAuthToken();
-        const decoded = jwt.verify(token, process.env.PRIVATE_KEY);
+        const decoded = jwt.verify(token, process.env.USER_ACCESS_KEY);
 
         expect(decoded.isAdmin).toBe(true);
     })
