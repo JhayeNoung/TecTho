@@ -7,7 +7,7 @@ import { Field } from "./ui/field";
 import apiMovie from "@/services/api-movie";
 import AlertMessage from "./AlertMessage";
 import { useUserStore } from "@/context/useUserStore";
-import { logUserActionError } from "@/services/log-error";
+import { logActionError } from "@/services/log-error";
 import { User } from "@/hooks/useUser";
 
 export default function UserUpdate() {
@@ -33,7 +33,7 @@ export default function UserUpdate() {
       navigate('/registration/logout');
     }
     catch (error: any) {
-      logUserActionError(error);
+      logActionError(error);
     }
   };
 

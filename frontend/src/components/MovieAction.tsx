@@ -6,6 +6,8 @@ import Dialog from './Dialog';
 import MovieUpdate from './MovieUpdate';
 
 import { useUserStore } from '@/context/useUserStore';
+import { useMovieStore } from '@/context/useMovieStore';
+import { logActionError } from '@/services/log-error';
 
 interface Props {
   movie: Movie
@@ -13,6 +15,7 @@ interface Props {
 
 function MovieAction({ movie }: Props) {
   const { accessToken } = useUserStore();
+  const { updateActions } = useMovieStore();
 
   const handleDelete = async () => {
     try {
@@ -39,29 +42,13 @@ function MovieAction({ movie }: Props) {
         method: 'DELETE',
       });
 
-      window.dispatchEvent(new Event("movie-delete")); // Dispatch event on successful delete
+      // Update the actions in the store
+      updateActions(["movie-delete"]);
     }
     catch (error: any) {
-      console.log(error)
-      switch (error.status) {
-        case 404:
-          window.alert(error.message);
-          break;
-        case 401:
-        case 400:
-        case 403:
-          window.alert(error.response.data);
-          break;
-        case 500:
-          window.alert(error.message);
-          break;
-        default:
-          window.alert("An unexpected error occurred");
-      }
+      logActionError(error)
     }
   };
-
-
 
   return (
     <>

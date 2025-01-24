@@ -10,6 +10,8 @@ import apiMovie from "../services/api-movie";
 import useGenre from "../hooks/useGenre";
 import AlertMessage from "./AlertMessage";
 import { useUserStore } from "@/context/useUserStore";
+import { useMovieStore } from "@/context/useMovieStore";
+import { logMoviePostError } from "@/services/log-error";
 
 const schemaMovie = z.object({
   title: z.string().min(1).max(255),
@@ -45,6 +47,7 @@ export default function MovieForm() {
   const [alert, setAlert] = useState("");
   const [loading, setLoading] = useState(false)
   const { accessToken } = useUserStore();
+  const { updateActions } = useMovieStore();
 
   const handleFormSubmit = async (payload: Movie) => {
     setAlert(""); // Reset the alert
@@ -81,39 +84,15 @@ export default function MovieForm() {
         body: payload.video,
       });
 
-      window.dispatchEvent(new Event("movie-post")); // Dispatch an event to notify the MovieList component
+      // Update the actions in the store
+      updateActions(["movie-post"]);
 
       setAlert("Movie posted successfully");
       setLoading(false);
     }
     // Handle the error
     catch (error: any) {
-      console.log(error)
-      switch (error.response?.status) {
-        case 404:
-          if (error.response.data.includes("No genre found.")) {
-            setAlert("No genre found.");
-          } else {
-            setAlert("The requested resource was not found. status code: 404");
-          }
-          break;
-        case 400:
-          if (error.response.data.includes("Already have movie with this title.")) {
-            setAlert("Already have movie with this title.");
-          } else {
-            setAlert(error.response.data);
-          }
-          break;
-        case 401:
-        case 403:
-          setAlert(error.response.data);
-          break;
-        case 500:
-          setAlert(error.message);
-          break;
-        default:
-          window.alert("An unexpected error occurred");
-      }
+      logMoviePostError(error, setAlert);
       setLoading(false);
     }
   };

@@ -22,7 +22,7 @@ export const logUserError = (error: any, setAlert: React.Dispatch<React.SetState
     }
 };
 
-export const logUserActionError = (error: any) => {
+export const logActionError = (error: any) => {
     switch (error.status) {
         case 404:
             window.alert(error.response.data);
@@ -38,4 +38,34 @@ export const logUserActionError = (error: any) => {
         default:
             window.alert("An unexpected error occurred");
     }
+};
+
+
+export const logMoviePostError = (error: any, setAlert: React.Dispatch<React.SetStateAction<string>>) => {
+    switch (error.response?.status) {
+        case 404:
+            if (error.response.data.includes("No genre found.")) {
+                setAlert("No genre found.");
+            } else {
+                setAlert("The requested resource was not found. status code: 404");
+            }
+            break;
+        case 400:
+            if (error.response.data.includes("Already have movie with this title.")) {
+                setAlert("Already have movie with this title.");
+            } else {
+                setAlert(error.response.data);
+            }
+            break;
+        case 401:
+        case 403:
+            setAlert(error.response.data);
+            break;
+        case 500:
+            setAlert(error.message);
+            break;
+        default:
+            window.alert("An unexpected error occurred");
+    }
+
 };

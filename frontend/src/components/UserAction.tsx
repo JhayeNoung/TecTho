@@ -4,7 +4,7 @@ import { User } from '@/hooks/useUser'
 import { NavLink } from 'react-router-dom'
 
 import { useUserStore } from '@/context/useUserStore'
-import { logUserActionError } from '@/services/log-error'
+import { logActionError } from '@/services/log-error'
 
 interface Props {
   user: User
@@ -26,7 +26,7 @@ function UserAction({ user }: Props) {
       updateActions(['user-delete']);
     }
     catch (error: any) {
-      logUserActionError(error);
+      logActionError(error);
     }
   };
 
