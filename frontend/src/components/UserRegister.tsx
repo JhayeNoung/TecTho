@@ -7,6 +7,8 @@ import { z } from "zod";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from "react";
 import apiMovie from "@/services/api-movie";
+import AlertMessage from "./AlertMessage";
+import { logUserError } from "@/services/log-error";
 
 const schemaUser = z.object({
     name: z.string().min(2).max(100),
@@ -39,8 +41,10 @@ export default function UserRegister() {
     const { register, handleSubmit, formState: { errors } } = useForm<User>({ resolver: zodResolver(schemaUser) });
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+    const [alert, setAlert] = useState("");
 
     const onSubmit = async (payload: User) => {
+        setAlert(""); // reset alert
         try {
             // check validation and send mail
             setLoading(true);
@@ -51,28 +55,15 @@ export default function UserRegister() {
             setLoading(false);
         }
         catch (error: any) {
-            console.log(error);
-            switch (error.status) {
-                case 404:
-                    alert(error.message);
-                    break;
-                case 401:
-                case 400:
-                case 403:
-                    alert(error.response.data);
-                    break;
-                case 500:
-                    alert(error.message);
-                    break;
-                default:
-                    window.alert("An unexpected error occurred");
-            }
+            logUserError(error, setAlert);
             setLoading(false);
         }
     };
 
     return (
         <>
+            {alert && <AlertMessage message={alert} />}
+
             <form onSubmit={handleSubmit(onSubmit)}>
                 <Fieldset.Root>
                     <Stack>

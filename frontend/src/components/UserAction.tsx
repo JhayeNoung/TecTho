@@ -4,46 +4,30 @@ import { User } from '@/hooks/useUser'
 import { NavLink } from 'react-router-dom'
 
 import { useUserStore } from '@/context/useUserStore'
+import { logUserActionError } from '@/services/log-error'
 
 interface Props {
   user: User
 }
 
 function UserAction({ user }: Props) {
-  const { accessToken } = useUserStore();
-
-  const handleLoginFirst = () => {
-    window.alert("You need to login first");
-  }
+  const { accessToken, updateActions } = useUserStore();
 
   const handleDelete = async () => {
-    apiMovie
-      .delete(`/users/${user._id}`, {
+    try {
+      await apiMovie.delete(`/users/${user._id}`, {
         headers: {
           Authorization: `${accessToken}`,
           "Content-Type": "multipart/form-data"
         }
       })
-      .then(() => {
-        window.dispatchEvent(new Event("user-delete")); // Dispatch event on successful delete
-      })
-      .catch(error => {
-        switch (error.status) {
-          case 404:
-            window.alert(error.message);
-            break;
-          case 401:
-          case 400:
-          case 403:
-            window.alert(error.response.data);
-            break;
-          case 500:
-            window.alert(error.message);
-            break;
-          default:
-            window.alert("An unexpected error occurred");
-        }
-      })
+
+      window.alert("User deleted successfully");
+      updateActions(['user-delete']);
+    }
+    catch (error: any) {
+      logUserActionError(error);
+    }
   };
 
   return (
@@ -58,10 +42,10 @@ function UserAction({ user }: Props) {
         </HStack>
         :
         <HStack>
-          <Button variant="plain" color="gray" _hover={{ textDecoration: "underline" }} onClick={() => handleLoginFirst()}>
+          <Button variant="plain" color="gray" _hover={{ textDecoration: "underline" }} onClick={() => window.alert("You need to login first")}>
             Edit
           </Button>
-          <Button variant="plain" color="gray" _hover={{ textDecoration: "underline" }} onClick={() => handleLoginFirst()}>
+          <Button variant="plain" color="gray" _hover={{ textDecoration: "underline" }} onClick={() => window.alert("You need to login first")}>
             Delete
           </Button>
         </HStack>

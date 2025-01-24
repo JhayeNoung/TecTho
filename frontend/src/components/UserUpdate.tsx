@@ -1,72 +1,40 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { Input, Button, Fieldset, Stack } from "@chakra-ui/react";
 import { Field } from "./ui/field";
-import { z } from "zod";
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useLocation } from "react-router-dom";
 
 import apiMovie from "@/services/api-movie";
 import AlertMessage from "./AlertMessage";
 import { useUserStore } from "@/context/useUserStore";
-
-// all fields are optional, but if they are filled, they must meet the requirements
-const schemaUser = z.object({
-  _id: z.string().optional().or(z.literal('')),
-  name: z.string().min(2).max(100).optional().or(z.literal('')), // min and max length for name
-  email: z.string().min(3).max(255).email().optional().or(z.literal('')), // min, max, and email format for email
-  password: z
-    .string()
-    .min(8)
-    .max(20)
-    .regex(/[A-Z]/, "Password must contain at least one uppercase letter.")
-    .regex(/[a-z]/, "Password must contain at least one lowercase letter.")
-    .regex(/[0-9]/, "Password must contain at least one number.")
-    .regex(/[!@#$%^&*(),.?":{}|<>]/, "Password must contain at least one special character.")
-    .optional().or(z.literal('')), // min, max, and patterns for password
-});
-
-type User = z.infer<typeof schemaUser>;
+import { logUserActionError } from "@/services/log-error";
+import { User } from "@/hooks/useUser";
 
 export default function UserUpdate() {
-  const { register, handleSubmit, formState: { errors } } = useForm<User>({ resolver: zodResolver(schemaUser) });
+  const { register, handleSubmit, formState: { errors } } = useForm<User>();
   const [alert, setAlert] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
   const user = location.state?.user;
-  const { accessToken } = useUserStore();
+  const { accessToken, updateActions } = useUserStore();
 
   const onSubmit = async (payload: User) => {
     setAlert(""); // reset alert
-    await apiMovie
-      .put(`/users/${user._id}`, payload, {
+
+    try {
+      await apiMovie.put(`/users/${user._id}`, payload, {
         headers: {
           Authorization: `${accessToken}`,
           "Content-Type": "application/json" // set content type to json
         }
       })
-      .then(() => {
-        window.dispatchEvent(new Event("user-update")); // Dispatch event on successful update
-        navigate('/registration/logout'); // Navigate to the logout page after submission
-      })
-      .catch(error => {
-        switch (error.status) {
-          case 404:
-            window.alert(error.message);
-            break;
-          case 401:
-          case 400:
-          case 403:
-            window.alert(error.response.data);
-            break;
-          case 500:
-            window.alert(error.message);
-            break;
-          default:
-            window.alert("An unexpected error occurred");
-        }
-      })
+
+      updateActions(["user-update"]);
+      navigate('/registration/logout');
+    }
+    catch (error: any) {
+      logUserActionError(error);
+    }
   };
 
   return (

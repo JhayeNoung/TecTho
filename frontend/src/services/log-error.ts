@@ -1,6 +1,6 @@
 // error-handle.ts
 
-export const handleError = (error: any, setAlert: React.Dispatch<React.SetStateAction<string>>) => {
+export const logUserError = (error: any, setAlert: React.Dispatch<React.SetStateAction<string>>) => {
     switch (error.status) {
         case 404:
             if (error.response.data.includes("No user found with this email.")) {
@@ -16,6 +16,24 @@ export const handleError = (error: any, setAlert: React.Dispatch<React.SetStateA
             break;
         case 500:
             setAlert(error.message);
+            break;
+        default:
+            window.alert("An unexpected error occurred");
+    }
+};
+
+export const logUserActionError = (error: any) => {
+    switch (error.status) {
+        case 404:
+            window.alert(error.response.data);
+            break;
+        case 401:
+        case 400:
+        case 403:
+            window.alert(error.response.data);
+            break;
+        case 500:
+            window.alert(error.message);
             break;
         default:
             window.alert("An unexpected error occurred");

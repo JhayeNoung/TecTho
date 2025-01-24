@@ -9,7 +9,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import AlertMessage from "./AlertMessage";
 import apiMovie from "@/services/api-movie";
 import { useUserStore } from "@/context/useUserStore";
-import { handleError } from "@/services/handle-error";
+import { logUserError } from "@/services/log-error";
 
 const schemaUser = z.object({
   email: z.string().email(),
@@ -35,7 +35,7 @@ export default function UserLogin() {
       navigate('/registration/logout'); // redirect to the logout page
     }
     catch (error: any) {
-      handleError(error, setAlert);
+      logUserError(error, setAlert);
     }
   };
 

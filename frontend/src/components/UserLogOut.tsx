@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import { useUserStore } from '@/context/useUserStore';
 import apiMovie from '@/services/api-movie';
-import { handleError } from '@/services/handle-error';
+import { logUserError } from '@/services/log-error';
 import AlertMessage from './AlertMessage';
 
 function UserLogOut() {
@@ -17,7 +17,7 @@ function UserLogOut() {
       logout(); // clear the token and email from the state (or in-memory)
     }
     catch (error: any) {
-      handleError(error, setAlert);
+      logUserError(error, setAlert);
     }
   };
 

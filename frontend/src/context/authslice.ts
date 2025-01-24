@@ -1,7 +1,7 @@
 import { StateCreator } from 'zustand'
 import apiMovie from '@/services/api-movie';
 
-interface AuthSlice {
+export interface AuthSlice {
     accessToken: string | null;
     email: string | null;
     updateAccessToken: (token: string) => void;
@@ -11,7 +11,7 @@ interface AuthSlice {
 }
 
 
-export const authSlice: StateCreator<AuthSlice> = (set) => ({
+export const createAuthSlice: StateCreator<AuthSlice> = (set) => ({
     accessToken: null,
     email: null,
     updateAccessToken: (token) => {
@@ -28,7 +28,7 @@ export const authSlice: StateCreator<AuthSlice> = (set) => ({
     fetchAccessToken: async () => {
         try {
             const response = await apiMovie.post('users/refresh-token', null, { withCredentials: true });
-            set({ accessToken: response.data });
+            set({ accessToken: response.data.accessToken });
         }
         catch (error: any) {
             console.error(error.response.data.error);
