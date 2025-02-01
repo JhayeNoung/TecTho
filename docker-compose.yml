@@ -19,12 +19,13 @@ services:
       - "3001:3001"
     environment:
       NODE_ENV: production
-      USER_ACCESS_KEY: ${ USER_ACCESS_KEY} # value is from .env which is should be excluded from github respository
-      USER_REFRESH_KEY: ${ USER_REFRESH_KEY} # value is from .env which is should be excluded from github respository
+      USER_ACCESS_KEY: ${USER_ACCESS_KEY} # value is from .env which is should be excluded from github respository
+      USER_REFRESH_KEY: ${USER_REFRESH_KEY} # value is from .env which is should be excluded from github respository
       AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID} # value is from .env which is should be excluded from github respository
       AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY} # value is from .env which is should be excluded from github respository
       AWS_REGION: ${AWS_REGION}
       BUCKET_NAME: ${BUCKET_NAME}
+      CLOUDFRONT_URL: ${CLOUDFRONT_URL}
       APP_PASSWORD: ${APP_PASSWORD}
       STRIPE_TEST_PUBLIC_KEY: ${STRIPE_TEST_PUBLIC_KEY}
       STRIPE_TEST_PRIVATE_KEY: ${STRIPE_TEST_PRIVATE_KEY}

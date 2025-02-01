@@ -56,14 +56,11 @@ export default function MovieForm() {
     try {
       // Get the pre-signed URL from the backend
       const presigned_poster = await apiMovie.post('/presigned-url/post-url', { name: payload.poster.name, type: payload.poster.type });
-      const poster_url = presigned_poster.data.url.split('?')[0];
-
       const presigned_video = await apiMovie.post('/presigned-url/post-url', { name: payload.video.name, type: payload.video.type });
-      const video_url = presigned_video.data.url.split('?')[0];
 
       // send the payload to the backend
       const { poster, video, ...rest } = payload; // Separate the poster file from the payload
-      await apiMovie.post(`/movies`, { ...rest, poster_url, video_url }, {
+      await apiMovie.post(`/movies`, { ...rest, poster_url: payload.poster.name, video_url: payload.video.name }, {
         headers: {
           Authorization: `${accessToken}`,
           "Content-Type": "application/json"

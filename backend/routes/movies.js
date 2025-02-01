@@ -94,6 +94,8 @@ router.post('/', [auth], async (req, res) => {
     // save movie
     const movie = new Movie(req.body);
     movie.genre = genre;
+    movie.poster_url = process.env.CLOUDFRONT_URL + "/images/" + req.body.poster_url;
+    movie.video_url = process.env.CLOUDFRONT_URL + "/videos/" + req.body.video_url;
 
     await movie.save();
 
