@@ -1,33 +1,44 @@
-**End User License Agreement (EULA)**
+End User License Agreement (EULA)
 
-This **End User License Agreement (EULA)** is a legal agreement between you (the "Licensee") and **Alba** ("Licensor") for the software product identified above (the "Software"). By installing, copying, or otherwise using the Software, you agree to be bound by the terms of this EULA.
+This End User License Agreement (EULA) is a legal agreement between you (the "Licensee") and Alba ("Licensor") 
+for the software product identified above (the "Software"). By installing, copying, or otherwise using the Software, 
+you agree to be bound by the terms of this EULA.
 
-**1. License Grant**
-The Licensor grants you a non-exclusive, non-transferable license to install and use the Software only in accordance with the terms of this agreement. The Software is licensed, not sold.
+1. License Grant
+The Licensor grants you a non-exclusive, non-transferable license to install and use the Software only in accordance 
+with the terms of this agreement. The Software is licensed, not sold.
 
-**2. Restrictions**
+2. Restrictions
 You may not:
 - Decompile, reverse engineer, disassemble, attempt to derive the source code of, or decrypt the Software.
 - Rent, lease, sublicense, or transfer the Software to any third party.
 - Use the Software for any unlawful or unauthorized purposes.
 
-**3. Ownership**
-The Software and all copies thereof are owned by **Alba** and are protected by copyright laws and international treaties. The Software is licensed, not sold, to you. You may not modify, distribute, or create derivative works based on the Software unless explicitly authorized by **Alba**.
+3. Ownership
+The Software and all copies thereof are owned by Alba and are protected by copyright laws and international treaties. 
+The Software is licensed, not sold, to you. You may not modify, distribute, or create derivative works based on the 
+Software unless explicitly authorized by Alba.
 
-**4. Updates and Maintenance**
-**Alba** may, at its discretion, provide updates, patches, or bug fixes for the Software. Any such updates will be covered by the terms of this EULA unless otherwise specified by **Alba**.
+4. Updates and Maintenance
+Alba may, at its discretion, provide updates, patches, or bug fixes for the Software. Any such updates will be covered 
+by the terms of this EULA unless otherwise specified by Alba.
 
-**5. Termination**
-This EULA will terminate immediately without notice if you fail to comply with any of its terms. Upon termination, you must cease using the Software and destroy all copies of the Software in your possession.
+5. Termination
+This EULA will terminate immediately without notice if you fail to comply with any of its terms. Upon termination, you 
+must cease using the Software and destroy all copies of the Software in your possession.
 
-**6. Limitation of Liability**
-In no event will **Alba** be liable for any indirect, incidental, special, or consequential damages arising from the use of the Software, even if advised of the possibility of such damages. Your sole remedy under this agreement is limited to the replacement of the Software or a refund of the purchase price, at **Alba**’s discretion.
+6. Limitation of Liability
+In no event will Alba be liable for any indirect, incidental, special, or consequential damages arising from the use of 
+the Software, even if advised of the possibility of such damages. Your sole remedy under this agreement is limited to the 
+replacement of the Software or a refund of the purchase price, at Alba’s discretion.
 
-**7. Warranty Disclaimer**
-The Software is provided "as-is," without warranty of any kind, express or implied, including but not limited to the implied warranties of merchantability and fitness for a particular purpose.
+7. Warranty Disclaimer
+The Software is provided "as-is," without warranty of any kind, express or implied, including but not limited to the implied 
+warranties of merchantability and fitness for a particular purpose.
 
-**8. Governing Law**
-This Agreement shall be governed by and construed in accordance with the laws of the jurisdiction in which **Alba** is incorporated, without regard to its conflict of law principles.
+8. Governing Law
+This Agreement shall be governed by and construed in accordance with the laws of the jurisdiction in which Alba is incorporated, 
+without regard to its conflict of law principles.
 
-**9. Contact Information**
-For inquiries or questions regarding this Agreement, please contact us at **legal@alba.com**.
+9. Contact Information
+For inquiries or questions regarding this Agreement, please contact us at legal@alba.com.
