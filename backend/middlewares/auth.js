@@ -4,6 +4,7 @@ module.exports = async function (req, res, next) {
     // authentication  
     try {
         const token = req.header('Authorization');
+
         if (!token) return res.status(401).send('Lack of valid authentication credentials ')
 
         // authorization
@@ -16,7 +17,7 @@ module.exports = async function (req, res, next) {
         next();
     }
     catch (error) {
-        res.status(400).send('You need to loging first.');
+        res.status(400).send(error);
     }
 };
 

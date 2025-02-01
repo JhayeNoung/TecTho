@@ -7,6 +7,7 @@ import { MovieQuery, Movie } from "@/hooks/useMovie";
 import { FetchResponse } from "@/hooks/useData";
 import { useEffect, useState } from "react";
 import apiMovie from "@/services/api-movie";
+import { useMovieStore } from "@/context/useMovieStore";
 
 interface Props {
     movieQuery: MovieQuery
@@ -14,8 +15,8 @@ interface Props {
 
 export default function MovieList({ movieQuery }: Props) {
     const [movies, setMovies] = useState<Movie[]>([])
-    const [signal, setSignal] = useState(0);
     const [loading, setLoading] = useState(true);
+    const { actions } = useMovieStore();
 
     useEffect(() => {
         setLoading(true);
@@ -34,18 +35,10 @@ export default function MovieList({ movieQuery }: Props) {
                 setLoading(false);
             })
 
-
-        window.addEventListener("movie-delete", () => setSignal(prev => prev + 1)); // Listen for movie-delete event
-        window.addEventListener("movie-post", () => setSignal(prev => prev + 1)); // Listen for movie-post event
-        window.addEventListener("movie-update", () => setSignal(prev => prev + 1)); // Listen for movie-update event
-
         return () => {
-            // controller.abort();
-            window.removeEventListener("movie-delete", () => setSignal(prev => prev + 1));
-            window.removeEventListener("movie-post", () => setSignal(prev => prev + 1));
-            window.removeEventListener("movie-update", () => setSignal(prev => prev + 1));
+            controller.abort();
         };
-    }, [signal, movieQuery]);
+    }, [actions, movieQuery]);
 
     return (
         <>

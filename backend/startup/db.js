@@ -7,3 +7,5 @@ module.exports = function () {
         .then(() => msgLogger.info(`Connects to ${db}`))
         .catch(err => msgLogger.error(err.message));
 }
+
+

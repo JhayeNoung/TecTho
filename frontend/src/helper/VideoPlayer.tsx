@@ -24,6 +24,7 @@ const VideoPlayer = ({ posterUrl, videoUrl, onReady }: Props) => {
       videoElement.classList.add('vjs-big-play-centered');
       if (videoRef.current) videoRef.current.appendChild(videoElement);
 
+      const isHLS = videoUrl.endsWith(".m3u8"); // This checks if the URL is HLS
       const videoJsOptions = {
         autoplay: false,
         controls: true,
@@ -31,10 +32,15 @@ const VideoPlayer = ({ posterUrl, videoUrl, onReady }: Props) => {
         fluid: true,
         preload: "auto",
         poster: posterUrl,
-        sources: [{
-          src: videoUrl,
-          type: 'video/mp4'
-        }]
+        sources: isHLS
+          ? [{
+            src: videoUrl,
+            type: 'application/x-mpegURL' // HLS
+          }]
+          : [{
+            src: videoUrl,
+            type: 'video/mp4' // MP4 fallback
+          }]
       };
 
       // create player
@@ -42,14 +48,20 @@ const VideoPlayer = ({ posterUrl, videoUrl, onReady }: Props) => {
         videojs.log('player is ready');
         onReady && onReady(player);
       });
+
     }
     else {
       // if playerRef.current has value
       const player = playerRef.current;
       // videoJsOptions
       player.autoplay(false);
+      const isHLS = videoUrl.endsWith(".m3u8"); // Check if the URL is HLS
+      player.src(isHLS
+        ? [{ src: videoUrl, type: 'application/x-mpegURL' }] // Use HLS URL
+        : [{ src: videoUrl, type: 'video/mp4' }] // Use MP4 fallback
+      );
       player.src([{
-        src: posterUrl,
+        src: videoUrl,
         type: 'video/mp4'
       }]);
     }

@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
 });
 
 
-// validate email and send verification email
+// validation
 router.post('/validation', async (req, res) => {
     // validate the request body and check 400
     const { error } = validateUser(req.body);
@@ -24,7 +24,7 @@ router.post('/validation', async (req, res) => {
     const email = await User.findOne({ email: req.body.email });
     if (email) return res.status(400).send('There is an account with this email.');
 
-    // check mail system
+    // send verification email
     const result = await sendVerificationEmail(req.body.email)
     if (!result.success) {
         console.error('Detailed error:', result.error);
@@ -106,7 +106,7 @@ router.post('/refresh-token', async (req, res) => {
         const decoded = jwt.verify(refreshToken, process.env.USER_REFRESH_KEY);
         const user = await User.findOne({ email: decoded.email })
         const accessToken = user.generateAccessToken();
-        res.json({ accessToken });
+        res.status(200).send({ accessToken });
     } catch (err) {
         res.status(403).send({ error: 'Invalid refresh token' });
     }

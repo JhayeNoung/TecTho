@@ -22,6 +22,7 @@ import { Movie } from "@/hooks/useMovie"
 import apiMovie from "@/services/api-movie"
 import useGenre from "../hooks/useGenre";
 import { useUserStore } from "@/context/useUserStore"
+import { useMovieStore } from "@/context/useMovieStore"
 
 interface Props {
   children: React.ReactNode
@@ -33,6 +34,7 @@ const MovieUpdateForm = ({ movie }: { movie: Movie }) => {
   const [alert, setAlert] = useState("");
   const { data: genres } = useGenre();
   const { accessToken } = useUserStore();
+  const { updateActions } = useMovieStore();
 
   const onSubmit = async (formData: Movie) => {
     setAlert("");
@@ -51,7 +53,7 @@ const MovieUpdateForm = ({ movie }: { movie: Movie }) => {
       }
     })
       .then(() => {
-        window.dispatchEvent(new Event("movie-update")); // Dispatch event on successful update
+        updateActions(["movie-update"]);
         setAlert("Movie updated successfully");
       })
       .catch((error: any) => {
