@@ -1,7 +1,7 @@
 import axios, { CanceledError } from "axios";
 
 const backend_api = import.meta.env.MODE === 'production'
-  ? 'http://167.172.71.20:3001/api'
+  ? 'https://api.tectho.com/api'
   : 'http://localhost:3001/api';
 
 export default axios.create({

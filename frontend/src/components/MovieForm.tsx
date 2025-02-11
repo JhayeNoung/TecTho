@@ -77,7 +77,7 @@ export default function MovieForm() {
       // Upload the file to S3 using the pre-signed URL after the movie is successfully posted
       await fetch(presigned_video.data.url, {
         method: 'PUT',
-        headers: { 'Content-Type': payload.poster.type },
+        headers: { 'Content-Type': payload.video.type },
         body: payload.video,
       });
 
