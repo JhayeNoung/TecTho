@@ -1,13 +1,13 @@
 
 import { Button, HStack } from '@chakra-ui/react'
-import apiMovie from '@/services/api-movie'
-import { Movie } from '@/hooks/useMovie';
-import Dialog from './Dialog';
-import MovieUpdate from './MovieUpdate';
 
+import { Movie } from '@/hooks/useMovie';
 import { useUserStore } from '@/context/useUserStore';
 import { useMovieStore } from '@/context/useMovieStore';
 import { logActionError } from '@/services/log-error';
+import Dialog from './Dialog';
+import MovieUpdate from './MovieUpdate';
+import apiMovie from '@/services/api-movie'
 
 interface Props {
   movie: Movie

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router";
@@ -5,10 +6,10 @@ import { Input, Button, Fieldset, Stack, Box } from "@chakra-ui/react";
 import { Field } from "./ui/field";
 import { z } from "zod";
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useState } from "react";
+
+import { logUserError } from "@/services/log-error";
 import apiMovie from "@/services/api-movie";
 import AlertMessage from "./AlertMessage";
-import { logUserError } from "@/services/log-error";
 
 const schemaUser = z.object({
     name: z.string().min(2).max(100),

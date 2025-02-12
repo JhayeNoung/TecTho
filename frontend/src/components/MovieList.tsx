@@ -1,13 +1,11 @@
-import { TableBody, TableCell, TableColumnHeader, TableHeader, TableRoot, TableRow, Spinner } from "@chakra-ui/react"
-import { CanceledError } from "@/services/api-movie";
-import { Table } from "@chakra-ui/react"
-
-import MovieAction from "./MovieAction";
-import { MovieQuery, Movie } from "@/hooks/useMovie";
-import { FetchResponse } from "@/hooks/useData";
 import { useEffect, useState } from "react";
-import apiMovie from "@/services/api-movie";
+import { Table, TableBody, TableCell, TableColumnHeader, TableHeader, TableRoot, TableRow, Spinner } from "@chakra-ui/react"
+
+import { FetchResponse } from "@/hooks/useData";
+import { MovieQuery, Movie } from "@/hooks/useMovie";
 import { useMovieStore } from "@/context/useMovieStore";
+import apiMovie, { CanceledError } from "@/services/api-movie";
+import MovieAction from "./MovieAction";
 
 interface Props {
     movieQuery: MovieQuery

@@ -6,10 +6,10 @@ import { Field } from "./ui/field";
 import { z } from "zod";
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import AlertMessage from "./AlertMessage";
-import apiMovie from "@/services/api-movie";
 import { useUserStore } from "@/context/useUserStore";
 import { logUserError } from "@/services/log-error";
+import apiMovie from "@/services/api-movie";
+import AlertMessage from "./AlertMessage";
 
 const schemaUser = z.object({
   email: z.string().email(),

@@ -4,11 +4,12 @@ import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { Input, Button, Fieldset, Stack } from "@chakra-ui/react";
 import { Field } from "./ui/field";
 
-import apiMovie from "@/services/api-movie";
-import AlertMessage from "./AlertMessage";
 import { useUserStore } from "@/context/useUserStore";
 import { logActionError } from "@/services/log-error";
 import { User } from "@/hooks/useUser";
+import apiMovie from "@/services/api-movie";
+import AlertMessage from "./AlertMessage";
+
 
 export default function UserUpdate() {
   const { register, handleSubmit, formState: { errors } } = useForm<User>();

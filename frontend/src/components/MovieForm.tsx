@@ -1,17 +1,16 @@
 import { useState } from "react";
+import { NativeSelectField, NativeSelectRoot, Input, Button, Fieldset, Stack } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Input, Button, Fieldset, Stack } from "@chakra-ui/react";
 import { Field } from "./ui/field";
-import { NativeSelectField, NativeSelectRoot } from "@chakra-ui/react";
-import apiMovie from "../services/api-movie";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from "zod";
 
-import useGenre from "../hooks/useGenre";
-import AlertMessage from "./AlertMessage";
 import { useUserStore } from "@/context/useUserStore";
 import { useMovieStore } from "@/context/useMovieStore";
 import { logMoviePostError } from "@/services/log-error";
+import AlertMessage from "./AlertMessage";
+import apiMovie from "../services/api-movie";
+import useGenre from "../hooks/useGenre";
 
 const schemaMovie = z.object({
   title: z.string().min(1).max(255),

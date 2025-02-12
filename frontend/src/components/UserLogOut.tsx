@@ -1,11 +1,11 @@
+import { useState } from 'react';
 import { NavLink } from 'react-router-dom'
 import { Button, Box, Text } from "@chakra-ui/react";
-import { useState } from 'react';
 
 import { useUserStore } from '@/context/useUserStore';
-import apiMovie from '@/services/api-movie';
 import { logUserError } from '@/services/log-error';
 import AlertMessage from './AlertMessage';
+import apiMovie from '@/services/api-movie';
 
 function UserLogOut() {
   const { logout } = useUserStore();
