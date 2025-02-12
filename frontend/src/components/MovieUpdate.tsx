@@ -1,5 +1,6 @@
 "use client"
 
+import { useRef, useState } from "react"
 import { Input, Stack } from "@chakra-ui/react"
 import { Button } from "@/components/ui/button"
 import {
@@ -13,16 +14,14 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Field } from "@/components/ui/field"
-import { useRef } from "react"
 import { useForm } from "react-hook-form"
-import AlertMessage from "./AlertMessage"
-import { useState } from "react"
 
 import { Movie } from "@/hooks/useMovie"
 import apiMovie from "@/services/api-movie"
 import useGenre from "../hooks/useGenre";
 import { useUserStore } from "@/context/useUserStore"
 import { useMovieStore } from "@/context/useMovieStore"
+import AlertMessage from "./AlertMessage"
 
 interface Props {
   children: React.ReactNode

@@ -1,11 +1,11 @@
 import React from 'react';
 import { Card, CardBody, Image, HStack, Button, Stack } from '@chakra-ui/react'
 import Player from 'video.js/dist/types/player';
+import videojs from "video.js";
+import VideoPlayer from '@/helper/VideoPlayer';
+import MetacriticBadge from './MetacriticBadge'
 
 import { Movie } from '@/hooks/useMovie'
-import MetacriticBadge from './MetacriticBadge'
-import VideoPlayer from '@/helper/VideoPlayer';
-import videojs from "video.js";
 import apiMovie from '@/services/api-movie';
 
 interface Props {

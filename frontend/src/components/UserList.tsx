@@ -1,7 +1,7 @@
 import { Table, TableBody, TableCell, TableColumnHeader, TableHeader, TableRoot, TableRow } from "@chakra-ui/react"
 
-import UserAction from "./UserAction"
 import { useUser } from "@/hooks/useUser";
+import UserAction from "./UserAction"
 import AlertMessage from "./AlertMessage";
 
 function UserList() {

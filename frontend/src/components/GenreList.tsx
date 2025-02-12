@@ -1,7 +1,6 @@
-import useGenre from "@/hooks/useGenre"
-import { Button } from "@chakra-ui/react"
-import { List } from "@chakra-ui/react"
-import { Genre } from "@/hooks/useGenre"
+import { Button, List } from "@chakra-ui/react"
+
+import useGenre, { Genre } from "@/hooks/useGenre"
 
 interface Props {
     onClick: (genre: Genre) => void;

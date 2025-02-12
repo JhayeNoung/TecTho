@@ -27,8 +27,6 @@ router.post('/validation', async (req, res) => {
     // send verification email
     const result = await sendVerificationEmail(req.body.email)
     if (!result.success) {
-        console.error('Detailed error:', result.error);
-
         if (result.error.message.includes('Invalid recipient') || result.error.message.includes('ENOTFOUND')) {
             return res.status(400).send('The provided email address is not valid or registered.');
         }

@@ -1,10 +1,10 @@
 import { Button, HStack } from '@chakra-ui/react'
-import apiMovie from '@/services/api-movie'
-import { User } from '@/hooks/useUser'
 import { NavLink } from 'react-router-dom'
 
+import { User } from '@/hooks/useUser'
 import { useUserStore } from '@/context/useUserStore'
 import { logActionError } from '@/services/log-error'
+import apiMovie from '@/services/api-movie'
 
 interface Props {
   user: User
