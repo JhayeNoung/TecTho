@@ -24,7 +24,7 @@ const NavBar = ({ accessToken }: { accessToken: string | null }) => (
         :
         <NavLink to="/registration">
           <Button variant="plain" _hover={{ textDecoration: "underline" }}>
-            User API
+            User Panel
           </Button>
         </NavLink>
       }
