@@ -7,7 +7,6 @@ import { useUserStore } from "@/context/useUserStore";
 import { Genre } from "./useGenre";
 import useData from "./useData";
 import apiMovie from "@/services/api-movie";
-import { set } from "video.js/dist/types/tech/middleware";
 
 export interface FetchMovie {
     "_id": string,
