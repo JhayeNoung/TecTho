@@ -5,11 +5,11 @@ import videojs from "video.js";
 import VideoPlayer from '@/helper/VideoPlayer';
 import MetacriticBadge from './MetacriticBadge'
 
-import { Movie } from '@/hooks/useMovie'
+import { FetchMovie } from '@/hooks/useMovie'
 import apiMovie from '@/services/api-movie';
 
 interface Props {
-  movie: Movie
+  movie: FetchMovie
 }
 
 function MovieCard({ movie }: Props) {

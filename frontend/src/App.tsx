@@ -3,7 +3,7 @@ import { useEffect } from "react";
 
 import Home from "./pages/Home";
 import Registration from "./pages/Registration";
-import MovieAPI from "./pages/MovieAPI";
+import MoviePanel from "./pages/MoviePanel";
 import Payment from "./pages/Payment";
 import { useUserStore } from "./context/useUserStore";
 
@@ -20,7 +20,7 @@ function App() {
   return (
     <Routes>
       <Route index element={<Home />} />
-      <Route path="api" element={<MovieAPI />} />
+      <Route path="movie-panel" element={<MoviePanel />} />
       <Route path="registration/*" element={<Registration />} />
       <Route path="payment" element={<Payment />} />
     </Routes>

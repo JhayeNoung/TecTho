@@ -29,9 +29,9 @@ const NavBar = ({ accessToken }: { accessToken: string | null }) => (
         </NavLink>
       }
 
-      <NavLink to="/api" end>
+      <NavLink to="/movie-panel" end>
         <Button variant="plain" _hover={{ textDecoration: "underline" }}>
-          Movie API
+          Movie Panel
         </Button>
       </NavLink>
 
