@@ -18,10 +18,10 @@ router.get('/', async (req, res) => {
 
     // Validate genreId if provided
     if (genreId) {
-        if (!mongoose.Types.ObjectId.isValid(genreId)) return res.status(400).send("Invalid Object Id")
+        if (!mongoose.Types.ObjectId.isValid(genreId)) return res.status(400).send({ message: "Invalid Object Id" })
 
         var genre = await Genre.findById(genreId)
-        if (!genre) return res.status(404).send("No genre with this Id")
+        if (!genre) return res.status(404).send({ message: "No genre with this Id" })
     }
 
     // Build filter object
@@ -70,7 +70,7 @@ router.get('/', async (req, res) => {
 router.get('/:id', validObjectId, async (req, res) => {
     // find by id and check 404
     const movie = await Movie.findById(req.params.id);
-    if (!movie) return res.status(404).send('Not found');
+    if (!movie) return res.status(404).send({ message: 'Not found' });
 
     // send the request
     res.status(200).send(movie);
@@ -81,15 +81,15 @@ router.get('/:id', validObjectId, async (req, res) => {
 router.post('/', [auth], async (req, res) => {
     // validate movie request and check 400
     const { error } = validateMovie(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
+    if (error) return res.status(400).send({ message: error.details[0].message });
 
     // find genre , and check 404
     let genre = await Genre.findById(req.body.genre);
-    if (!genre) return res.status(404).send('No genre found.');
+    if (!genre) return res.status(404).send({ message: 'No genre found.' });
 
     // find duplicate
     let movie_title = await Movie.findOne({ title: req.body.title });
-    if (movie_title) return res.status(400).send('Already have movie with this title.')
+    if (movie_title) return res.status(400).send({ message: 'Already have movie with this title.' })
 
     // save movie
     const movie = new Movie(req.body);
@@ -99,7 +99,7 @@ router.post('/', [auth], async (req, res) => {
 
     await movie.save();
 
-    res.status(200).send(req.body);
+    res.status(200).send({ ...req.body, message: 'Movie has been created' });
 });
 
 
@@ -107,11 +107,11 @@ router.post('/', [auth], async (req, res) => {
 router.put('/:id', [validObjectId, auth], async (req, res) => {
     // find movie and check 404
     let movie = await Movie.findById(req.params.id);
-    if (!movie) return res.status(404).send('Not found the movie');
+    if (!movie) return res.status(404).send({ message: 'Not found the movie' });
 
     // if provided validate the payload 
     const { error } = validateUpdateMovie(req.body)
-    if (error) return res.status(400).send(error.details[0].message);
+    if (error) return res.status(400).send({ message: error.details[0].message });
 
     // update movie
     movie.title = req.body.title || movie.title;
@@ -125,11 +125,11 @@ router.put('/:id', [validObjectId, auth], async (req, res) => {
     if (req.body.hasOwnProperty("genre")) {
         // validate genre id
         if (!mongoose.Types.ObjectId.isValid(req.body.genre))
-            return res.status(400).send('Invalid genre Id.');
+            return res.status(400).send({ message: 'Invalid genre Id.' });
 
         // find genre if it is provided, and check 404
         const genre = await Genre.findById(req.body.genre);
-        if (!genre) return res.status(404).send('No genre found');
+        if (!genre) return res.status(404).send({ message: 'No genre found' });
 
         movie.genre = {
             _id: genre._id,
@@ -138,7 +138,7 @@ router.put('/:id', [validObjectId, auth], async (req, res) => {
     }
 
     await movie.save();
-    res.status(200).send(movie);
+    res.status(200).send({ movie, message: 'Movie has been updated' });
 })
 
 
@@ -146,10 +146,10 @@ router.put('/:id', [validObjectId, auth], async (req, res) => {
 router.delete('/:id', [validObjectId, auth], async (req, res) => {
     // find movie and check 404
     let movie = await Movie.findById(req.params.id);
-    if (!movie) return res.status(404).send('Not found the movie');
+    if (!movie) return res.status(404).send({ message: 'Not found the movie' });
 
     await movie.deleteOne();
-    res.status(200).send('Movie has been deleted');
+    res.status(200).send({ message: 'Movie has been deleted' });
 })
 
 

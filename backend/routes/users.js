@@ -18,21 +18,21 @@ router.get('/', async (req, res) => {
 router.post('/validation', async (req, res) => {
     // validate the request body and check 400
     const { error } = validateUser(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
+    if (error) return res.status(400).send({ message: error.details[0].message });
 
     // check existed user or not
     const email = await User.findOne({ email: req.body.email });
-    if (email) return res.status(400).send('There is an account with this email.');
+    if (email) return res.status(400).send({ message: 'There is an account with this email.' });
 
     // send verification email
     const result = await sendVerificationEmail(req.body.email)
     if (!result.success) {
         if (result.error.message.includes('Invalid recipient') || result.error.message.includes('ENOTFOUND')) {
-            return res.status(400).send('The provided email address is not valid or registered.');
+            return res.status(400).send({ message: 'The provided email address is not valid or registered.' });
         }
-        return res.status(500).send('An error occurred while sending the verification email.');
+        return res.status(500).send({ message: 'An error occurred while sending the verification email.' });
     }
-    res.status(200).send('Ok');
+    res.status(200).send({ success: true, message: 'Ok' });
 });
 
 // verify email
@@ -40,9 +40,9 @@ router.get('/validation/mail', async (req, res) => {
     // const { token } = req.query;
     const { verificationKey } = req.query;
 
-    if (verificationKey != 12345) return res.status(400).send('Invalid verification key.');
+    if (verificationKey != 12345) return res.status(400).send({ message: 'Invalid verification key.' });
 
-    res.status(200).send('Email verified!');
+    res.status(200).send({ success: true, message: 'Email verified!' });
 });
 
 
@@ -54,22 +54,22 @@ router.post('/create', async (req, res) => {
     user.password = hashPassword;
     await user.save();
 
-    res.status(200).send('Ok');
+    res.status(200).send({ success: true, message: 'Ok' });
 });
 
 // login
 router.post('/login', async (req, res) => {
     // validate email and password
     const { error } = validateLogIn(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
+    if (error) return res.status(400).send({ message: error.details[0].message });
 
     // find user by email and check 404
     const user = await User.findOne({ email: req.body.email })
-    if (!user) return res.status(404).send('No user found with this email.');
+    if (!user) return res.status(404).send({ message: 'No user found with this email.' });
 
     // check password
     const validPassword = await bcrypt.compare(req.body.password, user.password);
-    if (!validPassword) return res.status(400).send('Invalid Password');
+    if (!validPassword) return res.status(400).send({ message: 'Invalid Password' });
 
     const accessToken = user.generateAccessToken();
     const refreshToken = user.generateRefreshToken();
@@ -97,7 +97,7 @@ router.post('/refresh-token', async (req, res) => {
     const refreshToken = req.cookies.refreshToken;
 
     if (!refreshToken) {
-        return res.status(403).send({ error: 'No refresh token found' });
+        return res.status(403).send({ message: 'No refresh token found' });
     }
 
     try {
@@ -106,7 +106,7 @@ router.post('/refresh-token', async (req, res) => {
         const accessToken = user.generateAccessToken();
         res.status(200).send({ accessToken });
     } catch (err) {
-        res.status(403).send({ error: 'Invalid refresh token' });
+        res.status(403).send({ message: 'Invalid refresh token' });
     }
 });
 
@@ -118,18 +118,18 @@ router.post('/logout', (req, res) => {
         sameSite: 'strict',
     });
 
-    res.status(200).send({ success: 'Logged out successfully' });
+    res.status(200).send({ success: true, message: 'Logged out successfully' });
 });
 
 // update data
 router.put('/:id', [validObjectId, auth], async (req, res) => {
     // find user and check 404
     let user = await User.findById(req.params.id);
-    if (!user) return res.status(404).send('Not found the user');
+    if (!user) return res.status(404).send({ message: 'Not found the user' });
 
     // if provided validate the payload 
     const { error } = validateUpdateUser(req.body)
-    if (error) return res.status(400).send(error.details[0].message);
+    if (error) return res.status(400).send({ message: error.details[0].message });
 
     // if not provided in the payload, add original
     user.name = req.body.name || user.name;
@@ -145,10 +145,10 @@ router.put('/:id', [validObjectId, auth], async (req, res) => {
 router.delete('/:id', [validObjectId, auth], async (req, res) => {
     // find movie and check 404
     let user = await User.findById(req.params.id);
-    if (!user) return res.status(404).send('Not found the user');
+    if (!user) return res.status(404).send({ message: 'Not found the user' });
 
     await user.deleteOne();
-    res.status(200).send('User has been deleted');
+    res.status(200).send({ success: true, message: 'User has been deleted' });
 })
 
 
@@ -156,19 +156,19 @@ router.delete('/:id', [validObjectId, auth], async (req, res) => {
 router.delete('/login/delete', async (req, res) => {
     // validate email and password
     const { error } = validateLogIn(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
+    if (error) return res.status(400).send({ message: error.details[0].message });
 
     // find user by email and check 404
     const user = await User.findOne({ email: req.body.email })
-    if (!user) return res.status(404).send('Not found user with this email');
+    if (!user) return res.status(404).send({ message: 'Not found user with this email' });
 
     // check password
     const validPassword = await bcrypt.compare(req.body.password, user.password);
-    if (!validPassword) return res.status(400).send('Invalid Password');
+    if (!validPassword) return res.status(400).send({ message: 'Invalid Password' });
 
     // generate token
     await user.deleteOne();
-    res.status(200).send('User has been deleted');
+    res.status(200).send({ success: true, message: 'User has been deleted' });
 });
 
 module.exports = router;

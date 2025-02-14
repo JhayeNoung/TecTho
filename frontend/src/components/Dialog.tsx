@@ -1,3 +1,4 @@
+import { useRef } from "react"
 import { Button } from "@/components/ui/button"
 import {
   DialogBody,
@@ -10,36 +11,27 @@ import {
 } from "@/components/ui/dialog"
 
 interface Props {
-  children: React.ReactNode
-  data: any
+  children: React.ReactNode,
+  document: string,
+  action: string,
 }
 
-// The <pre> HTML element stands for preformatted text. 
-// It is used to display text exactly as it is written in the HTML source code, 
-// preserving white spaces, line breaks, and formatting.
-const JsonViewer = ({ data }: { data: any }) => (
-  <pre style={{ whiteSpace: "pre-wrap" }}>{JSON.stringify(data, null, 2)}</pre>
-);
-
-const Dialog = ({ children, data }: Props) => {
-  // MANUAL FORMATTING
-  // const json = JSON.stringify(data, null, 2);
-  // const lines = json.split("\n");
-
+function Dialog({ children, document, action }: Props) {
+  const ref = useRef<HTMLInputElement>(null)
   return (
-    <DialogRoot size="cover" placement="center" motionPreset="slide-in-bottom">
+    <DialogRoot initialFocusEl={() => ref.current}>
       <DialogTrigger asChild>
         <Button variant="plain" _hover={{ color: "cyan" }} color="blue">
-          {children}
+          {action}
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Movie Details</DialogTitle>
+          <DialogTitle>{document} {action}</DialogTitle>
           <DialogCloseTrigger />
         </DialogHeader>
         <DialogBody>
-          <JsonViewer data={data} />
+          {children}
         </DialogBody>
       </DialogContent>
     </DialogRoot>

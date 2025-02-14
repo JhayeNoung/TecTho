@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { AxiosInstance, CanceledError, AxiosRequestConfig } from "axios";
 
+import { useMovieStore } from "@/context/useMovieStore";
 
 export interface FetchResponse<T> {
     count: number;
@@ -13,6 +14,7 @@ function useData<T>(axiosInstance: AxiosInstance, endpoint: string, requestConfi
     const [data, setData] = useState<T[]>([]);
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false)
+    const { actions } = useMovieStore();
 
     useEffect(() => {
         setLoading(true)
@@ -35,7 +37,7 @@ function useData<T>(axiosInstance: AxiosInstance, endpoint: string, requestConfi
         return () => {
             controller.abort()
         }
-    }, dep ? [...dep] : [])
+    }, dep ? [...dep, actions] : [actions])
 
     return { data, error, loading }
 }

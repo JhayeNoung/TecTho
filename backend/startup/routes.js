@@ -13,21 +13,23 @@ const cors = require("cors"); // If your frontend and backend are running on dif
 const cookieParser = require('cookie-parser');
 
 module.exports = function (app) {
-    app.set('trust proxy', true); // Trust proxy for Nginx SSL forwarding
-    app.use((req, res, next) => {  // Force HTTPS redirect
-        if (req.headers['x-forwarded-proto'] !== 'https') {
-            return res.redirect(`https://${req.headers.host}${req.url}`);
-        }
-        next();
-    });
+    if (process.env.NODE_ENV === 'production') {
+        app.set('trust proxy', true); // Trust proxy for Nginx SSL forwarding
+        app.use((req, res, next) => {  // Force HTTPS redirect
+            if (req.headers['x-forwarded-proto'] !== 'https') {
+                return res.redirect(`https://${req.headers.host}${req.url}`);
+            }
+            next();
+        });
+    }
 
     const allowedOrigins = [
         'http://localhost:5173',
         'http://localhost:4173',
-        process.env.DOMAIN_ADDRESS,
         'https://www.tectho.com',
         'https://tectho.com',
         'https://api.tectho.com',
+        process.env.DOMAIN_ADDRESS,
     ];
 
     app.use(cors({
