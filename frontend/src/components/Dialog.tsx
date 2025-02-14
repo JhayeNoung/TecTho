@@ -27,7 +27,7 @@ function Dialog({ children, document, action }: Props) {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{document}{action}</DialogTitle>
+          <DialogTitle>{document} {action}</DialogTitle>
           <DialogCloseTrigger />
         </DialogHeader>
         <DialogBody>

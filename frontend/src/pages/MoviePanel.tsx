@@ -67,8 +67,8 @@ function MovieAction({ movie }: { movie: FetchMovie }) {
     <>
       {accessToken ?
         <HStack>
-          <Dialog document='Movie' action='edit'><MovieUpdateForm movie={movie} /></Dialog>
-          <Dialog document='Movie' action='detail'><JsonViewer data={movie} /></Dialog>
+          <Dialog document='Movie' action='Edit'><MovieUpdateForm movie={movie} /></Dialog>
+          <Dialog document='Movie' action='Detail'><JsonViewer data={movie} /></Dialog>
           <Button variant="plain" _hover={{ color: "cyan" }} color="red" onClick={onClick}>
             Delete
           </Button>
