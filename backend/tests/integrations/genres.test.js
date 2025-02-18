@@ -4,119 +4,119 @@ const { Genre } = require('../../models/genre');
 const { User } = require('../../models/user');
 
 
-describe('/api/genres ', ()=>{
+describe('/api/genres ', () => {
     let server;
-    beforeEach(()=>{
+    beforeEach(() => {
         server = require('../../index');
     })
-    afterEach(async ()=>{
+    afterEach(async () => {
         await server.close();
         await Genre.deleteMany({});
     })
-    describe('GET/ ', ()=>{
-        it('should return 200 for all genre', async ()=>{
+    describe('GET/ ', () => {
+        it('should return 200 for all genre', async () => {
             const res = await request(server).get('/api/genres');
             expect(res.status).toBe(200);
         })
     })
 
-    describe('GET/:id ', ()=>{
-        it('should return 400 if invalid id', async ()=>{
+    describe('GET/:id ', () => {
+        it('should return 400 if invalid id', async () => {
             let id = '123'
-            const res = await request(server).get('/api/genres/'+id);
+            const res = await request(server).get('/api/genres/' + id);
             expect(res.status).toBe(400);
         })
 
-        it('should return 404 if no genre with this id', async ()=>{
+        it('should return 404 if no genre with this id', async () => {
             let id = new mongoose.Types.ObjectId();
-            const res = await request(server).get('/api/genres/'+id);
+            const res = await request(server).get('/api/genres/' + id);
             expect(res.status).toBe(404);
         })
 
-        it('should return 200 if everyting is good', async ()=>{
-            let genre = new Genre({name: 'genre'})
+        it('should return 200 if everyting is good', async () => {
+            let genre = new Genre({ name: 'genre' })
             await genre.save();
             let id = genre._id;
-            const res = await request(server).get('/api/genres/'+id);
+            const res = await request(server).get('/api/genres/' + id);
             expect(res.status).toBe(200);
         })
     })
 
-    describe('POST/ ', ()=>{
+    describe('POST/ ', () => {
         let token, name;
-        const execPost = async ()=>{
-            return request(server).post('/api/genres').set('x-auth-token', token).send({name});
+        const execPost = async () => {
+            return request(server).post('/api/genres').set('Authorization', token).send({ name });
         }
-        beforeEach(async ()=>{
-            token = new User({isAdmin: true}).generateAuthToken();
+        beforeEach(async () => {
+            token = new User({ isAdmin: true }).generateAccessToken();
             name = 'genre';
         })
-        it('should return 401 if authorization failed', async ()=>{
+        it('should return 401 if authorization failed', async () => {
             token = ' ';
             const res = await execPost();
             expect(res.status).toBe(401);
         })
 
-        it('should return 403 if authorization failed', async ()=>{
-            token = new User({isAdmin: false}).generateAuthToken();
+        it('should return 403 if authorization failed', async () => {
+            token = new User({ isAdmin: false }).generateAccessToken();
             const res = await execPost();
             expect(res.status).toBe(403);
         })
 
-        it('should return 400 if validation failed', async ()=>{
+        it('should return 400 if validation failed', async () => {
             name = ' ';
             const res = await execPost();
-            expect(res.status).toBe(400);       
+            expect(res.status).toBe(400);
         })
 
-        it('should return 200 if everything is ok', async ()=>{
+        it('should return 200 if everything is ok', async () => {
             const res = await execPost();
             expect(res.status).toBe(200);
         })
     })
 
-    describe('PUT/ ', ()=>{
+    describe('PUT/ ', () => {
         let token, name, id;
-        const execPut = async ()=>{
-            return request(server).put('/api/genres/'+id).set('x-auth-token', token).send({name});
+        const execPut = async () => {
+            return request(server).put('/api/genres/' + id).set('Authorization', token).send({ name });
         }
-        beforeEach(async ()=>{
-            token = new User({isAdmin: true}).generateAuthToken();
+        beforeEach(async () => {
+            token = new User({ isAdmin: true }).generateAccessToken();
             id = new mongoose.Types.ObjectId();
             name = 'genre';
         })
-        it('should return 400 if invalid id', async ()=>{
+        it('should return 400 if invalid id', async () => {
             id = '123'
             const res = await execPut();
             expect(res.status).toBe(400);
         })
 
-        it('should return 401 if authorization failed', async ()=>{
+        it('should return 401 if authorization failed', async () => {
             token = ' ';
             const res = await execPut();
             expect(res.status).toBe(401);
         })
 
-        it('should return 403 if authorization failed', async ()=>{
-            token = new User({isAdmin: false}).generateAuthToken();
+        it('should return 403 if authorization failed', async () => {
+            token = new User({ isAdmin: false }).generateAccessToken();
             const res = await execPut();
             expect(res.status).toBe(403);
         })
 
-        it('should return 400 if validation failed', async ()=>{
+        it('should return 400 if validation failed', async () => {
             name = ' ';
             const res = await execPut();
-            expect(res.status).toBe(400);       
+            expect(res.status).toBe(400);
         })
 
-        it('should return 404 if genre is not found', async ()=>{
+        it('should return 404 if genre is not found', async () => {
             id = new mongoose.Types.ObjectId();
             const res = await execPut();
-            expect(res.status).toBe(404);       
+            expect(res.status).toBe(404);
         })
 
-        it('should return 200 if everything is ok', async ()=>{
-            const genre = new Genre({name: 'genre'});
+        it('should return 200 if everything is ok', async () => {
+            const genre = new Genre({ name: 'genre' });
             await genre.save();
             id = genre._id;
             const res = await execPut();
@@ -124,41 +124,41 @@ describe('/api/genres ', ()=>{
         })
     })
 
-    describe('DELETE/ ', ()=>{
+    describe('DELETE/ ', () => {
         let token, id;
-        const execDelete = async ()=>{
-            return request(server).delete('/api/genres/'+id).set('x-auth-token', token);
+        const execDelete = async () => {
+            return request(server).delete('/api/genres/' + id).set('Authorization', token);
         }
-        beforeEach(async ()=>{
-            token = new User({isAdmin: true}).generateAuthToken();
+        beforeEach(async () => {
+            token = new User({ isAdmin: true }).generateAccessToken();
             id = new mongoose.Types.ObjectId();
         })
-        it('should return 400 if invalid id', async ()=>{
+        it('should return 400 if invalid id', async () => {
             id = '123'
             const res = await execDelete();
             expect(res.status).toBe(400);
         })
 
-        it('should return 401 if authorization failed', async ()=>{
+        it('should return 401 if authorization failed', async () => {
             token = ' ';
             const res = await execDelete();
             expect(res.status).toBe(401);
         })
 
-        it('should return 403 if authorization failed', async ()=>{
-            token = new User({isAdmin: false}).generateAuthToken();
+        it('should return 403 if authorization failed', async () => {
+            token = new User({ isAdmin: false }).generateAccessToken();
             const res = await execDelete();
             expect(res.status).toBe(403);
         })
 
-        it('should return 404 if genre is not found', async ()=>{
+        it('should return 404 if genre is not found', async () => {
             id = new mongoose.Types.ObjectId();
             const res = await execDelete();
-            expect(res.status).toBe(404);       
+            expect(res.status).toBe(404);
         })
 
-        it('should return 200 if everything is ok', async ()=>{
-            const genre = new Genre({name: 'genre'});
+        it('should return 200 if everything is ok', async () => {
+            const genre = new Genre({ name: 'genre' });
             await genre.save();
             id = genre._id;
             const res = await execDelete();
